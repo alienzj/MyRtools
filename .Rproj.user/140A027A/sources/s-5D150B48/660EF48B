@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563263096901.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "660EF48B",
+    "lastKnownWriteTime" : 1563262003,
+    "last_content_update" : 1563262003,
+    "path" : "E:/hua/script/MyRtools/R/bar.R",
+    "project_path" : "R/bar.R",
+    "properties" : {
+        "cursorPosition" : "11,2",
+        "scrollLine" : "51"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,10 @@
+#dir
+*tmp/
+*.Rcheck/
+
+
+#files
+.Rhistory
+*.zip
+*.log
+*.png
