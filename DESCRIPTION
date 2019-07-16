@@ -13,5 +13,15 @@ Imports:
     ggplot2,
     ggthemes,
     patternplot,
-    tidyr
+    tidyr,
+    UpSetR,
+    VennDiagram,
+    gcookbook,
+    corrplot,
+    dplyr
 RoxygenNote: 6.0.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    roxygen2
+VignetteBuilder: knitr

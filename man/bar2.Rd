@@ -14,4 +14,5 @@ bar
 }
 \examples{
 bar2()
+
 }

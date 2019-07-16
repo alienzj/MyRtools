@@ -14,4 +14,5 @@ a function for bar plot using ggplot2
 }
 \examples{
 bar1()
+
 }
