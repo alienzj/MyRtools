@@ -4,15 +4,18 @@
 \alias{boxplot1}
 \title{boxplot1}
 \usage{
-boxplot1()
+boxplot1(dat = DATA)
+}
+\arguments{
+\item{DATA}{Table.}
 }
 \value{
 boxplot
 }
 \description{
-boxplot by ggplot2
+boxplot
 }
 \examples{
-boxplot1()
+boxplot1(DATA)
 
 }

@@ -4,7 +4,10 @@
 \alias{boxplot2}
 \title{boxplot2}
 \usage{
-boxplot2()
+boxplot2(dat = DATA)
+}
+\arguments{
+\item{DATA}{Table.}
 }
 \value{
 boxplot
@@ -13,6 +16,6 @@ boxplot
 boxplot
 }
 \examples{
-boxplot2()
+boxplot2(DATA)
 
 }

@@ -1,0 +1,28 @@
+Package: MyRtools
+Type: Package
+Title: Handy functions for analysis in R
+Version: 0.1.2
+Author: Zou Hua
+Maintainer: Zou Hua <zouhua1@outlook.com>
+Description: Some hopeful tools or codes in daily work, especially in visualization and statistics
+License: GPL
+Encoding: UTF-8
+LazyData: true
+Packaged: 2019-07-16 ShenZhen China;
+RoxygenNote: 6.0.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    roxygen2
+VignetteBuilder: knitr
+Depends: 
+  R (>= 3.5.0)
+Imports: 
+    ggplot2 (>= 3.2.0),
+    patternplot (>= 0.2),
+    tidyr (>= 0.8.1),
+    dplyr (>= 0.8.1),
+    data.table (>= 1.12.2),
+    magrittr (>= 1.5),
+    ggpubr (>= 0.2),
+    tibble (>= 2.1.3)

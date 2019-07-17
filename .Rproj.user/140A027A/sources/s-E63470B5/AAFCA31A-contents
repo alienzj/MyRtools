@@ -1,0 +1,8 @@
+# transform data into package data
+
+# library(devtools)
+# library(dplyr)
+
+# boxplot data
+# DATA <- read.csv(system.file("extdata", "fruits.csv", package="patternplot"))
+# use_data(DATA)
