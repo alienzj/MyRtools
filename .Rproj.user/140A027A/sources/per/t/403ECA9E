@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563351023364.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2585016576",
+    "id" : "403ECA9E",
+    "lastKnownWriteTime" : 1563351055,
+    "last_content_update" : 1563351055727,
+    "path" : "E:/hua/script/MyRtools/R/09.venn.R",
+    "project_path" : "R/09.venn.R",
+    "properties" : {
+        "cursorPosition" : "58,6",
+        "scrollLine" : "41"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

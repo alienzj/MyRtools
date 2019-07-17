@@ -1,13 +1,13 @@
 {
-    "path" : "E:/hua/script/MyRtools/man",
+    "path" : "E:/hua/script/MyRtools/vignettes",
     "sortOrder" : [
-        {
-            "ascending" : false,
-            "columnIndex" : 3
-        },
         {
             "ascending" : true,
             "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 3
         }
     ]
 }

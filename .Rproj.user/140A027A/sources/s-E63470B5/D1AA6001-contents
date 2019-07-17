@@ -1,5 +1,0 @@
-library(devtools)
-library(dplyr)
-
-DATA <- read.csv(system.file("extdata", "fruits.csv", package="patternplot"))
-use_data(DATA, internal = T)

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563341539564.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2891675071",
+    "id" : "45F5A457",
+    "lastKnownWriteTime" : 1563351449,
+    "last_content_update" : 1563351449114,
+    "path" : "E:/hua/script/MyRtools/NAMESPACE",
+    "project_path" : "NAMESPACE",
+    "properties" : {
+        "cursorPosition" : "23,29",
+        "scrollLine" : "10"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_namespace"
+}

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563350801528.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "166974317",
+    "id" : "94CE1B9E",
+    "lastKnownWriteTime" : 1563350213,
+    "last_content_update" : 1563350213,
+    "path" : "E:/hua/script/MyRtools/R/00.manipulate_script.R",
+    "project_path" : "R/00.manipulate_script.R",
+    "properties" : {
+        "cursorPosition" : "16,2",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

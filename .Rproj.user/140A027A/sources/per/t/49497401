@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563350780823.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2690275842",
+    "id" : "49497401",
+    "lastKnownWriteTime" : 1563350860,
+    "last_content_update" : 1563350860428,
+    "path" : "E:/hua/script/MyRtools/R/01.scatterplot.R",
+    "project_path" : "R/01.scatterplot.R",
+    "properties" : {
+        "cursorPosition" : "7,31",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
