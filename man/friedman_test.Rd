@@ -7,6 +7,10 @@
 friedman_test(x, y, DNAID, PID, GROUP,grp1=NULL, grp2=NULL,grp3=NULL)
 }
 \arguments{
+\item{x}{x with sampleID and group; sampleID connected to x}
+
+\item{y}{y table rownames->taxonomy; colnames->sampleID}
+
 \item{DNAID}{names of sampleID to connect x and y}
 
 \item{PID}{id for paired test}
@@ -18,10 +22,6 @@ friedman_test(x, y, DNAID, PID, GROUP,grp1=NULL, grp2=NULL,grp3=NULL)
 \item{grp2}{one of groups}
 
 \item{grp3}{one of groups}
-
-\item{phen}{x with sampleID and group; sampleID connected to x}
-
-\item{prof}{y table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Friedman Test

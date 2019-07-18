@@ -7,13 +7,13 @@
 ANOVA_one(x, y, DNAID, GROUP)
 }
 \arguments{
+\item{x}{x with sampleID and group; sampleID connected to y}
+
+\item{y}{y table rownames->taxonomy; colnames->sampleID}
+
 \item{DNAID}{names of sampleID to connect x and y}
 
 \item{GROUP}{names of group information}
-
-\item{phen}{x with sampleID and group; sampleID connected to y}
-
-\item{prof}{y table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of one-way analysis of variance

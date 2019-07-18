@@ -52,7 +52,16 @@ export(pie1)
 export(volcano1)
 export(theme_box)
 
+# statistics
+## functions
 export(Correlation_matrix)
+## nonparamteric test
 export(wilcox_rank)
 export(wilcox_sign)
 export(kruskal_test)
+export(friedman_test)
+## parameteric test
+export(ANOVA_one)
+export(ANOVA_two)
+export(paired_ttest)
+export(unpaired_ttest)

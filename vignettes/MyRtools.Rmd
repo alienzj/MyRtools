@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include = FALSE, warning=F}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -18,60 +18,62 @@ knitr::opts_chunk$set(
 ```{r}
 library(MyRtools)
 print(sessionInfo())
+
+RUN <- F
 ```
 
-### 1 scatterplot
+### visualization
 ```{r}
-scatterplot1()
+if(RUN){
+  # 1 scatterplot
+  scatterplot1()
+  
+  # 2 histogram
+  histogram1()
+  
+  # 3 Bar chart and bar chart
+  bar2()
+  
+  # 4 boxplot 
+  boxplot1()
+  
+  # 5 area plot
+  area1()
+  
+  # 6 heatmap
+  heat1()
+  
+  # 7 correlate
+  corrplot1()
+  
+  # 8 line chart
+  linechart1()
+  
+  # 9 venn chart
+  venn2()
+  
+  # 10 volcano 
+  volcano1()
+  
+  # 11 pie chart
+  pie1()
+}
 ```
 
-### 2 histogram
+### Statistic Methods  
 ```{r}
-histogram1()
-```
+if(RUN){
+  # nonparamteric test
+  result1 <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+  result2 <- wilcox_sign(phen, prof, "SampleID", "ID", "Stage", "BASE", "WASH")
+  result3 <- kruskal_test(phen, prof, "SampleID", "Stage")
+  result4 <- friedman_test(phen, prof, "SampleID", "ID", "Stage")
 
-### 3 Bar chart and bar chart
-```{r}
-bar2()
-```
-
-### 4 boxplot 
-```{r}
-boxplot1()
-```
-
-### 5 area plot
-```{r}
-area1()
-```
-
-### 6 heatmap
-```{r}
-heat1()
-```
-
-### 7 correlate
-```{r}
-corrplot1()
-```
-
-### 8 line chart
-```{r}
-linechart1()
-```
-
-### 9 venn chart
-```{r}
-venn2()
-```
-
-### 10 volcano 
-```{r}
-volcano1()
-```
-
-### 11 pie chart
-```{r}
-pie1()
+  # paramteric test
+  res1 <- unpaired_ttest(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+  res2 <- paired_ttest(phen, prof, "SampleID", "ID", "Stage", "BASE", "WASH")
+  res3 <- ANOVA_one(phen, prof, "SampleID", "Stage")
+  res4 <- ANOVA_two(phen, prof, "SampleID", "Stage", "Group")
+}
 ```
 

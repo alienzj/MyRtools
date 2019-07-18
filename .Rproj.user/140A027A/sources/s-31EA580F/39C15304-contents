@@ -14,7 +14,8 @@
 #' @param grp2  one of groups to be converted into 1
 #'
 #' @usage wilcox_rank(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
-#' @example result <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+#' @examples result <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+#'
 #' @return   Returns a result of Wilcoxon Rank-Sum Test
 #' @return   Type:       kind of data
 #' @return   Block:      group information
@@ -197,13 +198,8 @@ wilcox_rank <- function(x, y, DNAID, GROUP,
 #'
 #' @export
 #'
-wilcox_sign <- function(x,
-                        y,
-                        DNAID,
-                        PID,
-                        GROUP,
-                        grp1=NULL,
-                        grp2=NULL){
+wilcox_sign <- function(x, y, DNAID, PID, GROUP,
+                        grp1=NULL, grp2=NULL){
 
   # determine x with two cols and names are corret
   phe <- x %>% select(DNAID, PID, GROUP)
@@ -502,8 +498,8 @@ kruskal_test <- function(x, y, DNAID, GROUP, FILTER=T,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen x with sampleID and group; sampleID connected to x
-#' @param prof y table rownames->taxonomy; colnames->sampleID
+#' @param x x with sampleID and group; sampleID connected to x
+#' @param y y table rownames->taxonomy; colnames->sampleID
 #' @param DNAID names of sampleID to connect x and y
 #' @param PID   id for paired test
 #' @param GROUP names of group information

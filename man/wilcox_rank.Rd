@@ -50,6 +50,10 @@ Tests for the difference between two independent variables; takes into account m
 \details{
 07/18/2019
 }
+\examples{
+result <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+
+}
 \author{
 Hua Zou
 }

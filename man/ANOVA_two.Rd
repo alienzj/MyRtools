@@ -4,7 +4,7 @@
 \alias{ANOVA_two}
 \title{Two-Way ANOVA Test}
 \usage{
-ANOVA_one(x, y, DNAID, GROUP1, GROUP2)
+ANOVA_two(x, y, DNAID, GROUP1, GROUP2)
 }
 \arguments{
 \item{x}{x with sampleID and group; sampleID connected to y}
@@ -28,7 +28,7 @@ P-value:  P by Two-Way ANOVA Test or post test pvalue
 
 FDR:        adjusted by BH
 
-mean+/-sd   each group
+mean+/-sd:   each group
 
 median:     each group
 }
@@ -40,7 +40,7 @@ two grouping variables (A and B) on a response variable
 07/18/2019
 }
 \examples{
-result <- ANOVA_one(phen, prof, "SampleID", "Stage", "Group")
+result <- ANOVA_two(phen, prof, "SampleID", "Stage", "Group")
 }
 \author{
 Hua Zou

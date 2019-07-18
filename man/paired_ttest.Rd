@@ -7,6 +7,10 @@
 paired_ttest(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
 }
 \arguments{
+\item{x}{x with sampleID, ID and group; sampleID connected to x}
+
+\item{y}{y table rownames->taxonomy; colnames->sampleID}
+
 \item{DNAID}{names of sampleID to connect x and y}
 
 \item{PID}{id for paired test}
@@ -16,10 +20,6 @@ paired_ttest(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
 \item{grp1}{one of groups to be converted into 0}
 
 \item{grp2}{one of groups to be converted into 1}
-
-\item{phen}{x with sampleID, ID and group; sampleID connected to x}
-
-\item{prof}{y table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Paired T-Test

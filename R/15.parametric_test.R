@@ -6,8 +6,8 @@
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param x phenotype with sampleID and group; sampleID connected to y
-#' @param y profile table rownames->taxonomy; colnames->sampleID
+#' @param x x with sampleID and group; sampleID connected to y
+#' @param y y table rownames->taxonomy; colnames->sampleID
 #' @param DNAID names of sampleID to connect x and y
 #' @param GROUP names of group information, only contail two levels if grp1 or grp2 haven't been provided
 #' @param grp1  one of groups to be converted into 0
@@ -174,8 +174,8 @@ unpaired_ttest <- function(x, y, DNAID, GROUP,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen  x with sampleID, ID and group; sampleID connected to x
-#' @param prof  y table rownames->taxonomy; colnames->sampleID
+#' @param x  x with sampleID, ID and group; sampleID connected to x
+#' @param y  y table rownames->taxonomy; colnames->sampleID
 #' @param DNAID names of sampleID to connect x and y
 #' @param PID   id for paired test
 #' @param GROUP names of group information, only contail two levels if grp1 or grp2 haven't been provided
@@ -199,13 +199,8 @@ unpaired_ttest <- function(x, y, DNAID, GROUP,
 #'
 #' @export
 #'
-paired_ttest <- function(x,
-                         y,
-                         DNAID,
-                         PID,
-                         GROUP,
-                         grp1=NULL,
-                         grp2=NULL){
+paired_ttest <- function(x, y, DNAID, PID, GROUP,
+                         grp1=NULL, grp2=NULL){
 
   # determine x with two cols and names are corret
   phe <- x %>% select(DNAID, PID, GROUP)
@@ -358,8 +353,8 @@ paired_ttest <- function(x,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen x with sampleID and group; sampleID connected to y
-#' @param prof y table rownames->taxonomy; colnames->sampleID
+#' @param x x with sampleID and group; sampleID connected to y
+#' @param y y table rownames->taxonomy; colnames->sampleID
 #' @param DNAID names of sampleID to connect x and y
 #' @param GROUP names of group information
 #'
@@ -376,7 +371,7 @@ paired_ttest <- function(x,
 #' @export
 #'
 ANOVA_one <- function(x, y, DNAID, GROUP,
-                       grp1=NULL, grp2=NULL,grp3=NULL){
+              grp1=NULL, grp2=NULL,grp3=NULL){
 
   # determine x with two cols and names are corret
   phe <- x %>% select(DNAID, GROUP)
@@ -486,14 +481,14 @@ ANOVA_one <- function(x, y, DNAID, GROUP,
 #' @param GROUP1 names of group information: factor1
 #' @param GROUP2 names of group information: factor2
 #'
-#' @usage ANOVA_one(x, y, DNAID, GROUP1, GROUP2)
-#' @examples result <- ANOVA_one(phen, prof, "SampleID", "Stage", "Group")
+#' @usage ANOVA_two(x, y, DNAID, GROUP1, GROUP2)
+#' @examples result <- ANOVA_two(phen, prof, "SampleID", "Stage", "Group")
 #' @return Returns a result of Two-Way ANOVA Test
 #' @return type:     kind of data
 #' @return Num:      number of group
 #' @return P-value:  P by Two-Way ANOVA Test or post test pvalue
 #' @return FDR:        adjusted by BH
-#' @return mean+/-sd   each group
+#' @return mean+/-sd:   each group
 #' @return median:     each group
 #'
 #' @export

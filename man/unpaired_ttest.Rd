@@ -7,9 +7,9 @@
 unpaired_ttest(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
 }
 \arguments{
-\item{x}{phenotype with sampleID and group; sampleID connected to y}
+\item{x}{x with sampleID and group; sampleID connected to y}
 
-\item{y}{profile table rownames->taxonomy; colnames->sampleID}
+\item{y}{y table rownames->taxonomy; colnames->sampleID}
 
 \item{DNAID}{names of sampleID to connect x and y}
 
