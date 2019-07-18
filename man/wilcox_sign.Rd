@@ -4,43 +4,56 @@
 \alias{wilcox_sign}
 \title{Wilcoxon Sign-Rank Test}
 \usage{
-result <- wilcox_sign(phen, prof, "SampleID", "ID", "Stage", "BASE", "WASH")
+wilcox_rank(x, y, DNAID, PID, GROUP, grp1=NULL, grp2=NULL)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{x}{x is a data.frma with sampleID and group; sampleID connected to y}
+
+\item{y}{y is a data.frma table rownames->taxonomy; colnames->sampleID}
+
+\item{DNAID}{names of sampleID to connect x and y}
 
 \item{PID}{id for paired test}
 
-\item{GROUP}{names of group information, only contail two levels if grp1 or grp2 haven't been provided}
+\item{GROUP}{names of group information, only contain two levels if grp1 or grp2 haven't been provided}
 
 \item{grp1}{one of groups to be converted into 0}
 
 \item{grp2}{one of groups to be converted into 1}
-
-\item{phen}{phenotype with sampleID, ID and group; sampleID connected to profile.}
-
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Wilcoxon Sign-Rank Test
-  type:       kind of data
-  Block:      group information
-  Num:        number of group
-  P-value:    P by Wilcoxon Sign-Rank Test
-  FDR:        adjusted by BH
-  Enrichment: directory by median
-              directory by rank
-  Occurence:  occurence of two groups
-  median:     both or each group
-  rank:       each group
-  FDR:        adjusted P value by BH
-  Odds Ratio:     95% Confidence interval
+
+type:       kind of data
+
+Block:      group information
+
+Num:        number of group
+
+P-value:    P by Wilcoxon Sign-Rank Test
+
+FDR:        adjusted by BH
+
+Enrichment: directory by median or directory by rank
+
+Occurence:  occurence of two groups
+
+median:     both or each group
+
+rank:       each group
+
+FDR:        adjusted P value by BH
+
+Odds Ratio:     95% Confidence interval
 }
 \description{
 Tests for the difference between two related variables; takes into account the magnitude and direction of difference
 }
 \details{
 07/18/2019
+}
+\examples{
+result <- wilcox_sign(phen, prof, "SampleID", "ID", "Stage", "BASE", "WASH")
 }
 \author{
 Hua Zou

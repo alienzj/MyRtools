@@ -4,10 +4,12 @@
 \alias{friedman_test}
 \title{Friedman Test}
 \usage{
-result <- friedman_test(phen, prof, "SampleID", "ID", "Stage")
+friedman_test(x, y, DNAID, PID, GROUP,grp1=NULL, grp2=NULL,grp3=NULL)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{DNAID}{names of sampleID to connect x and y}
+
+\item{PID}{id for paired test}
 
 \item{GROUP}{names of group information}
 
@@ -17,19 +19,24 @@ result <- friedman_test(phen, prof, "SampleID", "ID", "Stage")
 
 \item{grp3}{one of groups}
 
-\item{phen}{phenotype with sampleID and group; sampleID connected to profile.}
+\item{phen}{x with sampleID and group; sampleID connected to x}
 
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
+\item{prof}{y table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Friedman Test
-  type:       kind of data
-  Number:     number of group
-  P-value:    Pvalue by Friedman Test
-              pvalue by post test
-  FDR:        correct by BH in friedman test
-  Mean+SD:    each group
-  Median:     each group
+
+type:       kind of data
+
+Number:     number of group
+
+P-value:    Pvalue by Friedman Test or  pvalue by post test
+
+FDR:        correct by BH in friedman test
+
+Mean+SD:    each group
+
+Median:     each group
 }
 \description{
 The Friedman test is a non-parametric statistical test developed by Milton Friedman.
@@ -39,6 +46,9 @@ then considering the values of ranks by columns
 }
 \details{
 07/18/2019
+}
+\examples{
+result <- friedman_test(phen, prof, "SampleID", "ID", "Stage")
 }
 \author{
 Hua Zou

@@ -4,10 +4,14 @@
 \alias{kruskal_test}
 \title{Kruskal Test}
 \usage{
-result <- kruskal_test(phen, prof, "SampleID", "ID", "Stage")
+kruskal_test(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL, grp3=NULL)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{x}{x with sampleID and group; sampleID connected to y}
+
+\item{y}{y table rownames->taxonomy; colnames->sampleID}
+
+\item{DNAID}{names of sampleID to connect x and y}
 
 \item{GROUP}{names of group information}
 
@@ -16,19 +20,19 @@ result <- kruskal_test(phen, prof, "SampleID", "ID", "Stage")
 \item{grp2}{one of groups}
 
 \item{grp3}{one of groups}
-
-\item{phen}{phenotype with sampleID and group; sampleID connected to profile.}
-
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Kruskal Test
-  type:       kind of data
-  Number:     number of group
-  P-value:    Pvalue by Friedman Test
-              pvalue by post test
-  Mean+SD:    each group
-  Median:     each group
+
+type:       kind of data
+
+Number:     number of group
+
+P-value:    Pvalue by kruskal test or pvalue by post test
+
+Mean+SD:    each group
+
+Median:     each group
 }
 \description{
 The Kruskal–Wallis test by ranks, Kruskal–Wallis H test (named after William Kruskal and W. Allen Wallis),
@@ -38,6 +42,9 @@ It is used for comparing two or more independent samples of equal or different s
 }
 \details{
 07/18/2019
+}
+\examples{
+result <- kruskal_test(phen, prof, "SampleID", "Stage")
 }
 \author{
 Hua Zou

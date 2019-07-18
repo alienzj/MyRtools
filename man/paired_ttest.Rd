@@ -4,10 +4,10 @@
 \alias{paired_ttest}
 \title{Paired T-Test}
 \usage{
-result <- paired_ttest(phen, prof, "SampleID", "ID","Stage", "BASE", "WASH")
+paired_ttest(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{DNAID}{names of sampleID to connect x and y}
 
 \item{PID}{id for paired test}
 
@@ -17,24 +17,34 @@ result <- paired_ttest(phen, prof, "SampleID", "ID","Stage", "BASE", "WASH")
 
 \item{grp2}{one of groups to be converted into 1}
 
-\item{phen}{phenotype with sampleID, ID and group; sampleID connected to profile.}
+\item{phen}{x with sampleID, ID and group; sampleID connected to x}
 
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
+\item{prof}{y table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Paired T-Test
-  type:       kind of data
-  Block:      group information
-  Num:        number of group
-  P-value:    P by Paired T-Test
-  FDR:        adjusted by BH
-  Enrichment: directory by median
-              directory by mean
-  Occurence:  occurence of two groups
-  median:     both or each group
-  mean:       each group
-  FDR:        adjusted P value by BH
-  Odds Ratio:     95% Confidence interval
+
+type:       kind of data
+
+Block:      group information
+
+Num:        number of group
+
+P-value:    P by Paired T-Test
+
+FDR:        adjusted by BH
+
+Enrichment: directory by median or directory by mean
+
+Occurence:  occurence of two groups
+
+median:     both or each group
+
+mean:       each group
+
+FDR:        adjusted P value by BH
+
+Odds Ratio:     95% Confidence interval
 }
 \description{
 Tests for the difference between two variables from the same population (e.g., a pre- and posttest score)
@@ -43,6 +53,9 @@ Tests for the difference between two variables from the same population (e.g., a
 07/18/2019
 
 07/18/2019
+}
+\examples{
+result <- paired_ttest(phen, prof, "SampleID", "ID","Stage", "BASE", "WASH")
 }
 \author{
 Hua Zou

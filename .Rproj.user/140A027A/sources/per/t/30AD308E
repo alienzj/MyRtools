@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563443006444.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3187579943",
+    "id" : "30AD308E",
+    "lastKnownWriteTime" : 1563444002,
+    "last_content_update" : 1563444002656,
+    "path" : "E:/hua/script/MyRtools/R/15.parametric_test.R",
+    "project_path" : "R/15.parametric_test.R",
+    "properties" : {
+        "cursorPosition" : "493,64",
+        "scrollLine" : "474"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

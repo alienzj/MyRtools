@@ -4,28 +4,33 @@
 \alias{ANOVA_two}
 \title{Two-Way ANOVA Test}
 \usage{
-result <- ANOVA_one(phen, prof, "SampleID", "Stage", "Group")
+ANOVA_one(x, y, DNAID, GROUP1, GROUP2)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{x}{x with sampleID and group; sampleID connected to y}
+
+\item{y}{y table rownames->taxonomy; colnames->sampleID}
+
+\item{DNAID}{names of sampleID to connect x and y}
 
 \item{GROUP1}{names of group information: factor1}
 
 \item{GROUP2}{names of group information: factor2}
-
-\item{phen}{phenotype with sampleID and group; sampleID connected to profile.}
-
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Two-Way ANOVA Test
-  type:       kind of data
-  Num:        number of group
-  P-value:    P by Two-Way ANOVA Test
-              post test pvalue
-  FDR:        adjusted by BH
-  mean+/-sd   each group
-  median:     each group
+
+type:     kind of data
+
+Num:      number of group
+
+P-value:  P by Two-Way ANOVA Test or post test pvalue
+
+FDR:        adjusted by BH
+
+mean+/-sd   each group
+
+median:     each group
 }
 \description{
 Two-way ANOVA test is used to evaluate simultaneously the effect of
@@ -33,6 +38,9 @@ two grouping variables (A and B) on a response variable
 }
 \details{
 07/18/2019
+}
+\examples{
+result <- ANOVA_one(phen, prof, "SampleID", "Stage", "Group")
 }
 \author{
 Hua Zou

@@ -4,26 +4,31 @@
 \alias{ANOVA_one}
 \title{The one-way analysis of variance (ANOVA)}
 \usage{
-result <- ANOVA_one(phen, prof, "SampleID", "Stage")
+ANOVA_one(x, y, DNAID, GROUP)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{DNAID}{names of sampleID to connect x and y}
 
 \item{GROUP}{names of group information}
 
-\item{phen}{phenotype with sampleID and group; sampleID connected to profile.}
+\item{phen}{x with sampleID and group; sampleID connected to y}
 
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
+\item{prof}{y table rownames->taxonomy; colnames->sampleID}
 }
 \value{
-Returns a result of the one-way analysis of variance (ANOVA)
-  type:       kind of data
-  Num:        number of group
-  P-value:    P by one-way analysis of variance (ANOVA)
-              post test pvalue
-  FDR:        adjusted by BH
-  mean+/-sd   each group
-  median:     each group
+Returns a result of one-way analysis of variance
+
+type:     kind of data
+
+Num:      number of group
+
+P-value:  P by one-way analysis of variance or post test pvalue
+
+FDR:        adjusted by BH
+
+mean+/-sd   each group
+
+median:     each group
 }
 \description{
 one-factor ANOVA, is an extension of independent two-samples t-test for comparing means in a situation
@@ -32,6 +37,9 @@ one single grouping variable
 }
 \details{
 07/18/2019
+}
+\examples{
+result <- ANOVA_one(phen, prof, "SampleID", "Stage")
 }
 \author{
 Hua Zou

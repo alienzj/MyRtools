@@ -4,35 +4,45 @@
 \alias{wilcox_rank}
 \title{Wilcoxon Rank-Sum Test}
 \usage{
-result <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+wilcox_rank(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
 }
 \arguments{
-\item{DNAID}{names of sampleID to connect phen and prof}
+\item{x}{x is a data.frma with sampleID and group; sampleID connected to y}
 
-\item{GROUP}{names of group information, only contail two levels if grp1 or grp2 haven't been provided}
+\item{y}{y is a data.frma table rownames->taxonomy; colnames->sampleID}
+
+\item{DNAID}{names of sampleID to connect x and y}
+
+\item{GROUP}{names of group information, only contain two levels if grp1 or grp2 haven't been provided}
 
 \item{grp1}{one of groups to be converted into 0}
 
 \item{grp2}{one of groups to be converted into 1}
-
-\item{phen}{phenotype with sampleID and group; sampleID connected to profile.}
-
-\item{prof}{profile table rownames->taxonomy; colnames->sampleID}
 }
 \value{
 Returns a result of Wilcoxon Rank-Sum Test
-  type:       kind of data
-  Block:      group information
-  Num:        number of group
-  P-value:    P by Wilcoxon Rank-Sum Test
-  FDR:        adjusted by BH
-  Enrichment: directory by median
-              directory by rank
-  Occurence:  occurence of two groups
-  median:     both or each group
-  rank:       each group
-  FDR:        adjusted P value by BH
-  Odds Ratio:     95% Confidence interval
+
+Type:       kind of data
+
+Block:      group information
+
+Num:        number of group
+
+P-value:    P by Wilcoxon Rank-Sum Test
+
+FDR:        adjusted by BH
+
+Enrichment: directory by median or directory by rank
+
+Occurence:  occurence of two groups
+
+median:     both or each group
+
+rank:       each group
+
+FDR:        adjusted P value by BH
+
+Odds Ratio:     95% Confidence interval
 }
 \description{
 Tests for the difference between two independent variables; takes into account magnitude and direction of difference

@@ -6,27 +6,27 @@
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param x phenotype with sampleID and group; sampleID connected to y
+#' @param y profile table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
 #' @param GROUP names of group information, only contail two levels if grp1 or grp2 haven't been provided
 #' @param grp1  one of groups to be converted into 0
 #' @param grp2  one of groups to be converted into 1
 #'
-#' @usage result <- unpaired_ttest(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+#' @usage unpaired_ttest(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
+#' @examples  result <- unpaired_ttest(phen, prof, "SampleID", "Stage", "BASE", "WASH")
 #' @return Returns a result of Independent T-Test
-#'   type:       kind of data
-#'   Block:      group information
-#'   Num:        number of group
-#'   P-value:    P by Independent T-Test
-#'   FDR:        adjusted by BH
-#'   Enrichment: directory by median
-#'               directory by mean
-#'   Occurence:  occurence of two groups
-#'   median:     both or each group
-#'   mean:       each group
-#'   FDR:        adjusted P value by BH
-#'   Odds Ratio:     95% Confidence interval
+#' @return type:       kind of data
+#' @return Block:      group information
+#' @return Num:        number of group
+#' @return P-value:    P by Independent T-Test
+#' @return FDR:        adjusted by BH
+#' @return Enrichment: directory by median or directory by mean
+#' @return Occurence:  occurence of two groups
+#' @return median:     both or each group
+#' @return mean:       each group
+#' @return FDR:        adjusted P value by BH
+#' @return Odds Ratio:     95% Confidence interval
 #'
 #' @export
 #'
@@ -174,28 +174,28 @@ unpaired_ttest <- function(x, y, DNAID, GROUP,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID, ID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param phen  x with sampleID, ID and group; sampleID connected to x
+#' @param prof  y table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
 #' @param PID   id for paired test
 #' @param GROUP names of group information, only contail two levels if grp1 or grp2 haven't been provided
 #' @param grp1  one of groups to be converted into 0
 #' @param grp2  one of groups to be converted into 1
 #'
-#' @usage result <- paired_ttest(phen, prof, "SampleID", "ID","Stage", "BASE", "WASH")
+#' @usage paired_ttest(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
+#' @examples result <- paired_ttest(phen, prof, "SampleID", "ID","Stage", "BASE", "WASH")
 #' @return Returns a result of Paired T-Test
-#'   type:       kind of data
-#'   Block:      group information
-#'   Num:        number of group
-#'   P-value:    P by Paired T-Test
-#'   FDR:        adjusted by BH
-#'   Enrichment: directory by median
-#'               directory by mean
-#'   Occurence:  occurence of two groups
-#'   median:     both or each group
-#'   mean:       each group
-#'   FDR:        adjusted P value by BH
-#'   Odds Ratio:     95% Confidence interval
+#' @return type:       kind of data
+#' @return Block:      group information
+#' @return Num:        number of group
+#' @return P-value:    P by Paired T-Test
+#' @return FDR:        adjusted by BH
+#' @return Enrichment: directory by median or directory by mean
+#' @return Occurence:  occurence of two groups
+#' @return median:     both or each group
+#' @return mean:       each group
+#' @return FDR:        adjusted P value by BH
+#' @return Odds Ratio:     95% Confidence interval
 #'
 #' @export
 #'
@@ -358,20 +358,20 @@ paired_ttest <- function(x,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param phen x with sampleID and group; sampleID connected to y
+#' @param prof y table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
 #' @param GROUP names of group information
 #'
-#' @usage result <- ANOVA_one(phen, prof, "SampleID", "Stage")
-#' @return Returns a result of the one-way analysis of variance (ANOVA)
-#'   type:       kind of data
-#'   Num:        number of group
-#'   P-value:    P by one-way analysis of variance (ANOVA)
-#'               post test pvalue
-#'   FDR:        adjusted by BH
-#'   mean+/-sd   each group
-#'   median:     each group
+#' @usage ANOVA_one(x, y, DNAID, GROUP)
+#' @examples result <- ANOVA_one(phen, prof, "SampleID", "Stage")
+#' @return Returns a result of one-way analysis of variance
+#' @return type:     kind of data
+#' @return Num:      number of group
+#' @return P-value:  P by one-way analysis of variance or post test pvalue
+#' @return FDR:        adjusted by BH
+#' @return mean+/-sd   each group
+#' @return median:     each group
 #'
 #' @export
 #'
@@ -480,21 +480,21 @@ ANOVA_one <- function(x, y, DNAID, GROUP,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param x  x with sampleID and group; sampleID connected to y
+#' @param y  y table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
 #' @param GROUP1 names of group information: factor1
 #' @param GROUP2 names of group information: factor2
 #'
-#' @usage result <- ANOVA_one(phen, prof, "SampleID", "Stage", "Group")
+#' @usage ANOVA_one(x, y, DNAID, GROUP1, GROUP2)
+#' @examples result <- ANOVA_one(phen, prof, "SampleID", "Stage", "Group")
 #' @return Returns a result of Two-Way ANOVA Test
-#'   type:       kind of data
-#'   Num:        number of group
-#'   P-value:    P by Two-Way ANOVA Test
-#'               post test pvalue
-#'   FDR:        adjusted by BH
-#'   mean+/-sd   each group
-#'   median:     each group
+#' @return type:     kind of data
+#' @return Num:      number of group
+#' @return P-value:  P by Two-Way ANOVA Test or post test pvalue
+#' @return FDR:        adjusted by BH
+#' @return mean+/-sd   each group
+#' @return median:     each group
 #'
 #' @export
 #'

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563442002226.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "33|50|163|0|\n205|35|346|0|\n380|57|490|0|\n526|58|634|0|\n",
+    "hash" : "2055552936",
+    "id" : "CF97CA57",
+    "lastKnownWriteTime" : 1563444155,
+    "last_content_update" : 1563444155791,
+    "path" : "E:/hua/script/MyRtools/R/14.nonparametric_test.R",
+    "project_path" : "R/14.nonparametric_test.R",
+    "properties" : {
+        "cursorPosition" : "526,13",
+        "scrollLine" : "494"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

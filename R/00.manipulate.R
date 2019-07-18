@@ -1,5 +1,5 @@
 # transform data into package data
-
+#
 # library(devtools)
 # library(roxygen2)
 # library(dplyr)
@@ -21,7 +21,7 @@
 # read.table("inst/results.txt", header = T) -> DATA3
 # use_data(DATA3)
 
-# statistics data
+#statistics data
 # phen <- read.csv("inst/phenotype.csv") %>%
 #       mutate(BMI=rnorm(150, mean = 25, sd=6),
 #       Group=c(rep("ETB", 60), rep("ETP", 90)))

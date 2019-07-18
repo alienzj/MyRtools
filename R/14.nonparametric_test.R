@@ -6,27 +6,27 @@
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
-#' @param GROUP names of group information, only contail two levels if grp1 or grp2 haven't been provided
+#' @param x x is a data.frma with sampleID and group; sampleID connected to y
+#' @param y y is a data.frma table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
+#' @param GROUP names of group information, only contain two levels if grp1 or grp2 haven't been provided
 #' @param grp1  one of groups to be converted into 0
 #' @param grp2  one of groups to be converted into 1
 #'
-#' @usage result <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
-#' @return Returns a result of Wilcoxon Rank-Sum Test
-#'   type:       kind of data
-#'   Block:      group information
-#'   Num:        number of group
-#'   P-value:    P by Wilcoxon Rank-Sum Test
-#'   FDR:        adjusted by BH
-#'   Enrichment: directory by median
-#'               directory by rank
-#'   Occurence:  occurence of two groups
-#'   median:     both or each group
-#'   rank:       each group
-#'   FDR:        adjusted P value by BH
-#'   Odds Ratio:     95% Confidence interval
+#' @usage wilcox_rank(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL)
+#' @example result <- wilcox_rank(phen, prof, "SampleID", "Stage", "BASE", "WASH")
+#' @return   Returns a result of Wilcoxon Rank-Sum Test
+#' @return   Type:       kind of data
+#' @return   Block:      group information
+#' @return   Num:        number of group
+#' @return   P-value:    P by Wilcoxon Rank-Sum Test
+#' @return   FDR:        adjusted by BH
+#' @return   Enrichment: directory by median or directory by rank
+#' @return   Occurence:  occurence of two groups
+#' @return   median:     both or each group
+#' @return   rank:       each group
+#' @return   FDR:        adjusted P value by BH
+#' @return   Odds Ratio:     95% Confidence interval
 #'
 #' @export
 #'
@@ -172,28 +172,28 @@ wilcox_rank <- function(x, y, DNAID, GROUP,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID, ID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param x x is a data.frma with sampleID and group; sampleID connected to y
+#' @param y y is a data.frma table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
 #' @param PID   id for paired test
-#' @param GROUP names of group information, only contail two levels if grp1 or grp2 haven't been provided
+#' @param GROUP names of group information, only contain two levels if grp1 or grp2 haven't been provided
 #' @param grp1  one of groups to be converted into 0
 #' @param grp2  one of groups to be converted into 1
 #'
-#' @usage result <- wilcox_sign(phen, prof, "SampleID", "ID", "Stage", "BASE", "WASH")
-#' @return Returns a result of Wilcoxon Sign-Rank Test
-#'   type:       kind of data
-#'   Block:      group information
-#'   Num:        number of group
-#'   P-value:    P by Wilcoxon Sign-Rank Test
-#'   FDR:        adjusted by BH
-#'   Enrichment: directory by median
-#'               directory by rank
-#'   Occurence:  occurence of two groups
-#'   median:     both or each group
-#'   rank:       each group
-#'   FDR:        adjusted P value by BH
-#'   Odds Ratio:     95% Confidence interval
+#' @usage wilcox_rank(x, y, DNAID, PID, GROUP, grp1=NULL, grp2=NULL)
+#' @examples result <- wilcox_sign(phen, prof, "SampleID", "ID", "Stage", "BASE", "WASH")
+#' @return  Returns a result of Wilcoxon Sign-Rank Test
+#' @return  type:       kind of data
+#' @return  Block:      group information
+#' @return  Num:        number of group
+#' @return  P-value:    P by Wilcoxon Sign-Rank Test
+#' @return  FDR:        adjusted by BH
+#' @return  Enrichment: directory by median or directory by rank
+#' @return  Occurence:  occurence of two groups
+#' @return  median:     both or each group
+#' @return  rank:       each group
+#' @return  FDR:        adjusted P value by BH
+#' @return  Odds Ratio:     95% Confidence interval
 #'
 #' @export
 #'
@@ -358,46 +358,43 @@ wilcox_sign <- function(x,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param x x with sampleID and group; sampleID connected to y
+#' @param y y table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
 #' @param GROUP names of group information
 #' @param grp1  one of groups
 #' @param grp2  one of groups
 #' @param grp3  one of groups
 #'
-#' @usage result <- kruskal_test(phen, prof, "SampleID", "ID", "Stage")
+#' @usage kruskal_test(x, y, DNAID, GROUP, grp1=NULL, grp2=NULL, grp3=NULL)
+#' @examples result <- kruskal_test(phen, prof, "SampleID", "Stage")
 #' @return Returns a result of Kruskal Test
-#'   type:       kind of data
-#'   Number:     number of group
-#'   P-value:    Pvalue by Friedman Test
-#'               pvalue by post test
-#'   Mean+SD:    each group
-#'   Median:     each group
+#' @return  type:       kind of data
+#' @return  Number:     number of group
+#' @return  P-value:    Pvalue by kruskal test or pvalue by post test
+#' @return  Mean+SD:    each group
+#' @return  Median:     each group
 #'
 #' @export
 #'
-kruskal_test <- function(x, y, DNAID, PID, GROUP, FILTER=T,
+kruskal_test <- function(x, y, DNAID, GROUP, FILTER=T,
                          grp1=NULL, grp2=NULL,grp3=NULL){
 
   # determine x with two cols and names are corret
-  phe <- x %>% select(DNAID, PID, GROUP)
+  phe <- x %>% select(DNAID, GROUP)
   colnames(phe)[which(colnames(phe) == DNAID)] <- "SampleID"
-  colnames(phe)[which(colnames(phe) == PID)] <- "ID"
   colnames(phe)[which(colnames(phe) == GROUP)] <- "Stage"
-  if (length(which(colnames(phe)%in%c("SampleID","ID","Stage"))) != 3){
-    warning("x without 2 cols: DNAID, ID, GROUP")
+  if (length(which(colnames(phe)%in%c("SampleID","Stage"))) != 3){
+    warning("x without 2 cols: DNAID, GROUP")
   }
 
   # select groups
   if(length(grp1)){
     phe.cln <- phe %>% filter(Stage%in%c(grp1, grp2, grp3)) %>%
-      mutate(Stage=factor(Stage, levels = c(grp1, grp2, grp3))) %>%
-      arrange(ID, Stage)
+      mutate(Stage=factor(Stage, levels = c(grp1, grp2, grp3)))
     pr <- c(grp1, grp2, grp3)
   } else {
-    phe.cln <- phe %>% mutate(Stage=factor(Stage)) %>%
-      arrange(ID, Stage)
+    phe.cln <- phe %>% mutate(Stage=factor(Stage))
     pr <- levels(phe.cln$Stage)
   }
 
@@ -430,8 +427,8 @@ kruskal_test <- function(x, y, DNAID, PID, GROUP, FILTER=T,
   mdat <- inner_join(phe.cln %>% filter(SampleID%in%sid),
                      prf %>% rownames_to_column("SampleID"),
                      by = "SampleID")
-  dat.phe <- mdat %>% select(c(1:3))
-  dat.prf <- mdat %>% select(-c(2:3))
+  dat.phe <- mdat %>% select(c(1:2))
+  dat.prf <- mdat %>% select(-2)
   idx <- which(colnames(dat.phe) == "Stage")
 
   kru.res <- apply(dat.prf[, -1], 2, function(x, grp){
@@ -505,23 +502,24 @@ kruskal_test <- function(x, y, DNAID, PID, GROUP, FILTER=T,
 #' @details 07/18/2019
 #' @author  Hua Zou
 #'
-#' @param phen phenotype with sampleID and group; sampleID connected to profile.
-#' @param prof profile table rownames->taxonomy; colnames->sampleID
-#' @param DNAID names of sampleID to connect phen and prof
+#' @param phen x with sampleID and group; sampleID connected to x
+#' @param prof y table rownames->taxonomy; colnames->sampleID
+#' @param DNAID names of sampleID to connect x and y
+#' @param PID   id for paired test
 #' @param GROUP names of group information
 #' @param grp1  one of groups
 #' @param grp2  one of groups
 #' @param grp3  one of groups
 #'
-#' @usage result <- friedman_test(phen, prof, "SampleID", "ID", "Stage")
+#' @usage friedman_test(x, y, DNAID, PID, GROUP,grp1=NULL, grp2=NULL,grp3=NULL)
+#' @examples result <- friedman_test(phen, prof, "SampleID", "ID", "Stage")
 #' @return Returns a result of Friedman Test
-#'   type:       kind of data
-#'   Number:     number of group
-#'   P-value:    Pvalue by Friedman Test
-#'               pvalue by post test
-#'   FDR:        correct by BH in friedman test
-#'   Mean+SD:    each group
-#'   Median:     each group
+#' @return  type:       kind of data
+#' @return  Number:     number of group
+#' @return  P-value:    Pvalue by Friedman Test or  pvalue by post test
+#' @return  FDR:        correct by BH in friedman test
+#' @return  Mean+SD:    each group
+#' @return  Median:     each group
 #'
 #' @export
 #'
