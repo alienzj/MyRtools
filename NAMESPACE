@@ -26,7 +26,10 @@ importFrom(VennDiagram, venn.diagram)
 importFrom(ggthemes, theme_wsj)
 importFrom(ggthemes, scale_fill_wsj)
 importFrom(corrplot, corrplot)
+importFrom(Hmisc, rcorr)
 
+importFrom(varhandle, unfactor)
+importFrom(PMCMR, posthoc.durbin.test)
 
 # import packages
 import(ggplot2)
@@ -47,3 +50,9 @@ export(venn1)
 export(venn2)
 export(pie1)
 export(volcano1)
+export(theme_box)
+
+export(Correlation_matrix)
+export(wilcox_rank)
+export(wilcox_sign)
+export(kruskal_test)
