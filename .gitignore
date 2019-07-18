@@ -8,3 +8,4 @@
 *.zip
 *.log
 inst/doc
+*.DS_Store
