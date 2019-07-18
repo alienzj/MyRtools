@@ -3,7 +3,7 @@
 #' @description
 #' Tests for the difference between the same variable from different populations (e.g., comparing boys to girls)
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019  ShenZhen China
 #' @author  Hua Zou
 #'
 #' @param x x with sampleID and group; sampleID connected to y
@@ -168,10 +168,7 @@ unpaired_ttest <- function(x, y, DNAID, GROUP,
 #' @description
 #' Tests for the difference between two variables from the same population (e.g., a pre- and posttest score)
 #'
-#' @details 07/18/2019
-#' @author  Hua Zou
-#'
-#' @details 07/18/2019
+#' @details 07/18/2019   ShenZhen China
 #' @author  Hua Zou
 #'
 #' @param x  x with sampleID, ID and group; sampleID connected to x
@@ -350,7 +347,7 @@ paired_ttest <- function(x, y, DNAID, PID, GROUP,
 #' where there are more than two groups. In one-way ANOVA, the data is organized into several groups base on
 #' one single grouping variable
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019  ShenZhen China
 #' @author  Hua Zou
 #'
 #' @param x x with sampleID and group; sampleID connected to y
@@ -472,7 +469,7 @@ ANOVA_one <- function(x, y, DNAID, GROUP,
 #' Two-way ANOVA test is used to evaluate simultaneously the effect of
 #' two grouping variables (A and B) on a response variable
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019  ShenZhen China
 #' @author  Hua Zou
 #'
 #' @param x  x with sampleID and group; sampleID connected to y

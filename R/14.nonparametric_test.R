@@ -3,11 +3,11 @@
 #' @description
 #' Tests for the difference between two independent variables; takes into account magnitude and direction of difference
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019  ShenZhen China
 #' @author  Hua Zou
 #'
-#' @param x x is a data.frma with sampleID and group; sampleID connected to y
-#' @param y y is a data.frma table rownames->taxonomy; colnames->sampleID
+#' @param x x is data.frame with sampleID and group; sampleID connected to y
+#' @param y y is table rownames->taxonomy; colnames->sampleID
 #' @param DNAID names of sampleID to connect x and y
 #' @param GROUP names of group information, only contain two levels if grp1 or grp2 haven't been provided
 #' @param grp1  one of groups to be converted into 0
@@ -170,11 +170,11 @@ wilcox_rank <- function(x, y, DNAID, GROUP,
 #' @description
 #' Tests for the difference between two related variables; takes into account the magnitude and direction of difference
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019 ShenZhen China
 #' @author  Hua Zou
 #'
-#' @param x x is a data.frma with sampleID and group; sampleID connected to y
-#' @param y y is a data.frma table rownames->taxonomy; colnames->sampleID
+#' @param x x is data.frame with sampleID and group; sampleID connected to y
+#' @param y y is table rownames->taxonomy; colnames->sampleID
 #' @param DNAID names of sampleID to connect x and y
 #' @param PID   id for paired test
 #' @param GROUP names of group information, only contain two levels if grp1 or grp2 haven't been provided
@@ -351,7 +351,7 @@ wilcox_sign <- function(x, y, DNAID, PID, GROUP,
 #' It is used for comparing two or more independent samples of equal or different sample sizes.
 #'  It extends the Mann–Whitney U test, which is used for comparing only two groups
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019  ShenZhen China
 #' @author  Hua Zou
 #'
 #' @param x x with sampleID and group; sampleID connected to y
@@ -495,7 +495,7 @@ kruskal_test <- function(x, y, DNAID, GROUP, FILTER=T,
 #'in treatments across multiple test attempts. The procedure involves ranking each row (or block) together,
 #'then considering the values of ranks by columns
 #'
-#' @details 07/18/2019
+#' @details 07/18/2019  ShenZhen China
 #' @author  Hua Zou
 #'
 #' @param x x with sampleID and group; sampleID connected to x
