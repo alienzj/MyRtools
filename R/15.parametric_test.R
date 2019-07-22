@@ -138,11 +138,11 @@ unpaired_ttest <- function(x, y, DNAID, GROUP,
     #
     # Returns:
     #   the glm result of between taxonomy group
-    group <- m
-    marker <- n
-    model <- summary(glm(marker ~ group, family = binomial(link = "logit")))
-    res <- signif(exp(model$coefficients["group",1]) +
-                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["group",1], 2)
+    dat.glm <- data.frame(group=m, marker=scale(n, center=T, scale=T))
+    model <- summary(glm(group ~ marker, data = dat.glm,
+                         family = binomial(link = "logit")))
+    res <- signif(exp(model$coefficients["marker",1]) +
+                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["marker",1], 2)
 
     return(res)
   }
@@ -315,11 +315,11 @@ paired_ttest <- function(x, y, DNAID, PID, GROUP,
     #
     # Returns:
     #   the glm result of between taxonomy group
-    group <- m
-    marker <- n
-    model <- summary(glm(marker ~ group, family = binomial(link = "logit")))
-    res <- signif(exp(model$coefficients["group",1]) +
-                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["group",1], 2)
+    dat.glm <- data.frame(group=m, marker=scale(n, center=T, scale=T))
+    model <- summary(glm(group ~ marker, data = dat.glm,
+                         family = binomial(link = "logit")))
+    res <- signif(exp(model$coefficients["marker",1]) +
+                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["marker",1], 2)
 
     return(res)
   }

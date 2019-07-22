@@ -140,11 +140,11 @@ wilcox_rank <- function(x, y, DNAID, GROUP,
     #
     # Returns:
     #   the glm result of between taxonomy group
-    group <- m
-    marker <- n
-    model <- summary(glm(marker ~ group, family = binomial(link = "logit")))
-    res <- signif(exp(model$coefficients["group",1]) +
-                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["group",1], 2)
+    dat.glm <- data.frame(group=m, marker=scale(n, center=T, scale=T))
+    model <- summary(glm(group ~ marker, data = dat.glm,
+                         family = binomial(link = "logit")))
+    res <- signif(exp(model$coefficients["marker",1]) +
+                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["marker",1], 2)
 
     return(res)
   }
@@ -230,8 +230,8 @@ wilcox_sign <- function(x, y, DNAID, PID, GROUP,
   sid <- intersect(phe.cln$SampleID, colnames(y))
   prf <- y %>% select(sid) %>%
     rownames_to_column("tmp") %>%
-    # occurrence of rows more than 0.1
-    filter(apply(select(., -one_of("tmp")), 1, function(x){sum(x > 0)/length(x)}) > 0.3) %>%
+    # occurrence of rows more than 0.3
+    filter(apply(select(., -one_of("tmp")), 1, function(x){sum(x[!is.na(x)] != 0)/length(x)}) > 0.3) %>%
     data.frame() %>% column_to_rownames("tmp") %>%
     t() %>% data.frame()
 
@@ -251,15 +251,37 @@ wilcox_sign <- function(x, y, DNAID, PID, GROUP,
   mdat <- inner_join(phe.cln %>% filter(SampleID%in%sid),
                      prf %>% rownames_to_column("SampleID"),
                      by = "SampleID")
-  dat.phe <- mdat %>% select(c(1:3))
-  dat.prf <- mdat %>% select(-c(2:3))
 
-  res <- apply(dat.prf[, -1], 2, function(x, grp){
-    dat <- as.numeric(x)
-    p <- signif(wilcox.test(dat ~ grp, paired=T)$p.value, 6)
+  dat.phe <- mdat %>% select(c(1:3))
+  dat.prf.tmp <- mdat %>% select(-c(1:3))
+  dat.prf <- apply(dat.prf.tmp, 2, function(x){
+    as.numeric(as.character(x))}) %>% data.frame()
+
+  res <- apply(dat.prf, 2, function(x, grp){
+
+    origin <- data.frame(value=as.numeric(x), grp)
+    number <- tapply(origin$value, origin$Stage, function(x){sum(!is.na(x))})
+    Num <- paste0(pr[1], number[1], "_vs_",
+                  pr[2], number[2])
+    # remove NA data
+    dat <- origin %>% na.omit()
+    intersectFun <- function(x){
+      tmp <- x %>% mutate(Stage = factor(Stage))
+      id <- unique(as.character(tmp$ID))
+      for (i in 1:length(levels(tmp$Stage))) {
+        id <- intersect(id,
+          unlist(tmp %>% filter(Stage == levels(Stage)[i]) %>% select(ID)))
+      }
+      return(id)
+    }
+    dat.cln <- dat %>% filter(ID%in%intersectFun(dat)) %>%
+      arrange(ID, Stage)
+
+    p <- signif(wilcox.test(value ~ Stage, data=dat.cln, paired=T)$p.value, 6)
+
     # median
-    md <- signif(median(dat), 4)
-    mdn <- signif(tapply(dat, grp, median), 4)
+    md <- signif(median(dat.cln$value), 4)
+    mdn <- signif(tapply(dat.cln$value, dat.cln$Stage, median), 4)
     if ( mdn[1] > mdn[2] & p < 0.05) {
       enrich1 <- pr[1]
     } else if (mdn[1] < mdn[2] & p < 0.05) {
@@ -269,8 +291,8 @@ wilcox_sign <- function(x, y, DNAID, PID, GROUP,
     }
 
     # rank
-    rk <- rank(dat)
-    rnk <- signif(tapply(rk, grp, mean), 4)
+    rk <- rank(dat.cln$value)
+    rnk <- signif(tapply(rk, dat.cln$Stage, mean), 4)
     if ( rnk[1] > rnk[2] & p < 0.05) {
       enrich2 <- pr[1]
     } else if (rnk[1] < rnk[2] & p < 0.05) {
@@ -278,33 +300,32 @@ wilcox_sign <- function(x, y, DNAID, PID, GROUP,
     } else if (p > 0.05 | rnk[1] == rnk[2]){
       enrich2 <- "No significance"
     }
-    occ <- signif(tapply(dat, grp, function(x){
+    occ <- signif(tapply(dat.cln$value, dat.cln$Stage, function(x){
       round(sum(x > 0)/length(x), 4)}), 4)
+    Pair <- nrow(dat.cln)
 
-    res <- c(p,enrich1,enrich2,occ,md,mdn,rnk)
+    res <- c(Num,Pair,p,enrich1,enrich2,occ,md,mdn,rnk)
 
     return(res)
-  }, dat.phe$Stage) %>%
+  }, dat.phe) %>%
     t(.) %>% data.frame(.) %>%
     rownames_to_column("type") %>%
     varhandle::unfactor(.)
 
-  colnames(res)[2:11] <- c("Pvalue", "Enrich_median", "Enrich_rank",
-                           paste0(pr, "_occurence"), "median_all",
-                           paste0(pr, "_median"), paste0(pr, "_rank"))
+  colnames(res)[2:ncol(res)] <- c("Number","Paired","Pvalue",
+                                  "Enrich_median", "Enrich_rank",
+                                  paste0(pr, "_occurence"), "median_all",
+                                  paste0(pr, "_median"), paste0(pr, "_rank"))
   res$Block <- paste0(pr[1], "_vs_", pr[2])
-  number <- as.numeric(table(dat.phe$Stage))
-  res$Num <- paste0(pr[1], number[1], "_vs_",
-                    pr[2], number[2])
-  res.cln <- res %>% select(c(1,12:13, 2:11)) %>%
+  res.cln <- res %>% select(c(1,14,2:13)) %>%
     mutate(Pvalue=as.numeric(Pvalue)) %>%
     mutate(FDR=p.adjust(Pvalue, method = "BH")) %>%
     arrange(FDR, Pvalue)
-  res2 <- res.cln[,c(1:4,14,5:13)]
+  res2 <- res.cln[,c(1:5,15,6:14)]
 
 
   # scale profile
-  dat.prf.cln <- prf[, -1]
+  dat.prf.cln <- dat.prf[, -1]
   dat.phe.cln <- dat.phe %>% mutate(Group=ifelse(Stage==pr[1], 0, 1))
   idx <- which(colnames(dat.phe.cln) == "Group")
 
@@ -318,11 +339,11 @@ wilcox_sign <- function(x, y, DNAID, PID, GROUP,
     #
     # Returns:
     #   the glm result of between taxonomy group
-    group <- m
-    marker <- n
-    model <- summary(glm(marker ~ group, family = binomial(link = "logit")))
-    res <- signif(exp(model$coefficients["group",1]) +
-                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["group",1], 2)
+    dat.glm <- data.frame(group=m, marker=scale(n, center=T, scale=T)) %>% na.omit()
+    model <- summary(glm(group ~ marker, data = dat.glm,
+                         family = binomial(link = "logit")))
+    res <- signif(exp(model$coefficients["marker",1]) +
+                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["marker",1], 2)
 
     return(res)
   }
