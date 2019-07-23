@@ -33,4 +33,5 @@ Imports:
     corrplot (>= 0.84),
     Hmisc (>= 4.2-0),
     PMCMR (>= 4.3),
-    varhandle (>= 2.0.3)
+    varhandle (>= 2.0.3),
+    circlize (>= 0.4.6)

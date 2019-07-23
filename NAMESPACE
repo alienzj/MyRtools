@@ -30,10 +30,16 @@ importFrom(Hmisc, rcorr)
 
 importFrom(varhandle, unfactor)
 importFrom(PMCMR, posthoc.durbin.test)
+importFrom("stats", "TukeyHSD", "aov", "binomial", "cor",
+             "friedman.test", "glm", "kruskal.test", "lm", "median",
+             "na.omit", "p.adjust", "qnorm", "rnorm", "sd", "setNames",
+             "t.test", "wilcox.test")
+importFrom("utils", "read.csv", "unstack")
 
 # import packages
 import(ggplot2)
 import(dplyr)
+import(circlize)
 
 # import functions edited by author in a hand manner
 export(scatterplot1)
@@ -51,6 +57,7 @@ export(venn2)
 export(pie1)
 export(volcano1)
 export(theme_box)
+export(circos1)
 
 # statistics
 ## functions
