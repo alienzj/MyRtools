@@ -1,6 +1,7 @@
 #dir
 *tmp/
 *.Rcheck/
+*..Rproj.user/
 
 
 #files
