@@ -1,12 +1,11 @@
 #dir
 *tmp/
 *.Rcheck/
-*..Rproj.user/
-
+*.Rproj.user/
+.Rproj.user/
 
 #files
 .Rhistory
-#*.zip
 *.log
 inst/doc
 *.DS_Store
