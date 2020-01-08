@@ -27,3 +27,10 @@
 #       Group=c(rep("ETB", 60), rep("ETP", 90)))
 # prof <- read.table("inst/test.profile")
 # use_data(phen, prof)
+
+#PCA site data
+# pca_site <- read.table("data/pca_site.txt", header = T, sep = "\t", row.names = 1) %>%
+#   mutate(PID = rep(paste("P", c(1:8)), 3))
+# use_data(pca_site)
+
+

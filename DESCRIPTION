@@ -1,7 +1,7 @@
 Package: MyRtools
 Type: Package
 Title: Handy functions for analysis in R
-Version: 0.1.2
+Version: 0.1.3
 Author: Zou Hua
 Maintainer: Zou Hua <zouhua1@outlook.com>
 Description: Some hopeful tools or codes in daily work, especially in visualization and statistics
@@ -9,7 +9,7 @@ License: GPL
 Encoding: UTF-8
 LazyData: true
 Packaged: 2019-07-16 ShenZhen China;
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2
 Suggests: 
     knitr,
     rmarkdown,
@@ -19,7 +19,7 @@ Depends:
   R (>= 3.5.0)
 Imports: 
     ggplot2 (>= 3.2.0),
-    patternplot (>= 0.2),
+    patternplot (>= 0.3.2),
     tidyr (>= 0.8.1),
     dplyr (>= 0.8.1),
     data.table (>= 1.12.2),
@@ -34,4 +34,8 @@ Imports:
     Hmisc (>= 4.2-0),
     PMCMR (>= 4.3),
     varhandle (>= 2.0.3),
-    circlize (>= 0.4.6)
+    circlize (>= 0.4.6),
+    patchwork (>= 1.0.0.9000),
+    vegan (>= 2.5-6),
+    plyr (>= 1.8.5),
+    plotrix (>= 3.7-7)

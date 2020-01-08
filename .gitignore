@@ -10,3 +10,4 @@
 *.log
 inst/doc
 *.DS_Store
+.Rproj.user

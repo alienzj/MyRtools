@@ -28,4 +28,21 @@ Correlation_matrix <- function(dat=DATA2){
   return(flattenCorrMatrix(signif(res$r, 5), signif(res$P, 5)))
 }
 
+#' Install suggest packages
+#'
+#' @description The install_suggest_packages function will install the suggest packages
+#'
+#' @param packages   a list of packages
+#' @examples install_suggest_packages(packages_name_list)
+#'
+
+install_suggest_packages <- function(packages_name_list = c("randomForest")){
+  usePackage <- function(p) {
+    if (!is.element(p, installed.packages()[, 1]))
+      install.packages(p, dep=TRUE, repos="https://mirrors.tuna.tsinghua.edu.cn/CRAN/")
+    suppressWarnings(suppressMessages(invisible(require(p, character.only=TRUE))))
+  }
+  invisible(lapply(packages_name_list, usePackage))
+}
+
 

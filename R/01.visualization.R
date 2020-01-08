@@ -111,18 +111,18 @@ bar1 <- function() {
 #'
 bar2 <- function() {
 
-  data <- read.csv(system.file("extdata", "monthlyexp.csv", package = "patternplot"))
-  data <- data[which(data$City == "City 1"), ]
+  dat <- read.csv(system.file("extdata", "monthlyexp.csv", package = "patternplot"))
+  dat <- dat[grep("1", dat$Location), ]
 
-  x <- factor(data$Type, c("Housing", "Food", "Childcare"))
-  y <- data$Monthly_Expenses
+  x <- factor(dat$Type, c("Housing", "Food", "Childcare"))
+  y <- dat$Amount
   pattern.type <- c("hdashes", "blank", "crosshatch")
   pattern.color <- c("black", "black", "black")
   background.color <- c("white", "white", "white")
   density <- c(20, 20, 10)
 
   return(
-    patternplot::patternbar(data, x, y, group = NULL,
+    patternplot::patternbar(dat, x, y, group = NULL,
                             ylab = "Monthly Expenses, Dollar",
                             pattern.type = pattern.type,
                             pattern.color = pattern.color,
@@ -202,7 +202,7 @@ boxplot1 <- function(dat=DATA){
 #' @examples boxplot2(DATA)
 #'
 boxplot2 <- function(dat=DATA){
-
+  dat=DATA
   BOXPLOT <- dat %>% mutate(Fruit=factor(Fruit)) %>%
     patternplot::patternboxplot(dat$Store, dat$Weight,
                                 group=dat$Fruit,
@@ -215,7 +215,7 @@ boxplot2 <- function(dat=DATA){
                                 ylab='Weights, pounds',
                                 legend.h=1.5,
                                 legend.y.pos=0.5,
-                                legend.ratio1=0.005,
+                                #legend.ratio1=0.005,
                                 legend.x.pos=0.15)+
     ggtitle('(B) Colors with Patterns')+
     theme_bw(base_size=12) +
@@ -502,28 +502,18 @@ volcano1 <- function(dat=DATA3){
 #' @examples
 #' pie1()
 #'
-pie1 <- function(){
+pie1 <- function() {
 
-  data <- read.csv(system.file("extdata", "vegetables.csv", package="patternplot"))
-  pattern.type <- c('hdashes', 'vdashes', 'bricks')
-  pattern.color <- c('red3','green3', 'white' )
-  background.color <- c('dodgerblue', 'lightpink', 'orange')
+  dat <- data.frame(group = c("Carbohydrate", "Protein", "Fat"),
+                    pct=c(43, 25, 32)) %>%
+    mutate(label = paste(group, "\n", paste0(pct, "%")))
 
-  return(
-    patternplot::patternpie(group=data$group,
-                            pct=data$pct,
-                            label=data$label,
-                            pattern.type=pattern.type,
-                            pattern.color=pattern.color,
-                            background.color=background.color,
-                            frame.color='grey40',
-                            pixel=0.3,
-                            pattern.line.size=0.3,
-                            frame.size=1.5,
-                            label.size=5,
-                            label.distance=1.35)+
-      ggtitle('(B) Colors with Patterns')
-  )
+  plotrix::pie3D(dat$pct,
+        labels=dat$label,
+        col=c("darkolivegreen1", "white", "indianred"),
+        shade=0.5, explode=0.1,
+        theta = 0.8, radius = 1,
+        labelcex = 1)
 }
 
 

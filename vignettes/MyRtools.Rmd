@@ -77,3 +77,11 @@ if(RUN){
 }
 ```
 
+### application on visualization
+```{r}
+if(RUN){
+  pca_plot <- PCA_scatterplot(pca_site)
+  per_res <- PERMANOVA(phen, prof)
+}
+```
+
