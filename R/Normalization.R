@@ -9,15 +9,13 @@
 #' @details 12/1/2021 Guangzhou China
 #' @author  Hua Zou
 #'
-#'
-#' @param Vectors, a vector contains numeric.
-#' @param type, the default method is Zscore. There are some other approaches, such as "MAD": Median Absolute Deviation;
-#' "Robust"; "Unit"; "Zscore"; "Median"; "Min_Max" scale normalization.
+#' @param Vectors, Numeric; (Required) a vector contains numeric.
+#' @param type, Character; "MAD": Median Absolute Deviation; "Robust"; "Unit"; "Zscore"; "Median"; "Min_Max" scale normalization(default: Zscore).
 #'
 #' @return
 #' a normalized vector
 #'
-#' @usage NormalizeFun(Vectors, type="Zscore")
+#' @usage NormalizeFun(Vector, type="Zscore")
 #' @examples
 #'
 #' V <- c(1:20, 30:40)

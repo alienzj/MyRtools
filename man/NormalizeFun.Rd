@@ -4,13 +4,12 @@
 \alias{NormalizeFun}
 \title{Normalization}
 \usage{
-NormalizeFun(Vectors, type="Zscore")
+NormalizeFun(Vector, type="Zscore")
 }
 \arguments{
-\item{Vectors, }{a vector contains numeric.}
+\item{Vectors, }{Numeric; (Required) a vector contains numeric.}
 
-\item{type, }{the default method is Zscore. There are some other approaches, such as "MAD": Median Absolute Deviation;
-"Robust"; "Unit"; "Zscore"; "Median"; "Min_Max" scale normalization.}
+\item{type, }{Character; "MAD": Median Absolute Deviation; "Robust"; "Unit"; "Zscore"; "Median"; "Min_Max" scale normalization(default: Zscore).}
 }
 \value{
 a normalized vector

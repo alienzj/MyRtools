@@ -4,22 +4,22 @@
 \alias{get_ExprSet}
 \title{Building ExpressionSet Object}
 \usage{
-get_ExprSet(Profile, Metadata, Feature=NULL)
+get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
 }
 \arguments{
-\item{Profile, }{(Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.}
+\item{Profile, }{Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.}
 
-\item{Metadata, }{(Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).}
+\item{Metadata, }{Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).}
 
-\item{Feature, }{a dataframe of the feature of Profile.}
+\item{Feature, }{Data.frame; the feature of Profile.}
 
-\item{Trim, }{filtering Feature and Sample with occurrence(default: FALSE).}
+\item{Trim, }{Logical; filtering Feature and Sample with occurrence(default: FALSE).}
 
-\item{Occ_Feature, }{the cutoff of Feature's trim(default: occurrence=0.2).}
+\item{Occ_Feature, }{Numeric; the cutoff of Feature's trim(default: occurrence=0.2).}
 
-\item{Each, }{filtering Features each group or whole data(default: Each("Group")=FALSE).}
+\item{Each, }{Logical; filtering Features each group or whole data(default: Each("Group")=FALSE).}
 
-\item{Occ_Sample, }{the cutoff of Sample's trim(default: occurrence=0.2).}
+\item{Occ_Sample, }{Numeric; the cutoff of Sample's trim(default: occurrence=0.2).}
 }
 \value{
 an ExpressionSet Object

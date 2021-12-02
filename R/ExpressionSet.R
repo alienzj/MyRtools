@@ -13,20 +13,19 @@
 #' @details 12/2/2021 Guangzhou China
 #' @author  Hua Zou
 #'
-#'
-#' @param Profile, (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.
-#' @param Metadata, (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
-#' @param Feature, a dataframe of the feature of Profile.
-#' @param Trim, filtering Feature and Sample with occurrence(default: FALSE).
-#' @param Occ_Feature, the cutoff of Feature's trim(default: occurrence=0.2).
-#' @param Each, filtering Features each group or whole data(default: Each("Group")=FALSE).
-#' @param Occ_Sample, the cutoff of Sample's trim(default: occurrence=0.2).
+#' @param Profile, Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.
+#' @param Metadata, Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
+#' @param Feature, Data.frame; the feature of Profile.
+#' @param Trim, Logical; filtering Feature and Sample with occurrence(default: FALSE).
+#' @param Occ_Feature, Numeric; the cutoff of Feature's trim(default: occurrence=0.2).
+#' @param Each, Logical; filtering Features each group or whole data(default: Each("Group")=FALSE).
+#' @param Occ_Sample, Numeric; the cutoff of Sample's trim(default: occurrence=0.2).
 #'
 #'
 #' @return
 #' an ExpressionSet Object
 #'
-#' @usage get_ExprSet(Profile, Metadata, Feature=NULL)
+#' @usage get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
 #' @examples
 #'
 #' Profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")
@@ -50,14 +49,6 @@ get_ExprSet <- function(profile=Profile,
                         each=FALSE,
                         occ_Sample=0.2){
 
-  # profile=Profile
-  # metadata=Metadata
-  # feature=Feature
-  # trim=TRUE
-  # occ_Feature=0.2
-  # each=TRUE
-  # occ_Sample=0.2
-
   # trim feature and sample
   if(trim){
     TrimFun <- function(x, y){
@@ -70,7 +61,7 @@ get_ExprSet <- function(profile=Profile,
 
       # Each
       if(each){
-        mdat <- y %>% dplyr::select(SampleID, Group) %>%
+        mdat <- y %>% dplyr::select(all_of(c("SampleID", "Group"))) %>%
           dplyr::inner_join(x %>%
                               t() %>% data.frame() %>%
                               tibble::rownames_to_column("SampleID"),
@@ -84,7 +75,7 @@ get_ExprSet <- function(profile=Profile,
 
         feature_occ_each <- sapply(1:length(group_name_each), function(i){
           df <- mdat %>% dplyr::filter(SampleID%in%group_name_each[[i]])
-          df2 <- df %>% dplyr::select(-Group) %>%
+          df2 <- df %>% dplyr::select(-"Group") %>%
             tibble::column_to_rownames("SampleID") %>%t()
           ratios <- as.numeric(apply(df2, 1, function(x){length(x[x!=0])/length(x)}))
           return(ratios)
@@ -121,7 +112,7 @@ get_ExprSet <- function(profile=Profile,
   intersect_id <- dplyr::intersect(colnames(profile), metadata$SampleID)
   phen <- metadata %>% dplyr::filter(SampleID%in%intersect_id) %>%
     column_to_rownames("SampleID")
-  prof <- profile %>% dplyr::select(rownames(phen))
+  prof <- profile %>% dplyr::select(all_of(rownames(phen)))
   if(!any(rownames(phen) == colnames(prof))){
     stop("Please check the order of SampleID between phen and prof")
   }
