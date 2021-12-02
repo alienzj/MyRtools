@@ -4,12 +4,12 @@
 \alias{DA_DESeq2}
 \title{Differential Expression Analysis by DEseq2 Package}
 \usage{
-DA_DESeq2(dataset=ExpressionSet, Group_info="Group", Pvalue=0.05, Log2FC=1)
+DA_DESeq2(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 }
 \arguments{
 \item{Group_info, }{Character; design factor(default: "Group").}
 
-\item{Group_name, }{Character; the group for comparison.}
+\item{Group_name, }{Character; (Required) the group for comparison.}
 
 \item{Pvalue, }{Numeric; significant level(default: 0.05).}
 
@@ -33,7 +33,7 @@ DEseq2 requires the count data (a matrix of integer values) to input. The normal
 
 data(ExprSet_species_count)
 
-DESeq2_res <- DA_DESeq2(dataset=ExprSet_species_count, Group_info="Group", Pvalue=0.05, Log2FC=1)
+DESeq2_res <- DA_DESeq2(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 DESeq2_res$res
 
 }

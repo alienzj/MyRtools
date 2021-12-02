@@ -15,23 +15,22 @@
 #'
 #' @param Expression, ExpressionSet; (Required) ExpressionSet object.
 #' @param Group_info, Character; design factor(default: "Group").
-#' @param Group_name, Character; the group for comparison.
+#' @param Group_name, Character; (Required) the group for comparison.
 #' @param Pvalue, Numeric; significant level(default: 0.05).
 #' @param Log2FC, Numeric; log2FoldChange(default: 1).
 #'
 #' @return
 #' a list object:
-#'   edgeR object
 #'   edgeR results
 #'   significant difference with enriched directors
 #'
-#' @usage DA_edgeR(dataset=ExpressionSet, Group_info="Group", Pvalue=0.05, Log2FC=1)
+#' @usage DA_edgeR(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' @examples
 #'
 #' data(ExprSet_species_count)
 #'
-#' Limma_res <- DA_edgeR(dataset=ExprSet_species_count, Group_info="Group", Pvalue=0.05, Log2FC=1)
-#' Limma_res$res
+#' edgeR_res <- DA_edgeR(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
+#' edgeR_res$res
 #'
 DA_edgeR <- function(dataset=ExprSet_species_count,
                      Group_info="Group",
@@ -50,11 +49,11 @@ DA_edgeR <- function(dataset=ExprSet_species_count,
   phen <- metadata %>% dplyr::filter(Group%in%Group_name)
   intersect_sid <- dplyr::intersect(rownames(phen), colnames(profile))
   # Prepare for input data
-  colData <- phen %>% rownames_to_column("SampleID") %>%
+  colData <- phen %>% tibble::rownames_to_column("SampleID") %>%
     dplyr::select(SampleID, Group) %>%
     dplyr::filter(SampleID%in%intersect_sid) %>%
     dplyr::mutate(Group=factor(Group, levels = Group_name)) %>%
-    column_to_rownames("SampleID")
+    tibble::column_to_rownames("SampleID")
   countData <- profile %>% data.frame() %>%
     dplyr::select(all_of(rownames(colData))) %>%
     as.matrix()

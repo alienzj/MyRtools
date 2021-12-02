@@ -2,7 +2,7 @@
 % Please edit documentation in R/Global_Ordination.R
 \name{Ord_PCoA}
 \alias{Ord_PCoA}
-\title{Principal Coordinate Analysis}
+\title{Dimensionality Reduction Analysis: Principal Coordinate Analysis(PCoA)}
 \usage{
 Ord_PCoA(dataset=ExpressionSet, Method="bray", Group_info="Group")
 }
@@ -19,7 +19,7 @@ a list object:
   Result of PERMANOVA
 }
 \description{
-Principal Coordinate Analysis use the distance among samples, which calculates through the multiple variables.
+PCoA uses the distance among samples, which calculates through the multiple variables.
 }
 \details{
 12/2/2021 Guangzhou China

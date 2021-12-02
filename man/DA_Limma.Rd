@@ -4,12 +4,12 @@
 \alias{DA_Limma}
 \title{Differential Expression Analysis by limma Package}
 \usage{
-DA_Limma(dataset=ExpressionSet, Group_info="Group", Pvalue=0.05, Log2FC=1)
+DA_Limma(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 }
 \arguments{
 \item{Group_info, }{Character; design factor(default: "Group").}
 
-\item{Group_name, }{Character; the group for comparison.}
+\item{Group_name, }{Character; (Required) the group for comparison.}
 
 \item{Pvalue, }{Numeric; significant level(default: 0.05).}
 
@@ -32,7 +32,7 @@ limma requires the count data (a matrix of integer values) to input. The *Voom* 
 
 data(ExprSet_species_count)
 
-Limma_res <- DA_Limma(dataset=ExprSet_species_count, Group_info="Group", Pvalue=0.05, Log2FC=1)
+Limma_res <- DA_Limma(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 Limma_res$res
 
 }

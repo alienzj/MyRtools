@@ -6,10 +6,10 @@
 #' @import convert
 #'
 #'
-#' @title Principal Component Analysis
+#' @title Dimensionality Reduction Analysis: Principal Component Analysis(PCA)
 #'
 #' @description
-#' The common multimension reduction method is Principal Component Analysis (PCA). It's suitable for non-zero sparse matrix such as metabolites' profile.
+#' The common Dimensionality reduction method is PCA. It's suitable for non-zero sparse matrix such as metabolites' profile.
 #'
 #' @details 12/2/2021 Guangzhou China
 #' @author  Hua Zou
@@ -80,6 +80,7 @@ Ord_PCA <- function(dataset=ExprSet_species,
   return(res)
 }
 
+
 #' @importFrom ape pcoa
 #' @importFrom dplyr %>% select inner_join
 #' @importFrom tibble column_to_rownames column_to_rownames
@@ -88,10 +89,10 @@ Ord_PCA <- function(dataset=ExprSet_species,
 #' @import convert
 #'
 #'
-#' @title Principal Coordinate Analysis
+#' @title Dimensionality Reduction Analysis: Principal Coordinate Analysis(PCoA)
 #'
 #' @description
-#' Principal Coordinate Analysis use the distance among samples, which calculates through the multiple variables.
+#' PCoA uses the distance among samples, which calculates through the multiple variables.
 #'
 #' @details 12/2/2021 Guangzhou China
 #' @author  Hua Zou
@@ -159,6 +160,88 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 }
 
 
+#' @importFrom MASS isoMDS sammon
+#' @importFrom dplyr %>% select inner_join
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom vegan adonis vegdist
+#' @importFrom stats setNames dist cmdscale
+#' @import convert
+#'
+#'
+#' @title Dimensionality Reduction Analysis: Multidimensional Scaling(MDS)
+#'
+#' @description
+#' MDS use the distance among samples, which calculates through the multiple variables.
+#'
+#' @details 12/2/2021 Guangzhou China
+#' @author  Hua Zou
+#'
+#' @param Expression, ExpressionSet; (Required) ExpressionSet object.
+#' @param Method, Character; method for MDS (default: Classic).
+#' @param Group_info, Character; the group for plot(default: "Group").
+#'
+#' @return
+#' a list object:
+#'   MDS score
+#'   Result of PERMANOVA
+#'
+#' @usage Ord_MDS(dataset=ExpressionSet, Method="Classic", Group_info="Group")
+#' @examples
+#'
+#' data(ExprSet_species)
+#'
+#' MDS_res <- Ord_MDS(dataset=ExprSet_species, Method="Classic", Group_info="Group")
+#' MDS_res$MDS
+#'
+Ord_MDS <- function(dataset=ExprSet_species,
+                    Method="Classic",
+                    Group_info="Group"){
+
+  metadata <- pData(dataset)
+  colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
+  profile <- exprs(dataset)
+
+  # MDS
+  if(is.element(Method, "Classic")){
+    # classical (metric) multidimensional scaling
+    mds <- t(profile) %>% stats::dist() %>% stats::cmdscale() %>% tibble::as_tibble()
+  }else if(is.element(Method, "Non-metric")){
+    # Kruskal’s non-metric multidimensional scaling
+    mds <- t(profile) %>% stats::dist() %>% MASS::isoMDS() %>% .$points %>% tibble::as_tibble()
+  }else if(is.element(Method, "Non-Sammon")){
+    # sammon’s non-linear mapping
+    mds <- t(profile) %>% stats::dist() %>% MASS::sammon() %>% .$points %>% tibble::as_tibble()
+  }
+  rownames(mds) <- colnames(profile)
+  score <- dplyr::inner_join(mds %>% stats::setNames(paste0("Axis", seq(2))) %>%
+                               tibble::rownames_to_column("SampleID"),
+                             metadata %>% tibble::rownames_to_column("SampleID") %>%
+                               dplyr::select(all_of(c("SampleID", "Group"))),
+                             by = "SampleID")
+  # PERMANOVA
+  set.seed(123)
+  if(any(profile < 0)){
+    res_adonis <- vegan::adonis(vegan::vegdist(t(profile), method = "manhattan") ~ metadata$Group, permutations = 999)
+  }else{
+    res_adonis <- vegan::adonis(vegan::vegdist(t(profile), method = "bray") ~ metadata$Group, permutations = 999)
+  }
+  adn_pvalue <- res_adonis[[1]][["Pr(>F)"]][1]
+  adn_rsquared <- round(res_adonis[[1]][["R2"]][1],3)
+  #use the bquote function to format adonis results to be annotated on the ordination plot.
+  signi_label <- paste(cut(adn_pvalue,
+                           breaks=c(-Inf, 0.001, 0.01, 0.05, Inf),
+                           label=c("***", "**", "*", ".")))
+  PERMANOVA <- bquote(atop(atop("PERMANOVA", R^2==~.(adn_rsquared)),
+                           atop("p-value="~.(adn_pvalue)~.(signi_label), phantom())))
+
+  res <- list(MDS=score,
+              epn=c("MDS1", "MDS2"),
+              PER=PERMANOVA)
+
+  return(res)
+}
+
+
 #' @importFrom Rtsne Rtsne
 #' @importFrom dplyr %>% select inner_join
 #' @importFrom tibble column_to_rownames column_to_rownames
@@ -167,7 +250,7 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 #' @import convert
 #'
 #'
-#' @title t-Distributed Stochastic Neighbor Embedding(t-SNE)
+#' @title Dimensionality Reduction Analysis: t-Distributed Stochastic Neighbor Embedding(t-SNE)
 #'
 #' @description
 #' Visualization of High Dimensional Data using t-SNE with R.
@@ -247,7 +330,7 @@ Ord_tsne <- function(dataset=ExprSet_species,
 #' @import convert
 #'
 #'
-#' @title Uniform Manifold Approximation and Projection (UMAP)
+#' @title Dimensionality Reduction Analysis: Uniform Manifold Approximation and Projection (UMAP)
 #'
 #' @description
 #' UMAP: a non-linear dimensionality reduction algorithm.

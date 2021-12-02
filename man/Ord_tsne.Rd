@@ -2,7 +2,7 @@
 % Please edit documentation in R/Global_Ordination.R
 \name{Ord_tsne}
 \alias{Ord_tsne}
-\title{t-Distributed Stochastic Neighbor Embedding(t-SNE)}
+\title{Dimensionality Reduction Analysis: t-Distributed Stochastic Neighbor Embedding(t-SNE)}
 \usage{
 Ord_tsne(dataset=ExpressionSet, Perplexity=20, Group_info="Group")
 }

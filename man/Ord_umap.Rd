@@ -2,7 +2,7 @@
 % Please edit documentation in R/Global_Ordination.R
 \name{Ord_umap}
 \alias{Ord_umap}
-\title{Uniform Manifold Approximation and Projection (UMAP)}
+\title{Dimensionality Reduction Analysis: Uniform Manifold Approximation and Projection (UMAP)}
 \usage{
 Ord_umap(dataset=ExpressionSet, Group_info="Group")
 }

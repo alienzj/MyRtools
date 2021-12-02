@@ -2,7 +2,7 @@
 % Please edit documentation in R/Global_Ordination.R
 \name{Ord_PCA}
 \alias{Ord_PCA}
-\title{Principal Component Analysis}
+\title{Dimensionality Reduction Analysis: Principal Component Analysis(PCA)}
 \usage{
 Ord_PCA(dataset=ExpressionSet, Normalization=TRUE, Group_info="Group")
 }
@@ -19,7 +19,7 @@ a list object:
   Result of PERMANOVA
 }
 \description{
-The common multimension reduction method is Principal Component Analysis (PCA). It's suitable for non-zero sparse matrix such as metabolites' profile.
+The common Dimensionality reduction method is PCA. It's suitable for non-zero sparse matrix such as metabolites' profile.
 }
 \details{
 12/2/2021 Guangzhou China

@@ -4,12 +4,12 @@
 \alias{DA_edgeR}
 \title{Differential Expression Analysis by edgeR Package}
 \usage{
-DA_edgeR(dataset=ExpressionSet, Group_info="Group", Pvalue=0.05, Log2FC=1)
+DA_edgeR(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 }
 \arguments{
 \item{Group_info, }{Character; design factor(default: "Group").}
 
-\item{Group_name, }{Character; the group for comparison.}
+\item{Group_name, }{Character; (Required) the group for comparison.}
 
 \item{Pvalue, }{Numeric; significant level(default: 0.05).}
 
@@ -19,7 +19,6 @@ DA_edgeR(dataset=ExpressionSet, Group_info="Group", Pvalue=0.05, Log2FC=1)
 }
 \value{
 a list object:
-  edgeR object
   edgeR results
   significant difference with enriched directors
 }
@@ -33,8 +32,8 @@ edgeR requires the count data (a matrix of integer values) to input.
 
 data(ExprSet_species_count)
 
-Limma_res <- DA_edgeR(dataset=ExprSet_species_count, Group_info="Group", Pvalue=0.05, Log2FC=1)
-Limma_res$res
+edgeR_res <- DA_edgeR(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
+edgeR_res$res
 
 }
 \author{
