@@ -50,7 +50,7 @@ DA_DESeq2 <- function(dataset=ExprSet_species_count,
   intersect_sid <- dplyr::intersect(rownames(phen), colnames(profile))
   # Prepare for input data
   colData <- phen %>% tibble::rownames_to_column("SampleID") %>%
-    dplyr::select(SampleID, Group) %>%
+    dplyr::select(all_of(c("SampleID", "Group"))) %>%
     dplyr::filter(SampleID%in%intersect_sid) %>%
     dplyr::mutate(Group=factor(Group, levels = Group_name)) %>%
     tibble::column_to_rownames("SampleID")

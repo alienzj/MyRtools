@@ -1,4 +1,4 @@
-#' @import convert
+#' Example dataset
 #'
 #'
 #' @title the Species relative abundance of ExpressionSet Object
@@ -23,7 +23,7 @@
 #'
 
 
-#' @import convert
+#' Example dataset
 #'
 #'
 #' @title the Species integer data of ExpressionSet Object
