@@ -21,7 +21,6 @@
 #' @param Each, Logical; filtering Features each group or whole data(default: Each("Group")=FALSE).
 #' @param Occ_Sample, Numeric; the cutoff of Sample's trim(default: occurrence=0.2).
 #'
-#'
 #' @return
 #' an ExpressionSet Object
 #'
@@ -40,7 +39,6 @@
 #' each=TRUE,
 #' occ_Sample=0.2)
 #'
-
 get_ExprSet <- function(profile=Profile,
                         metadata=Metadata,
                         feature=NULL,

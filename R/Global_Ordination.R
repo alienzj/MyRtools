@@ -274,9 +274,6 @@ Ord_tsne <- function(dataset=ExprSet_species,
 Ord_umap <- function(dataset=ExprSet_species,
                      Group_info="Group"){
 
-  # dataset=ExprSet_species
-  # Group_info="Group"
-
   metadata <- pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
   profile <- exprs(dataset)
