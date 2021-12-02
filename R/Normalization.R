@@ -27,7 +27,6 @@
 
 NormalizeFun <- function(Vectors, type="Zscore"){
 
-
   # Median Absolute Deviation normalization
   MAD_norm <- function(features){
     # x for features X = (x1, x2, ..., xn)

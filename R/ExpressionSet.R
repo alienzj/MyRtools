@@ -33,16 +33,14 @@
 #' Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
 #' Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
 #'
-#' get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature, trim=TRUE, occ_Feature=0.2, each=TRUE, occ_Sample=0.2)
+#' ExprSet <- get_ExprSet(profile=Profile,
+#' metadata=Metadata,
+#' feature=Feature,
+#' trim=TRUE,
+#' occ_Feature=0.2,
+#' each=TRUE,
+#' occ_Sample=0.2)
 #'
-
-
-# library(dplyr)
-# library(convert)
-# library(tibble)
-# Profile <- data.table::fread("inst/extdata/Species_relative_abundance.tsv") %>% tibble::column_to_rownames("V1")
-# Metadata <- read.csv("inst/extdata/Metadata.csv")
-# Feature <- read.csv("inst/extdata/Species_feature.csv") %>% tibble::column_to_rownames("Species")
 
 get_ExprSet <- function(profile=Profile,
                         metadata=Metadata,
