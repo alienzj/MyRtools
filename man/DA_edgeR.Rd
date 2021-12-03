@@ -30,10 +30,12 @@ edgeR requires the count data (a matrix of integer values) to input.
 }
 \examples{
 
+\donttest{
 data(ExprSet_species_count)
 
 edgeR_res <- DA_edgeR(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 edgeR_res$res
+}
 
 }
 \author{

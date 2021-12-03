@@ -26,10 +26,12 @@ Wilcox-rank-sum test is non-parameter test method, and also use for the data wit
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 Wilcox_res <- DA_Wilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05)
 Wilcox_res$res
+}
 
 }
 \author{

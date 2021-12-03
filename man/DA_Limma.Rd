@@ -30,10 +30,12 @@ limma requires the count data (a matrix of integer values) to input. The *Voom* 
 }
 \examples{
 
+\donttest{
 data(ExprSet_species_count)
 
 Limma_res <- DA_Limma(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 Limma_res$res
+}
 
 }
 \author{

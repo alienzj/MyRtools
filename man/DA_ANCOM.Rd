@@ -36,10 +36,12 @@ ANCOM also scales well to compare samples involving thousands of taxa.
 }
 \examples{
 
+\donttest{
 data(ExprSet_species_count)
 
 ANCOM_res <- DA_ANCOM(dataset=ExprSet_species_count, GroupVar="Group", AdjVar="Gender", RandVar=NULL, Pvalue=0.05, Wvalue=0.7)
 ANCOM_res$res
+}
 
 }
 \references{

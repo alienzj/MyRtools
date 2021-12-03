@@ -24,10 +24,12 @@ UMAP: a non-linear dimensionality reduction algorithm.
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 umap_res <- Ord_umap(dataset=ExprSet_species, Group_info="Group")
 umap_res$umap
+}
 
 }
 \author{

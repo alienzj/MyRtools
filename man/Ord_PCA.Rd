@@ -26,10 +26,12 @@ The common Dimensionality reduction method is PCA. It's suitable for non-zero sp
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 PCA_res <- Ord_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
 PCA_res$PCA
+}
 
 }
 \author{

@@ -17,20 +17,24 @@
 #'   edgeR results
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect all_of
+#' @export
+#'
+#' @importFrom dplyr %>% select filter intersect all_of mutate
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames model.matrix sd
 #' @importFrom limma plotMDS
-#' @import convert
+#' @importFrom Biobase pData exprs
 #' @importFrom edgeR DGEList calcNormFactors estimateGLMCommonDisp estimateGLMTrendedDisp estimateGLMTagwiseDisp glmFit glmLRT topTags
 #'
 #' @usage DA_edgeR(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species_count)
 #'
 #' edgeR_res <- DA_edgeR(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' edgeR_res$res
+#' }
 #'
 DA_edgeR <- function(dataset=ExprSet_species_count,
                      Group_info="Group",
@@ -38,9 +42,9 @@ DA_edgeR <- function(dataset=ExprSet_species_count,
                      Pvalue=0.05,
                      Log2FC=1){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
   if(!any(profile %% 1 == 0)){
     stop("The input matrix is not integer matrix please Check it")
   }

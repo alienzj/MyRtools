@@ -24,6 +24,7 @@ Show the result of Ordination using scatterplot.
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 PCA_res <- Ord_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
@@ -31,7 +32,7 @@ Ord_Plot(Score=PCA_res$PCA, Axis_name=PCA_res$epn, Pvalue=PCA_res$PER)
 
 res_tsne <- Ord_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
 Ord_Plot(Score=res_tsne$tsne, Axis_name=res_tsne$epn, Pvalue=res_tsne$PER)
-
+}
 
 }
 \author{

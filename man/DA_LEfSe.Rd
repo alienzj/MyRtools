@@ -30,10 +30,12 @@ LEfSe method for microbiome biomarker discovery.
 }
 \examples{
 
+\donttest{
 data(ExprSet_species_count)
 
 LEfSe_res <- DA_LEfSe(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
 LEfSe_res
+}
 
 }
 \author{

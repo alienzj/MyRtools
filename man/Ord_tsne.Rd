@@ -26,10 +26,12 @@ Visualization of High Dimensional Data using t-SNE with R.
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 tsne_res <- Ord_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
 tsne_res$tsne
+}
 
 }
 \author{

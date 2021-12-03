@@ -26,10 +26,12 @@ MDS use the distance among samples, which calculates through the multiple variab
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 MDS_res <- Ord_MDS(dataset=ExprSet_species, Method="Classic", Group_info="Group")
 MDS_res$MDS
+}
 
 }
 \author{

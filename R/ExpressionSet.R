@@ -17,15 +17,19 @@
 #' @return
 #' an ExpressionSet Object
 #'
+#' @export
+#'
 #' @importFrom data.table fread
 #' @importFrom dplyr %>% intersect select inner_join filter all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames
-#' @import convert
+#' @import Biobase
 #'
 #' @usage get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
 #' @examples
 #'
+#' \donttest{
+#' library(dplyr)
 #' Profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")
 #' Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
 #' Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
@@ -37,6 +41,7 @@
 #' occ_Feature=0.2,
 #' each=TRUE,
 #' occ_Sample=0.2)
+#' }
 #'
 get_ExprSet <- function(profile=Profile,
                         metadata=Metadata,

@@ -18,19 +18,23 @@
 #'   DESeq results
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect all_of
+#' @export
+#'
+#' @importFrom dplyr %>% select filter intersect all_of mutate
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames sd
-#' @import convert
+#' @importFrom Biobase pData exprs
 #' @importFrom DESeq2 DESeqDataSetFromMatrix DESeq results
 #'
 #' @usage DA_DESeq2(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species_count)
 #'
 #' DESeq2_res <- DA_DESeq2(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' DESeq2_res$res
+#' }
 #'
 DA_DESeq2 <- function(dataset=ExprSet_species_count,
                       Group_info="Group",
@@ -38,9 +42,9 @@ DA_DESeq2 <- function(dataset=ExprSet_species_count,
                       Pvalue=0.05,
                       Log2FC=1){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
   if(!any(profile %% 1 == 0)){
     stop("The input matrix is not integer matrix please Check it")
   }

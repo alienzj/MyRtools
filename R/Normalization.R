@@ -12,6 +12,8 @@
 #' @return
 #' a normalized vector
 #'
+#' @export
+#'
 #' @importFrom stats mad median quantile sd
 #'
 #' @usage NormalizeFun(Vector, type="Zscore")

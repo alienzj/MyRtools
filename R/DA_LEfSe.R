@@ -212,6 +212,8 @@ filterKruskal <- function(expr, group, p.value) {
 #' The function returns a dataframe with two columns, which are
 #' names of microorganisms and their LDA scores.
 #'
+#' @export
+#'
 #' @importFrom stats kruskal.test reorder rnorm
 #' @importFrom coin pvalue statistic wilcox_test
 #' @importFrom MASS lda
@@ -221,9 +223,6 @@ filterKruskal <- function(expr, group, p.value) {
 #' @import SummarizedExperiment
 #'
 #' @examples
-#'
-#'
-#' @export
 #'
 lefser <- function(expr,
            kruskal.threshold = 0.05,
@@ -319,20 +318,24 @@ lefser <- function(expr,
 #' @return
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect all_of
+#' @export
+#'
+#' @importFrom dplyr %>% select filter intersect all_of mutate
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames sd
 #' @import SummarizedExperiment
-#' @import convert
+#' @importFrom Biobase pData exprs
 #' @importFrom MASS lda
 #'
 #' @usage DA_LEfSe(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species_count)
 #'
 #' LEfSe_res <- DA_LEfSe(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
 #' LEfSe_res
+#' }
 #'
 DA_LEfSe <- function(dataset=ExprSet_species_count,
                      Group_info="Group",
@@ -341,12 +344,9 @@ DA_LEfSe <- function(dataset=ExprSet_species_count,
                      wl.p=0.05,
                      Lda=2){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
-  # if(!any(profile %% 1 == 0)){
-  #   stop("The input matrix is not integer matrix please Check it")
-  # }
+  profile <- Biobase::exprs(dataset)
 
   # choose group
   phen <- metadata %>% dplyr::filter(Group%in%Group_name)
@@ -384,7 +384,7 @@ DA_LEfSe <- function(dataset=ExprSet_species_count,
                 assay    = 1L,
                 trim.names = TRUE)
 
-  res <- lefse_res %>% mutate(Group=ifelse(scores > 0, Group_name[2], Group_name[1]))
+  res <- lefse_res %>% dplyr::mutate(Group=ifelse(scores > 0, Group_name[2], Group_name[1]))
 
   return(res)
 }

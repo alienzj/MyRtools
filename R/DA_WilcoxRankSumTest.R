@@ -14,27 +14,31 @@
 #' @return
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect inner_join arrange everything all_of
+#' @export
+#'
+#' @importFrom dplyr %>% select filter intersect inner_join arrange everything all_of mutate
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames glm
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage DA_Wilcox(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' Wilcox_res <- DA_Wilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05)
 #' Wilcox_res$res
+#' }
 #'
 DA_Wilcox <- function(dataset=ExprSet_species,
                       Group_info="Group",
                       Group_name=c("HC", "AA"),
                       Pvalue=0.05){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   # Choose group
   phen <- metadata %>% dplyr::filter(Group%in%Group_name)

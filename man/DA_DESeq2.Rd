@@ -31,10 +31,12 @@ DEseq2 requires the count data (a matrix of integer values) to input. The normal
 }
 \examples{
 
+\donttest{
 data(ExprSet_species_count)
 
 DESeq2_res <- DA_DESeq2(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 DESeq2_res$res
+}
 
 }
 \author{

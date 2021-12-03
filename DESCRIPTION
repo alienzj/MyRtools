@@ -23,7 +23,7 @@ Imports:
     dplyr (>= 1.0.7),
     data.table (>= 1.14.0),
     tibble (>= 3.1.4),
-    convert (>= 1.68.0),
+    Biobase (>= 2.52.0),
     factoextra (>= 1.0.7),
     vegan (>= 2.5-7),
     umap (>= 0.2.7.0),
@@ -40,4 +40,5 @@ Imports:
     coin (>= 1.4-1),
     SummarizedExperiment (>= 1.22.0),
     MASS (>= 7.3-54),
-    methods
+    methods,
+    Hmisc (>= 4.5-0) 

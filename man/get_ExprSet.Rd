@@ -32,6 +32,8 @@ ExpressionSet object comprising not only expressiondata but also metadata is ver
 }
 \examples{
 
+\donttest{
+library(dplyr)
 Profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  \%>\% tibble::column_to_rownames("V1")
 Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
 Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) \%>\% tibble::column_to_rownames("Species")
@@ -43,6 +45,7 @@ trim=TRUE,
 occ_Feature=0.2,
 each=TRUE,
 occ_Sample=0.2)
+}
 
 }
 \author{

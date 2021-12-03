@@ -26,10 +26,12 @@ PCoA uses the distance among samples, which calculates through the multiple vari
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 PCoA_res <- Ord_PCoA(dataset=ExprSet_species, Method="bray", Group_info="Group")
 PCoA_res$PCoA
+}
 
 }
 \author{

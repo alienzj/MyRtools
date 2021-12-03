@@ -27,22 +27,26 @@
 #'   significant features pass the threshold of W statistics
 #'   A volcano plot of significant features
 #'
-#' @importFrom dplyr %>% select filter intersect pull all_of
+#' @export
+#'
+#' @importFrom dplyr %>% select filter intersect pull all_of mutate
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames lm residuals quantile dnorm sd wilcox.test kruskal.test aov na.omit formula
 #' @importFrom compositions clr
 #' @importFrom nlme lme
 #' @importFrom tidyr gather
-#' @import convert
+#' @importFrom Biobase pData exprs
 #' @import ggplot2
 #'
 #' @usage DA_ANCOM(dataset=ExpressionSet, GroupVar="Group", AdjVar=NULL, RandVar=NULL, Pvalue=0.05, Wvalue=0.7)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species_count)
 #'
 #' ANCOM_res <- DA_ANCOM(dataset=ExprSet_species_count, GroupVar="Group", AdjVar="Gender", RandVar=NULL, Pvalue=0.05, Wvalue=0.7)
 #' ANCOM_res$res
+#' }
 #'
 DA_ANCOM <- function(dataset=ExprSet_species_count,
                      GroupVar="Group",
@@ -424,9 +428,9 @@ DA_ANCOM <- function(dataset=ExprSet_species_count,
     return(res)
   }
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == GroupVar)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   # factor group
   metadata$Group <- factor(metadata$Group)

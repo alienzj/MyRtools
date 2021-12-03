@@ -17,20 +17,24 @@
 #' @return
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect inner_join arrange everything all_of
+#' @export
+#'
+#' @importFrom dplyr %>% select filter intersect inner_join arrange everything all_of mutate
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames glm shapiro.test median wilcox.test
 #' @importFrom compositions geometricmean
 #' @importFrom rstatix t_test
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage DA_TWilcox(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' TWilcox_res <- DA_TWilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' TWilcox_res$res
+#' }
 #'
 DA_TWilcox <- function(dataset=ExprSet_species,
                        Group_info="Group",
@@ -38,9 +42,9 @@ DA_TWilcox <- function(dataset=ExprSet_species,
                        Pvalue=0.05,
                        Log2FC=1){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
   # if(!any(profile %% 1 == 0)){
   #   stop("The input matrix is not integer matrix please Check it")
   # }

@@ -15,28 +15,32 @@
 #'   PCA score
 #'   Result of PERMANOVA
 #'
+#' @export
+#'
 #' @importFrom factoextra get_eig
 #' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage Ord_PCA(dataset=ExpressionSet, Normalization=TRUE, Group_info="Group")
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' PCA_res <- Ord_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
 #' PCA_res$PCA
+#' }
 #'
 Ord_PCA <- function(dataset=ExprSet_species,
                     Normalization=TRUE,
                     Group_info="Group"){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   if(Normalization){
     profile_norm <- apply(t(profile), 1, NormalizeFun, "Zscore")
@@ -97,28 +101,32 @@ Ord_PCA <- function(dataset=ExprSet_species,
 #'   PCoA score
 #'   Result of PERMANOVA
 #'
+#' @export
+#'
 #' @importFrom ape pcoa
 #' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage Ord_PCoA(dataset=ExpressionSet, Method="bray", Group_info="Group")
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' PCoA_res <- Ord_PCoA(dataset=ExprSet_species, Method="bray", Group_info="Group")
 #' PCoA_res$PCoA
+#' }
 #'
 Ord_PCoA <- function(dataset=ExprSet_species,
                      Method="bray",
                      Group_info="Group"){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   # pcoa
   pcoa <- ape::pcoa(vegan::vegdist(t(profile), method = Method))
@@ -175,28 +183,32 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 #'   MDS score
 #'   Result of PERMANOVA
 #'
+#' @export
+#'
 #' @importFrom MASS isoMDS sammon
 #' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames dist cmdscale
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage Ord_MDS(dataset=ExpressionSet, Method="Classic", Group_info="Group")
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' MDS_res <- Ord_MDS(dataset=ExprSet_species, Method="Classic", Group_info="Group")
 #' MDS_res$MDS
+#' }
 #'
 Ord_MDS <- function(dataset=ExprSet_species,
                     Method="Classic",
                     Group_info="Group"){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   # MDS
   if(is.element(Method, "Classic")){
@@ -256,28 +268,32 @@ Ord_MDS <- function(dataset=ExprSet_species,
 #'   t-SNE score
 #'   Result of PERMANOVA
 #'
+#' @export
+#'
 #' @importFrom Rtsne Rtsne
 #' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage Ord_tsne(dataset=ExpressionSet, Perplexity=20, Group_info="Group")
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' tsne_res <- Ord_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
 #' tsne_res$tsne
+#' }
 #'
 Ord_tsne <- function(dataset=ExprSet_species,
                      Perplexity=20,
                      Group_info="Group"){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   # tsne
   Rtsne <- Rtsne::Rtsne(t(profile),
@@ -335,27 +351,31 @@ Ord_tsne <- function(dataset=ExprSet_species,
 #'   umap score
 #'   Result of PERMANOVA
 #'
+#' @export
+#'
 #' @importFrom umap umap
 #' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
-#' @import convert
+#' @importFrom Biobase pData exprs
 #'
 #' @usage Ord_umap(dataset=ExpressionSet, Group_info="Group")
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' umap_res <- Ord_umap(dataset=ExprSet_species, Group_info="Group")
 #' umap_res$umap
+#' }
 #'
 Ord_umap <- function(dataset=ExprSet_species,
                      Group_info="Group"){
 
-  metadata <- pData(dataset)
+  metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- exprs(dataset)
+  profile <- Biobase::exprs(dataset)
 
   # tsne
   Umap <- umap::umap(t(profile))
@@ -406,6 +426,8 @@ Ord_umap <- function(dataset=ExprSet_species,
 #' @return
 #' a scatterplot
 #'
+#' @export
+#'
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @import ggplot2
 #' @importFrom cowplot insert_xaxis_grob insert_yaxis_grob ggdraw
@@ -413,6 +435,7 @@ Ord_umap <- function(dataset=ExprSet_species,
 #' @usage Ord_Plot(Score=score, Axis_name=explains, Pvalue=label)
 #' @examples
 #'
+#' \donttest{
 #' data(ExprSet_species)
 #'
 #' PCA_res <- Ord_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
@@ -420,7 +443,7 @@ Ord_umap <- function(dataset=ExprSet_species,
 #'
 #' res_tsne <- Ord_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
 #' Ord_Plot(Score=res_tsne$tsne, Axis_name=res_tsne$epn, Pvalue=res_tsne$PER)
-#'
+#' }
 #'
 Ord_Plot <- function(Score=score,
                      Axis_name=name,

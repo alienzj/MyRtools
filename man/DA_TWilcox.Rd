@@ -30,10 +30,12 @@ The log2FoldChange is calculate by the geometricmean or median of two groups aft
 }
 \examples{
 
+\donttest{
 data(ExprSet_species)
 
 TWilcox_res <- DA_TWilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 TWilcox_res$res
+}
 
 }
 \author{
