@@ -49,3 +49,4 @@
 
 # roxygen2::roxygenise("D:/Project/MyRtools/")
 # devtools::check(document = FALSE)
+# devtools::build()

@@ -23,9 +23,14 @@ Multiple variables may have different, leading to unequal contribution on the da
 \examples{
 
 V <- c(1:20, 30:40)
-M <- matrix(rnorm(24, mean = 10, sd=10), nrow=4, ncol=6, byrow=TRUE, dimnames = list(paste0("R", 1:4), paste0("C", 1:6)))
 V_norm <- NormalizeFun(V, type="Zscore")
+V_norm
+
+M <- matrix(rnorm(24, mean = 10, sd=10), nrow=4, ncol=6, byrow=TRUE,
+            dimnames = list(paste0("R", 1:4), paste0("C", 1:6)))
 M_norm <- t(apply(M, 1, NormalizeFun, "Zscore"))
+head(M_norm)
+
 }
 \author{
 Hua Zou

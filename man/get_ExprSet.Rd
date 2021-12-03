@@ -39,12 +39,12 @@ Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
 Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) \%>\% tibble::column_to_rownames("Species")
 
 ExprSet <- get_ExprSet(profile=Profile,
-metadata=Metadata,
-feature=Feature,
-trim=TRUE,
-occ_Feature=0.2,
-each=TRUE,
-occ_Sample=0.2)
+                metadata=Metadata,
+                feature=Feature,
+                trim=TRUE,
+                occ_Feature=0.2,
+                each=TRUE,
+                occ_Sample=0.2)
 }
 
 }
