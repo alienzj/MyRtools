@@ -58,3 +58,12 @@
 # Group_name=c("HC", "AA")
 # Pvalue=0.05
 # Log2FC=1
+
+# ANCOM
+# load("data/ExprSet_species_count.rda")
+# dataset=ExprSet_species_count
+# GroupVar="Group"
+# AdjVar=c("Age", "Gender")
+# RandVar=NULL
+# Pvalue=0.05
+# Wvalue=0.7

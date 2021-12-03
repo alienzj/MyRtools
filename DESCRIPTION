@@ -31,5 +31,7 @@ Imports:
     Rtsne (>= 0.15),
     edgeR (>= 3.34.1),
     DESeq2 (>= 1.32.0),
-    limma (>= 3.48.3)
+    limma (>= 3.48.3),
+    nlme (>= 3.1-153),
+    tidyr (>= 1.1.4)
     
