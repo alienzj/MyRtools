@@ -301,14 +301,6 @@ lefser <- function(expr,
   }
 
 ############################################################################
-
-#' @importFrom dplyr %>% select filter intersect
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom stats setNames sd
-#' @import SummarizedExperiment
-#' @import convert
-#' @importFrom MASS lda
-#'
 #' @title Differential Expression Analysis by LEfSe Package
 #'
 #' @description
@@ -326,6 +318,13 @@ lefser <- function(expr,
 #'
 #' @return
 #'   significant difference with enriched directors
+#'
+#' @importFrom dplyr %>% select filter intersect all_of
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom stats setNames sd
+#' @import SummarizedExperiment
+#' @import convert
+#' @importFrom MASS lda
 #'
 #' @usage DA_LEfSe(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
 #' @examples
@@ -354,12 +353,12 @@ DA_LEfSe <- function(dataset=ExprSet_species_count,
   intersect_sid <- dplyr::intersect(rownames(phen), colnames(profile))
   # Prepare for input data
   colData <- phen %>% tibble::rownames_to_column("SampleID") %>%
-    dplyr::select(all_of(c("SampleID", "Group"))) %>%
+    dplyr::select(dplyr::all_of(c("SampleID", "Group"))) %>%
     dplyr::filter(SampleID%in%intersect_sid) %>%
     dplyr::mutate(Group=factor(Group, levels = Group_name)) %>%
     tibble::column_to_rownames("SampleID")
   proData <- profile %>% data.frame() %>%
-    dplyr::select(all_of(rownames(colData))) %>%
+    dplyr::select(dplyr::all_of(rownames(colData))) %>%
     as.matrix()
 
   # # No zero value for Log transform

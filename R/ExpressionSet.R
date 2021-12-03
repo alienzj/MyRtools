@@ -18,7 +18,7 @@
 #' an ExpressionSet Object
 #'
 #' @importFrom data.table fread
-#' @importFrom dplyr %>% intersect select inner_join filter
+#' @importFrom dplyr %>% intersect select inner_join filter all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames
 #' @import convert
@@ -58,7 +58,7 @@ get_ExprSet <- function(profile=Profile,
 
       # Each
       if(each){
-        mdat <- y %>% dplyr::select(all_of(c("SampleID", "Group"))) %>%
+        mdat <- y %>% dplyr::select(dplyr::all_of(c("SampleID", "Group"))) %>%
           dplyr::inner_join(x %>%
                               t() %>% data.frame() %>%
                               tibble::rownames_to_column("SampleID"),
@@ -109,7 +109,7 @@ get_ExprSet <- function(profile=Profile,
   intersect_id <- dplyr::intersect(colnames(profile), metadata$SampleID)
   phen <- metadata %>% dplyr::filter(SampleID%in%intersect_id) %>%
     column_to_rownames("SampleID")
-  prof <- profile %>% dplyr::select(all_of(rownames(phen)))
+  prof <- profile %>% dplyr::select(dplyr::all_of(rownames(phen)))
   if(!any(rownames(phen) == colnames(prof))){
     stop("Please check the order of SampleID between phen and prof")
   }

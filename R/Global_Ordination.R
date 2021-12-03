@@ -16,7 +16,7 @@
 #'   Result of PERMANOVA
 #'
 #' @importFrom factoextra get_eig
-#' @importFrom dplyr %>% select inner_join
+#' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
@@ -54,7 +54,7 @@ Ord_PCA <- function(dataset=ExprSet_species,
                         stats::setNames(paste0("Axis", seq(2))) %>%
                         tibble::rownames_to_column("SampleID"),
                       metadata %>% tibble::rownames_to_column("SampleID") %>%
-                        dplyr::select(all_of(c("SampleID", "Group"))),
+                        dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
                       by = "SampleID")
   # PERMANOVA
   set.seed(123)
@@ -98,7 +98,7 @@ Ord_PCA <- function(dataset=ExprSet_species,
 #'   Result of PERMANOVA
 #'
 #' @importFrom ape pcoa
-#' @importFrom dplyr %>% select inner_join
+#' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
@@ -132,7 +132,7 @@ Ord_PCoA <- function(dataset=ExprSet_species,
                                stats::setNames(paste0("Axis", seq(2))) %>%
                                tibble::rownames_to_column("SampleID"),
                              metadata %>% tibble::rownames_to_column("SampleID") %>%
-                               dplyr::select(all_of(c("SampleID", "Group"))),
+                               dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
                              by = "SampleID")
   # PERMANOVA
   set.seed(123)
@@ -176,7 +176,7 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 #'   Result of PERMANOVA
 #'
 #' @importFrom MASS isoMDS sammon
-#' @importFrom dplyr %>% select inner_join
+#' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames dist cmdscale
@@ -213,7 +213,7 @@ Ord_MDS <- function(dataset=ExprSet_species,
   score <- dplyr::inner_join(mds %>% stats::setNames(paste0("Axis", seq(2))) %>%
                                tibble::rownames_to_column("SampleID"),
                              metadata %>% tibble::rownames_to_column("SampleID") %>%
-                               dplyr::select(all_of(c("SampleID", "Group"))),
+                               dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
                              by = "SampleID")
   # PERMANOVA
   set.seed(123)
@@ -257,7 +257,7 @@ Ord_MDS <- function(dataset=ExprSet_species,
 #'   Result of PERMANOVA
 #'
 #' @importFrom Rtsne Rtsne
-#' @importFrom dplyr %>% select inner_join
+#' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
@@ -293,7 +293,7 @@ Ord_tsne <- function(dataset=ExprSet_species,
   rownames(point) <- colnames(profile)
   score <- dplyr::inner_join(point %>% tibble::rownames_to_column("SampleID"),
                              metadata %>% tibble::rownames_to_column("SampleID") %>%
-                               dplyr::select(all_of(c("SampleID", "Group"))),
+                               dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
                              by = "SampleID")
   # PERMANOVA
   set.seed(123)
@@ -336,7 +336,7 @@ Ord_tsne <- function(dataset=ExprSet_species,
 #'   Result of PERMANOVA
 #'
 #' @importFrom umap umap
-#' @importFrom dplyr %>% select inner_join
+#' @importFrom dplyr %>% select inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom vegan adonis vegdist
 #' @importFrom stats setNames
@@ -365,7 +365,7 @@ Ord_umap <- function(dataset=ExprSet_species,
   rownames(point) <- colnames(profile)
   score <- dplyr::inner_join(point %>% tibble::rownames_to_column("SampleID"),
                              metadata %>% tibble::rownames_to_column("SampleID") %>%
-                               dplyr::select(all_of(c("SampleID", "Group"))),
+                               dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
                              by = "SampleID")
   # PERMANOVA
   set.seed(123)

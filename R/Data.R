@@ -48,6 +48,7 @@
 #'
 
 # roxygen2::roxygenise("D:/Project/MyRtools/")
+# devtools::check(document = FALSE)
 
 # library(dplyr)
 # library(convert)

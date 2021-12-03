@@ -27,7 +27,7 @@
 #'   significant features pass the threshold of W statistics
 #'   A volcano plot of significant features
 #'
-#' @importFrom dplyr %>% select filter intersect pull
+#' @importFrom dplyr %>% select filter intersect pull all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames lm residuals quantile dnorm sd wilcox.test kruskal.test aov na.omit formula
 #' @importFrom compositions clr
@@ -433,10 +433,10 @@ DA_ANCOM <- function(dataset=ExprSet_species_count,
   intersect_sid <- dplyr::intersect(rownames(metadata), colnames(profile))
   # Prepare for input data
   colData <- metadata %>% tibble::rownames_to_column("SampleID") %>%
-    dplyr::select(all_of(c("SampleID", "Group", AdjVar, RandVar))) %>%
+    dplyr::select(dplyr::all_of(c("SampleID", "Group", AdjVar, RandVar))) %>%
     dplyr::filter(SampleID%in%intersect_sid)
   proData <- profile %>% data.frame() %>%
-    dplyr::select(all_of(colData$SampleID)) %>%
+    dplyr::select(dplyr::all_of(colData$SampleID)) %>%
     as.matrix()
 
   if(!all(colData$SampleID == colnames(proData))){

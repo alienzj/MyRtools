@@ -16,7 +16,8 @@ Depends:
 Suggests: 
     knitr,
     rmarkdown,
-    roxygen2  
+    roxygen2,
+    stats
 Imports: 
     ggplot2 (>= 3.3.5),
     dplyr (>= 1.0.7),
@@ -33,5 +34,10 @@ Imports:
     DESeq2 (>= 1.32.0),
     limma (>= 3.48.3),
     nlme (>= 3.1-153),
-    tidyr (>= 1.1.4)
-    
+    tidyr (>= 1.1.4),
+    rstatix (>= 0.7.0),
+    compositions (>= 2.0-2),
+    coin (>= 1.4-1),
+    SummarizedExperiment (>= 1.22.0),
+    MASS (>= 7.3-54),
+    methods

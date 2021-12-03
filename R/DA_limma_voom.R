@@ -17,7 +17,7 @@
 #'   limma results
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect
+#' @importFrom dplyr %>% select filter intersect all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames model.matrix sd
 #' @importFrom edgeR DGEList calcNormFactors
@@ -50,12 +50,12 @@ DA_Limma <- function(dataset=ExprSet_species_count,
   intersect_sid <- dplyr::intersect(rownames(phen), colnames(profile))
   # Prepare for input data
   colData <- phen %>% tibble::rownames_to_column("SampleID") %>%
-    dplyr::select(Sall_of(c("SampleID", "Group"))) %>%
+    dplyr::select(dplyr::all_of(c("SampleID", "Group"))) %>%
     dplyr::filter(SampleID%in%intersect_sid) %>%
     dplyr::mutate(Group=factor(Group, levels = Group_name)) %>%
     tibble::column_to_rownames("SampleID")
   countData <- profile %>% data.frame() %>%
-    dplyr::select(all_of(rownames(colData))) %>%
+    dplyr::select(dplyr::all_of(rownames(colData))) %>%
     as.matrix()
   # No zero value for Log transform
   if(any(countData == 0)){

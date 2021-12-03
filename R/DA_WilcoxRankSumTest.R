@@ -14,7 +14,7 @@
 #' @return
 #'   significant difference with enriched directors
 #'
-#' @importFrom dplyr %>% select filter intersect inner_join arrange everything
+#' @importFrom dplyr %>% select filter intersect inner_join arrange everything all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom stats setNames glm
 #' @import convert
@@ -44,12 +44,12 @@ DA_Wilcox <- function(dataset=ExprSet_species,
   intersect_sid <- dplyr::intersect(rownames(phen), colnames(profile))
   # Prepare for input data
   colData <- phen %>% tibble::rownames_to_column("SampleID") %>%
-    dplyr::select(all_of(c("SampleID", "Group"))) %>%
+    dplyr::select(dplyr::all_of(c("SampleID", "Group"))) %>%
     dplyr::filter(SampleID%in%intersect_sid) %>%
     dplyr::mutate(Group=factor(Group, levels = Group_name)) %>%
     tibble::column_to_rownames("SampleID")
   proData <- profile %>% data.frame() %>%
-    dplyr::select(all_of(rownames(colData))) %>%
+    dplyr::select(dplyr::all_of(rownames(colData))) %>%
     as.matrix()
 
   if(!all(rownames(colData) == colnames(proData))){
@@ -116,7 +116,7 @@ DA_Wilcox <- function(dataset=ExprSet_species,
 
   # glm result for odd ratios 95%CI
   mdat <- dplyr::inner_join(colData %>% tibble::rownames_to_column("SampleID") %>%
-                       dplyr::select(all_of(c("SampleID", "Group"))),
+                       dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
                        proData %>% t() %>% data.frame() %>%
                        tibble::rownames_to_column("SampleID"),
                      by = "SampleID") %>%
