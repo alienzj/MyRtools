@@ -48,3 +48,13 @@
 #'
 
 # roxygen2::roxygenise("D:/Project/MyRtools/")
+
+# library(dplyr)
+# library(convert)
+# library(tibble)
+# load("data/ExprSet_species.rda")
+# dataset=ExprSet_species
+# Group_info="Group"
+# Group_name=c("HC", "AA")
+# Pvalue=0.05
+# Log2FC=1

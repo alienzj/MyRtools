@@ -1,9 +1,3 @@
-#' @importFrom dplyr %>% select filter intersect
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom stats setNames sd
-#' @import convert
-#' @importFrom DESeq2 DESeqDataSetFromMatrix DESeq results
-#'
 #' @title Differential Expression Analysis by DEseq2 Package
 #'
 #' @description
@@ -23,6 +17,12 @@
 #'   DESeq object
 #'   DESeq results
 #'   significant difference with enriched directors
+#'
+#' @importFrom dplyr %>% select filter intersect
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom stats setNames sd
+#' @import convert
+#' @importFrom DESeq2 DESeqDataSetFromMatrix DESeq results
 #'
 #' @usage DA_DESeq2(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' @examples

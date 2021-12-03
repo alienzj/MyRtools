@@ -1,10 +1,3 @@
-#' @importFrom dplyr %>% select filter intersect
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom stats setNames model.matrix sd
-#' @importFrom limma plotMDS
-#' @import convert
-#' @importFrom edgeR DGEList calcNormFactors estimateGLMCommonDisp estimateGLMTrendedDisp estimateGLMTagwiseDisp glmFit glmLRT topTags
-#'
 #' @title Differential Expression Analysis by edgeR Package
 #'
 #' @description
@@ -23,6 +16,13 @@
 #' a list object:
 #'   edgeR results
 #'   significant difference with enriched directors
+#'
+#' @importFrom dplyr %>% select filter intersect
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom stats setNames model.matrix sd
+#' @importFrom limma plotMDS
+#' @import convert
+#' @importFrom edgeR DGEList calcNormFactors estimateGLMCommonDisp estimateGLMTrendedDisp estimateGLMTagwiseDisp glmFit glmLRT topTags
 #'
 #' @usage DA_edgeR(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' @examples

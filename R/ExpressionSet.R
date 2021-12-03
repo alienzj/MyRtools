@@ -1,10 +1,3 @@
-#' @importFrom data.table fread
-#' @importFrom dplyr %>% intersect select inner_join filter
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom stats setNames
-#' @import convert
-#'
-#'
 #' @title Building ExpressionSet Object
 #'
 #' @description
@@ -23,6 +16,12 @@
 #'
 #' @return
 #' an ExpressionSet Object
+#'
+#' @importFrom data.table fread
+#' @importFrom dplyr %>% intersect select inner_join filter
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom stats setNames
+#' @import convert
 #'
 #' @usage get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
 #' @examples

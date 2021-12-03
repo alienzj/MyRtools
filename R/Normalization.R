@@ -1,6 +1,3 @@
-#' @importFrom stats mad median quantile sd
-#'
-#'
 #' @title Normalization
 #'
 #' @description
@@ -14,6 +11,8 @@
 #'
 #' @return
 #' a normalized vector
+#'
+#' @importFrom stats mad median quantile sd
 #'
 #' @usage NormalizeFun(Vector, type="Zscore")
 #' @examples

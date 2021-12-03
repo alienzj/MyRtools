@@ -4,7 +4,7 @@
 \alias{DA_Wilcox}
 \title{Differential Expression Analysis by Wilcox-rank-sum test}
 \usage{
-DA_Wilcox(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
+DA_Wilcox(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05)
 }
 \arguments{
 \item{Group_info, }{Character; design factor(default: "Group").}
@@ -28,7 +28,7 @@ Wilcox-rank-sum test is non-parameter test method, and also use for the data wit
 
 data(ExprSet_species)
 
-Wilcox_res <- DA_Wilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
+Wilcox_res <- DA_Wilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05)
 Wilcox_res$res
 
 }

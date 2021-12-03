@@ -184,8 +184,9 @@ filterKruskal <- function(expr, group, p.value) {
   return(scores_df)
 }
 
-#' R implementation of the LEfSe method
+#' @title R implementation of the LEfSe method
 #'
+#' @description
 #' Perform a LEfSe analysis: the function carries out differential analysis
 #' between two sample groups for multiple microorganisms and uses linear discirminant analysis
 #' to establish their effect sizes. Subclass information for each class can be incorporated
@@ -344,9 +345,9 @@ DA_LEfSe <- function(dataset=ExprSet_species_count,
   metadata <- pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
   profile <- exprs(dataset)
-  if(!any(profile %% 1 == 0)){
-    stop("The input matrix is not integer matrix please Check it")
-  }
+  # if(!any(profile %% 1 == 0)){
+  #   stop("The input matrix is not integer matrix please Check it")
+  # }
 
   # choose group
   phen <- metadata %>% dplyr::filter(Group%in%Group_name)
@@ -357,22 +358,22 @@ DA_LEfSe <- function(dataset=ExprSet_species_count,
     dplyr::filter(SampleID%in%intersect_sid) %>%
     dplyr::mutate(Group=factor(Group, levels = Group_name)) %>%
     tibble::column_to_rownames("SampleID")
-  countData <- profile %>% data.frame() %>%
+  proData <- profile %>% data.frame() %>%
     dplyr::select(all_of(rownames(colData))) %>%
     as.matrix()
 
   # # No zero value for Log transform
-  # if(any(countData == 0)){
-  #   countData <- countData+1
+  # if(any(proData == 0)){
+  #   proData <- proData+1
   # }else{
-  #   countData <- countData
+  #   proData <- proData
   # }
-  if(!all(rownames(colData) == colnames(countData))){
-    stop("Order of sampleID between colData and CountData is wrong please check your data")
+  if(!all(rownames(colData) == colnames(proData))){
+    stop("Order of sampleID between colData and proData is wrong please check your data")
   }
 
   se <- SummarizedExperiment::SummarizedExperiment(
-              assays=list(counts=countData),
+              assays=list(counts=proData),
               colData=colData,
               metadata="Profile")
   lefse_res <- lefser(se,

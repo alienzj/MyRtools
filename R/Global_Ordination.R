@@ -1,11 +1,3 @@
-#' @importFrom factoextra get_eig
-#' @importFrom dplyr %>% select inner_join
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom vegan adonis vegdist
-#' @importFrom stats setNames
-#' @import convert
-#'
-#'
 #' @title Dimensionality Reduction Analysis: Principal Component Analysis(PCA)
 #'
 #' @description
@@ -22,6 +14,13 @@
 #' a list object:
 #'   PCA score
 #'   Result of PERMANOVA
+#'
+#' @importFrom factoextra get_eig
+#' @importFrom dplyr %>% select inner_join
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom vegan adonis vegdist
+#' @importFrom stats setNames
+#' @import convert
 #'
 #' @usage Ord_PCA(dataset=ExpressionSet, Normalization=TRUE, Group_info="Group")
 #' @examples
@@ -81,14 +80,6 @@ Ord_PCA <- function(dataset=ExprSet_species,
 }
 
 
-#' @importFrom ape pcoa
-#' @importFrom dplyr %>% select inner_join
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom vegan adonis vegdist
-#' @importFrom stats setNames
-#' @import convert
-#'
-#'
 #' @title Dimensionality Reduction Analysis: Principal Coordinate Analysis(PCoA)
 #'
 #' @description
@@ -105,6 +96,13 @@ Ord_PCA <- function(dataset=ExprSet_species,
 #' a list object:
 #'   PCoA score
 #'   Result of PERMANOVA
+#'
+#' @importFrom ape pcoa
+#' @importFrom dplyr %>% select inner_join
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom vegan adonis vegdist
+#' @importFrom stats setNames
+#' @import convert
 #'
 #' @usage Ord_PCoA(dataset=ExpressionSet, Method="bray", Group_info="Group")
 #' @examples
@@ -160,14 +158,6 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 }
 
 
-#' @importFrom MASS isoMDS sammon
-#' @importFrom dplyr %>% select inner_join
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom vegan adonis vegdist
-#' @importFrom stats setNames dist cmdscale
-#' @import convert
-#'
-#'
 #' @title Dimensionality Reduction Analysis: Multidimensional Scaling(MDS)
 #'
 #' @description
@@ -184,6 +174,13 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 #' a list object:
 #'   MDS score
 #'   Result of PERMANOVA
+#'
+#' @importFrom MASS isoMDS sammon
+#' @importFrom dplyr %>% select inner_join
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom vegan adonis vegdist
+#' @importFrom stats setNames dist cmdscale
+#' @import convert
 #'
 #' @usage Ord_MDS(dataset=ExpressionSet, Method="Classic", Group_info="Group")
 #' @examples
@@ -242,14 +239,6 @@ Ord_MDS <- function(dataset=ExprSet_species,
 }
 
 
-#' @importFrom Rtsne Rtsne
-#' @importFrom dplyr %>% select inner_join
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom vegan adonis vegdist
-#' @importFrom stats setNames
-#' @import convert
-#'
-#'
 #' @title Dimensionality Reduction Analysis: t-Distributed Stochastic Neighbor Embedding(t-SNE)
 #'
 #' @description
@@ -266,6 +255,13 @@ Ord_MDS <- function(dataset=ExprSet_species,
 #' a list object:
 #'   t-SNE score
 #'   Result of PERMANOVA
+#'
+#' @importFrom Rtsne Rtsne
+#' @importFrom dplyr %>% select inner_join
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom vegan adonis vegdist
+#' @importFrom stats setNames
+#' @import convert
 #'
 #' @usage Ord_tsne(dataset=ExpressionSet, Perplexity=20, Group_info="Group")
 #' @examples
@@ -322,14 +318,7 @@ Ord_tsne <- function(dataset=ExprSet_species,
   return(res)
 }
 
-#' @importFrom umap umap
-#' @importFrom dplyr %>% select inner_join
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @importFrom vegan adonis vegdist
-#' @importFrom stats setNames
-#' @import convert
-#'
-#'
+
 #' @title Dimensionality Reduction Analysis: Uniform Manifold Approximation and Projection (UMAP)
 #'
 #' @description
@@ -345,6 +334,13 @@ Ord_tsne <- function(dataset=ExprSet_species,
 #' a list object:
 #'   umap score
 #'   Result of PERMANOVA
+#'
+#' @importFrom umap umap
+#' @importFrom dplyr %>% select inner_join
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom vegan adonis vegdist
+#' @importFrom stats setNames
+#' @import convert
 #'
 #' @usage Ord_umap(dataset=ExpressionSet, Group_info="Group")
 #' @examples
@@ -395,11 +391,6 @@ Ord_umap <- function(dataset=ExprSet_species,
 }
 
 
-#' @importFrom tibble column_to_rownames column_to_rownames
-#' @import ggplot2
-#' @importFrom cowplot insert_xaxis_grob insert_yaxis_grob ggdraw
-#'
-#'
 #' @title Plot Ordination result with scatterplot
 #'
 #' @description
@@ -414,6 +405,10 @@ Ord_umap <- function(dataset=ExprSet_species,
 #'
 #' @return
 #' a scatterplot
+#'
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @import ggplot2
+#' @importFrom cowplot insert_xaxis_grob insert_yaxis_grob ggdraw
 #'
 #' @usage Ord_Plot(Score=score, Axis_name=explains, Pvalue=label)
 #' @examples
