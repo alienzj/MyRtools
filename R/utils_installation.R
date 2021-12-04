@@ -27,14 +27,14 @@ InstallPackage <- function(Package=packages, Type=c("CRAN", "bioconductor")){
   installed_packages <- Package %in% rownames(installed.packages())
   if (any(installed_packages == FALSE)) {
     if(is.element(Type, "CRAN")){
-      lapply(packages[!installed_packages], install.packages)
+      lapply(Package[!installed_packages], install.packages)
     }else{
       if(!require(BiocManager)){install.packages("BiocManager")}
-      lapply(packages[!installed_packages], BiocManager::install)
+      lapply(Package[!installed_packages], BiocManager::install)
     }
   }
   # Packages Loading
-  invisible(lapply(packages, library, character.only = TRUE))
+  invisible(lapply(Package, library, character.only = TRUE))
 
   message("The installation is finished")
 }
