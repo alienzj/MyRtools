@@ -24,19 +24,19 @@
 #' @importFrom stats setNames
 #' @importFrom Biobase pData exprs
 #'
-#' @usage Ord_PCA(dataset=ExpressionSet, Normalization=TRUE, Group_info="Group")
+#' @usage GB_PCA(dataset=ExpressionSet, Normalization=TRUE, Group_info="Group")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' PCA_res <- Ord_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
+#' PCA_res <- GB_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
 #' PCA_res$PCA
 #' }
 #'
-Ord_PCA <- function(dataset=ExprSet_species,
-                    Normalization=TRUE,
-                    Group_info="Group"){
+GB_PCA <- function(dataset=ExprSet_species,
+                   Normalization=TRUE,
+                   Group_info="Group"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
@@ -110,19 +110,19 @@ Ord_PCA <- function(dataset=ExprSet_species,
 #' @importFrom stats setNames
 #' @importFrom Biobase pData exprs
 #'
-#' @usage Ord_PCoA(dataset=ExpressionSet, Method="bray", Group_info="Group")
+#' @usage GB_PCoA(dataset=ExpressionSet, Method="bray", Group_info="Group")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' PCoA_res <- Ord_PCoA(dataset=ExprSet_species, Method="bray", Group_info="Group")
+#' PCoA_res <- GB_PCoA(dataset=ExprSet_species, Method="bray", Group_info="Group")
 #' PCoA_res$PCoA
 #' }
 #'
-Ord_PCoA <- function(dataset=ExprSet_species,
-                     Method="bray",
-                     Group_info="Group"){
+GB_PCoA <- function(dataset=ExprSet_species,
+                    Method="bray",
+                    Group_info="Group"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
@@ -192,19 +192,19 @@ Ord_PCoA <- function(dataset=ExprSet_species,
 #' @importFrom stats setNames dist cmdscale
 #' @importFrom Biobase pData exprs
 #'
-#' @usage Ord_MDS(dataset=ExpressionSet, Method="Classic", Group_info="Group")
+#' @usage GB_MDS(dataset=ExpressionSet, Method="Classic", Group_info="Group")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' MDS_res <- Ord_MDS(dataset=ExprSet_species, Method="Classic", Group_info="Group")
+#' MDS_res <- GB_MDS(dataset=ExprSet_species, Method="Classic", Group_info="Group")
 #' MDS_res$MDS
 #' }
 #'
-Ord_MDS <- function(dataset=ExprSet_species,
-                    Method="Classic",
-                    Group_info="Group"){
+GB_MDS <- function(dataset=ExprSet_species,
+                   Method="Classic",
+                   Group_info="Group"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
@@ -277,19 +277,19 @@ Ord_MDS <- function(dataset=ExprSet_species,
 #' @importFrom stats setNames
 #' @importFrom Biobase pData exprs
 #'
-#' @usage Ord_tsne(dataset=ExpressionSet, Perplexity=20, Group_info="Group")
+#' @usage GB_tsne(dataset=ExpressionSet, Perplexity=20, Group_info="Group")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' tsne_res <- Ord_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
+#' tsne_res <- GB_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
 #' tsne_res$tsne
 #' }
 #'
-Ord_tsne <- function(dataset=ExprSet_species,
-                     Perplexity=20,
-                     Group_info="Group"){
+GB_tsne <- function(dataset=ExprSet_species,
+                    Perplexity=20,
+                    Group_info="Group"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
@@ -360,18 +360,18 @@ Ord_tsne <- function(dataset=ExprSet_species,
 #' @importFrom stats setNames
 #' @importFrom Biobase pData exprs
 #'
-#' @usage Ord_umap(dataset=ExpressionSet, Group_info="Group")
+#' @usage GB_umap(dataset=ExpressionSet, Group_info="Group")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' umap_res <- Ord_umap(dataset=ExprSet_species, Group_info="Group")
+#' umap_res <- GB_umap(dataset=ExprSet_species, Group_info="Group")
 #' umap_res$umap
 #' }
 #'
-Ord_umap <- function(dataset=ExprSet_species,
-                     Group_info="Group"){
+GB_umap <- function(dataset=ExprSet_species,
+                    Group_info="Group"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
@@ -432,22 +432,22 @@ Ord_umap <- function(dataset=ExprSet_species,
 #' @import ggplot2
 #' @importFrom cowplot insert_xaxis_grob insert_yaxis_grob ggdraw
 #'
-#' @usage Ord_Plot(Score=score, Axis_name=explains, Pvalue=label)
+#' @usage GB_Plot(Score=score, Axis_name=explains, Pvalue=label)
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' PCA_res <- Ord_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
-#' Ord_Plot(Score=PCA_res$PCA, Axis_name=PCA_res$epn, Pvalue=PCA_res$PER)
+#' PCA_res <- GB_PCA(dataset=ExprSet_species, Normalization=TRUE, Group_info="Group")
+#' GB_OrdPlot(Score=PCA_res$PCA, Axis_name=PCA_res$epn, Pvalue=PCA_res$PER)
 #'
-#' res_tsne <- Ord_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
-#' Ord_Plot(Score=res_tsne$tsne, Axis_name=res_tsne$epn, Pvalue=res_tsne$PER)
+#' res_tsne <- GB_tsne(dataset=ExprSet_species, Perplexity=20, Group_info="Group")
+#' GB_OrdPlot(Score=res_tsne$tsne, Axis_name=res_tsne$epn, Pvalue=res_tsne$PER)
 #' }
 #'
-Ord_Plot <- function(Score=score,
-                     Axis_name=name,
-                     Pvalue=permanova){
+GB_OrdPlot <- function(Score=score,
+                       Axis_name=name,
+                       Pvalue=permanova){
 
   Score$Group <- factor(Score$Group)
   # main plot

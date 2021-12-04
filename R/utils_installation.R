@@ -13,6 +13,8 @@
 #'
 #' @export
 #'
+#' @importFrom BiocManager install
+#'
 #' @usage InstallPackage(Package=Packages, Type="CRAN")
 #' @examples
 #'
@@ -29,7 +31,7 @@ InstallPackage <- function(Package=packages, Type=c("CRAN", "bioconductor")){
     if(is.element(Type, "CRAN")){
       lapply(Package[!installed_packages], install.packages)
     }else{
-      if(!require(BiocManager)){install.packages("BiocManager")}
+      if(!BiocManager%in%installed_packages){install.packages("BiocManager")}
       lapply(Package[!installed_packages], BiocManager::install)
     }
   }

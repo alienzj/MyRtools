@@ -24,19 +24,19 @@
 #' @importFrom stats setNames
 #' @importFrom Biobase pData exprs
 #'
-#' @usage PERMANOVA(dataset=ExpressionSet, Group_info="Group", Group_name=NULL, Distance="bray")
+#' @usage GB_PERMANOVA(dataset=ExpressionSet, Group_info="Group", Group_name=NULL, Distance="bray")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' PERMANOVA_res <- PERMANOVA(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, Distance="bray")
+#' PERMANOVA_res <- GB_PERMANOVA(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, Distance="bray")
 #' }
 #'
-PERMANOVA <- function(dataset=ExprSet_species,
-                      Group_info="Group",
-                      Group_name=NULL,
-                      Distance="bray"){
+GB_PERMANOVA <- function(dataset=ExprSet_species,
+                         Group_info="Group",
+                         Group_name=NULL,
+                         Distance="bray"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"

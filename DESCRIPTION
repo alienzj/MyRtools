@@ -42,4 +42,5 @@ Imports:
     MASS (>= 7.3-54),
     methods,
     Hmisc (>= 4.5-0),
-    ppcor (>= 1.1)
+    ppcor (>= 1.1),
+    BiocManager (>= 1.30.16)
