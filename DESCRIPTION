@@ -41,4 +41,5 @@ Imports:
     SummarizedExperiment (>= 1.22.0),
     MASS (>= 7.3-54),
     methods,
-    Hmisc (>= 4.5-0) 
+    Hmisc (>= 4.5-0),
+    ppcor (>= 1.1)

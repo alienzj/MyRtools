@@ -10,33 +10,33 @@
 #' @param Group_info, Character; design factor(default: "Group").
 #' @param Group_name, Character; the group for filtering(default: NULL).
 #' @param Object, Character; (Required) the variables for correlation(Feature;Meta;Mix).
-#' @param Pvalue, Numeric; significant level(default: 0.05).
 #'
 #' @return
-#'   significant difference with enriched directors
+#'  a list of results
+#'   Spearman Correlation Coefficient matrix
+#'   Spearman Correlation Coefficient table
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select filter intersect inner_join
+#' @importFrom dplyr %>% select filter intersect inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
 #' @importFrom Hmisc rcorr
 #' @importFrom Biobase pData exprs
 #'
-#' @usage AA_Spearman(dataset=ExpressionSet, Group_info="Group", Group_name=NULL, Object="Feature", Pvalue=0.05)
+#' @usage AA_SimpleCC(dataset=ExpressionSet, Group_info="Group", Group_name=NULL, Object="Feature")
 #' @examples
 #'
 #' \donttest{
 #' data(ExprSet_species)
 #'
-#' Spearman_res <- AA_Spearman(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, Object="Feature", Pvalue=0.05)
-#' Spearman_res$res
+#' SimpleCC_res <- AA_SimpleCC(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, Object="Feature")
+#'
 #'}
 #'
-AA_Spearman <- function(dataset=ExprSet_species,
+AA_SimpleCC <- function(dataset=ExprSet_species,
                         Group_info="Group",
                         Group_name=NULL,
-                        Object="Feature",
-                        Pvalue=0.05){
+                        Object="Feature"){
 
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
@@ -88,8 +88,8 @@ AA_Spearman <- function(dataset=ExprSet_species,
     cor <- Hmisc::rcorr(as.matrix(mdat_cln), type = "spearman")
   }
 
-  FCM <- flattenCorrMatrix(signif(cor$r, 5), signif(cor$P, 5)) %>%
-    dplyr::filter(p < Pvalue)
-  res <- list(corfit=cor, CorrMatrix=FCM)
+  FCM <- flattenCorrMatrix(signif(cor$r, 5), signif(cor$P, 5))
+
+  res <- list(corfit=cor, CorMatrix=FCM)
   return(res)
 }
