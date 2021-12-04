@@ -64,11 +64,18 @@ AA_PartialCC <- function(dataset=ExprSet_species,
   colVariable <- colVariable[, sapply(colVariable, function(x){is.numeric(x)})]
 
   Adjvariable <- colData %>% dplyr::select(dplyr::all_of(AdjVar))
-  Adjvariable <- sapply(Adjvariable, function(x){if(is.numeric(x)){return(x)}else(as.numeric(factor(x)))})
+  Adjvariable <- sapply(Adjvariable, function(x){
+      if(is.numeric(x)){
+        return(x)
+      }else{
+        return(as.numeric(factor(x)))
+      }
+    }
+  )
   rownames(Adjvariable) <- rownames(colVariable)
 
   if(!all(rownames(colVariable) == colnames(proData))){
-    stop("Order of sampleID between colData and proData is wrong please check your data")
+    stop("Order of sampleID between colVariable and proData is wrong please check your data")
   }
 
   num_row <- nrow(proData)
