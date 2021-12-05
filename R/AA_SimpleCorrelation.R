@@ -20,6 +20,7 @@
 #'
 #' @importFrom dplyr %>% select filter intersect inner_join all_of
 #' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom stats na.omit
 #' @importFrom Hmisc rcorr
 #' @importFrom Biobase pData exprs
 #'
@@ -77,14 +78,14 @@ AA_SimpleCC <- function(dataset=ExprSet_species,
     # Features -> colnames; SampleID -> rownames
     cor <- Hmisc::rcorr(t(proData), type = "spearman")
   }else if(is.element(Object, "Meta")){
-    colData_cln <- colData[, sapply(colData, function(x){is.numeric(x)})]
+    colData_cln <- colData[, sapply(colData, function(x){is.numeric(x)})] %>% stats::na.omit()
     cor <- Hmisc::rcorr(as.matrix(colData_cln), type = "spearman")
   }else if(is.element(Object, "Mix")){
     mdat <- t(proData) %>% data.frame() %>%
       tibble::rownames_to_column("SampleID") %>%
       dplyr::inner_join(colData %>% tibble::rownames_to_column("SampleID"),
                         by = "SampleID")
-    mdat_cln <- mdat[, sapply(mdat, function(x){is.numeric(x)})]
+    mdat_cln <- mdat[, sapply(mdat, function(x){is.numeric(x)})] %>% stats::na.omit()
     cor <- Hmisc::rcorr(as.matrix(mdat_cln), type = "spearman")
   }
 

@@ -19,7 +19,7 @@ AA_PartialCC(dataset=ExpressionSet, Group_info="Group", Group_name=NULL, AdjVar=
 }
 \value{
 a list of results
-  Partial Correlation Coefficient matrix
+  Partial Correlation matrix(estimate, pvalue, statistics)
   Partial Correlation Coefficient table
 }
 \description{

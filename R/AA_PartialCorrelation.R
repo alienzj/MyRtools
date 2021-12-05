@@ -15,7 +15,7 @@
 #'
 #' @return
 #'  a list of results
-#'   Partial Correlation Coefficient matrix
+#'   Partial Correlation matrix(estimate, pvalue, statistics)
 #'   Partial Correlation Coefficient table
 #'
 #' @export
@@ -77,7 +77,6 @@ AA_PartialCC <- function(dataset=ExprSet_species,
   if(!all(rownames(colVariable) == colnames(proData))){
     stop("Order of sampleID between colVariable and proData is wrong please check your data")
   }
-
   num_row <- nrow(proData)
   num_col <- ncol(colVariable)
   matrix_estimate <- matrix(NA, nrow = num_row, ncol = num_col,
@@ -93,10 +92,14 @@ AA_PartialCC <- function(dataset=ExprSet_species,
 
   for(i in 1:num_row){
     for(j in 1:num_col){
+      index <- which(!is.na(colVariable[, j]))
+      Yvar <- colVariable[, j][index]
+      Xvar <- proData[i, ][index]
+      Zvar <- Adjvariable[index, ]
       if(is.element(Method, "pcor")){
-        cor_res <- ppcor::pcor.test(proData[i, ], colVariable[, j], Adjvariable, method = "spearman")
+        cor_res <- ppcor::pcor.test(Xvar, Yvar, Zvar, method = "spearman")
       }else if(is.element(Method, "spcor")){
-        cor_res <- ppcor::spcor.test(proData[i, ], colVariable[, j], Adjvariable, method = "spearman")
+        cor_res <- ppcor::spcor.test(Xvar, Yvar, Zvar, method = "spearman")
       }
       matrix_estimate[i, j] <- cor_res$estimate
       matrix_pvalue[i, j] <- cor_res$p.value
