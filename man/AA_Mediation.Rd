@@ -28,8 +28,8 @@ a list of results
 \description{
 CMA examines the intermediate process(Mediation variable:M) by which the independent variable(X) affects the dependent variable(Y).
  Firstly, building Mediator Model(model.m): f(M | X + AdjVar); and then Outcome Model: f(Y = X + M + AdjVar).
- Secondly, m.out <- mediate{Y, M, X, AdjVar, model.y, model.m} to perform mediation analysis.
- Finally,
+ Secondly, mediation_out <- mediate{Y, M, X, AdjVar, model.y, model.m} to perform mediation analysis.
+ Finally, extracting the results of mediation_out.
 }
 \details{
 12/5/2021 Guangzhou China
