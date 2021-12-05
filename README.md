@@ -2,7 +2,7 @@
 
 **MyRtools** package is aimed at performing the common statistic approaches on omics data including metagenomics or transcriptomics data for me in a personal manner.  
 
-<img src="figure/01.Overview.jpg" width="500" height="600">
+<img src="figure/01.Overview.png" width="500" height="600">
 
 ### Introduction
 
