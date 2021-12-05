@@ -43,4 +43,7 @@ Imports:
     methods,
     Hmisc (>= 4.5-0),
     ppcor (>= 1.1),
-    BiocManager (>= 1.30.16)
+    BiocManager (>= 1.30.16),
+    intmed (>= 0.1.2),
+    mediation (>= 4.5.0)
+
