@@ -319,7 +319,7 @@ setMethod("index_reorder", "MyDataSet", function(ps, index_type="both"){
         ## ENFORCE CONSISTENT ORDER OF FEATURE INDICES.
         torder <- feature_names(Profile_table(ps))
         if( !is.null(Feature_table(ps, FALSE)) ){
-            ps@Feature_table = Feature_table(ps)[torder, ]
+            ps@Feature_table <- Feature_table(Feature_table(ps)[torder, ])
         }
     }
     if( index_type %in% c("both", "Samples") ){

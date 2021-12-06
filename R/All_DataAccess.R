@@ -263,7 +263,7 @@ setMethod("Feature_table", "matrix", function(object){
     if(is.null(colnames(object))){
         colnames(object) <- paste("Attribution", 1:ncol(object), sep="")
     }
-    # instantiate as taxonomyTable
+    # instantiate as Feature_table
     return(new("Feature_table", object))
 })
 # Constructor; coerce to matrix, then pass on for creating Feature_table
