@@ -124,12 +124,10 @@ setClass(
 #' Build MyDataSet-class objects
 #'
 #' This the constructor to build the [`MyDataSet-class`] object.
-#' @param Profile_table a [`marker_table-class`] object differtial analysis.
-#' @param Sample_data character, method used to normalize the input `phyloseq`
-#'   object.
-#' @param Feature_table character, method used for microbiome marker
-#'   identification.
-#' @param ... arguments
+#' @param Profile_table, Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID..
+#' @param Sample_data, Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
+#' @param Feature_table, Data.frame; the feature of Profile.
+#'
 #' @seealso [phyloseq::phyloseq()]
 #' @name MyDataSet
 #' @export
@@ -146,8 +144,9 @@ setClass(
 #' FEATURE <- Feature_table(Feature)
 #'
 #' mydataset <- MyDataSet(Profile_table=PROF,
-#'           Sample_data=META,
-#'           Feature_table=FEATURE)
+#'                        Sample_data=META,
+#'                        Feature_table=FEATURE)
+#' mydataset
 #' }
 #'
 MyDataSet <- function(Profile_table = NULL,

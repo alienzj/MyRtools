@@ -7,15 +7,11 @@
 MyDataSet(Profile_table = NULL, Sample_data = NULL, Feature_table = NULL)
 }
 \arguments{
-\item{Profile_table}{a [`marker_table-class`] object differtial analysis.}
+\item{Profile_table, }{Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID..}
 
-\item{Sample_data}{character, method used to normalize the input `phyloseq`
-object.}
+\item{Sample_data, }{Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).}
 
-\item{Feature_table}{character, method used for microbiome marker
-identification.}
-
-\item{...}{arguments}
+\item{Feature_table, }{Data.frame; the feature of Profile.}
 }
 \value{
 a [`MyDataSet-class`] object.
@@ -35,8 +31,9 @@ META <- Sample_data(Metadata)
 FEATURE <- Feature_table(Feature)
 
 mydataset <- MyDataSet(Profile_table=PROF,
-          Sample_data=META,
-          Feature_table=FEATURE)
+                       Sample_data=META,
+                       Feature_table=FEATURE)
+mydataset
 }
 
 }
