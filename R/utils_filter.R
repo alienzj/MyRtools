@@ -7,9 +7,9 @@
 #' @details 12/6/2021 Guangzhou China
 #' @author  Hua Zou
 #'
-#' @param Object, Class; a [`MyDataSet-class`].
+#' @param Object, Class; a[`MyDataSet-class`].
 #' @param Cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
-#' @param Type, Character; the type of filtering data ("Both", "Features", "Samples").
+#' @param FilterType, Character; the type of filtering data ("Both", "Features", "Samples").
 #'
 #' @return
 #'  A filtered `object` with the Cutoff.
@@ -18,27 +18,31 @@
 #'
 #' @importFrom stats mad median quantile sd
 #'
-#' @usage filter_method(Object, Cutoff=0.2, Type="Both")
+#' @usage filter_method(Object, Cutoff=0.2, FilterType="Both")
+#'
 #' @examples
-#' data(mydataset)
-#' filter_method(mydataset, Cutoff=0.2, Type="Both")
+#' \donttest{
+#'    data(mydataset)
+#'    filter_method(mydataset, Cutoff=0.2, FilterType="Both")
+#' }
 #'
 filter_method <- function(object,
                           Cutoff = 0.2,
-                          Type = c("Both", "Features", "Samples")){
+                          FilterType = c("Both", "Features", "Samples")){
 
-  Type <- match.arg(Type, c("Both", "Features", "Samples"))
+
+  FilterType <- match.arg(FilterType, c("Both", "Features", "Samples"))
   prf <- as(Profile_table(object), "matrix")
 
-  if(Type == "Features"){
+  if(FilterType == "Features"){
     tmp1 <- trimFun(prf, 1, Cutoff)
     remain_features <- rownames(tmp1)
     remain_samples <- colnames(prf)
-  }else if(Type == "Samples"){
+  }else if(FilterType == "Samples"){
     tmp2 <- trimFun(prf, 2, Cutoff)
     remain_features <- rownames(prf)
     remain_samples <- rownames(tmp2)
-  }else if(Type == "Both"){
+  }else if(FilterType == "Both"){
     tmp1 <- trimFun(prf, 1, Cutoff)
     tmp2 <- trimFun(prf, 2, Cutoff)
     remain_features <- rownames(tmp1)

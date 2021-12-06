@@ -4,14 +4,14 @@
 \alias{filter_method}
 \title{Filter samples or features in `Profile_table` by Occurrences}
 \usage{
-filter_method(Object, Cutoff=0.2, Type="Both")
+filter_method(Object, Cutoff=0.2, FilterType="Both")
 }
 \arguments{
 \item{Cutoff, }{Numeric; the threshold for filtering (default: Cutoff=0.2).}
 
-\item{Type, }{Character; the type of filtering data ("Both", "Features", "Samples").}
+\item{FilterType, }{Character; the type of filtering data ("Both", "Features", "Samples").}
 
-\item{Object, }{Class; a [`MyDataSet-class`].}
+\item{Object, }{Class; a[`MyDataSet-class`].}
 }
 \value{
 A filtered `object` with the Cutoff.
@@ -24,8 +24,10 @@ which means the samples or features will be discard if they could not pass the c
 12/6/2021 Guangzhou China
 }
 \examples{
-data(mydataset)
-filter_method(mydataset, Cutoff=0.2, Type="Both")
+\donttest{
+   data(mydataset)
+   filter_method(mydataset, Cutoff=0.2, FilterType="Both")
+}
 
 }
 \author{
