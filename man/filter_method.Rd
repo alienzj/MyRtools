@@ -25,7 +25,7 @@ which means the samples or features will be discard if they could not pass the c
 }
 \examples{
 data(mydataset)
-filter_method(Object, Cutoff=0.2, Type="Both")
+filter_method(mydataset, Cutoff=0.2, Type="Both")
 
 }
 \author{

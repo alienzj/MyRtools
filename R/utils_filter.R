@@ -21,7 +21,7 @@
 #' @usage filter_method(Object, Cutoff=0.2, Type="Both")
 #' @examples
 #' data(mydataset)
-#' filter_method(Object, Cutoff=0.2, Type="Both")
+#' filter_method(mydataset, Cutoff=0.2, Type="Both")
 #'
 filter_method <- function(object,
                           Cutoff = 0.2,
@@ -53,9 +53,7 @@ filter_method <- function(object,
   # Force both samples and feature indices to be in the same order.
   object <- index_reorder(object, "Both")
 
-  #object@Profile_table <- Profile_table(abd, feature_are_rows = feature_are_rows(object))
-
-  object
+  return(object)
 }
 
 # the data is trimmed by threshold
