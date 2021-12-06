@@ -511,19 +511,19 @@ setMethod("show", "Feature_Table", function(object){
 setMethod("show", "MyDataSet", function(object){
     cat("MyDataSet-class experiment-level object", fill=TRUE)
     # print Profile_table (always there).
-    cat(paste("Profile_table()   Profile Table:         [ ", nfeature(Profile_table(object)), " taxa and ",
-              nsamples(Profile_table(object)), " samples ]", sep = ""), fill = TRUE)
+    cat(paste("Profile_table()   Profile Table:         [ ", nfeature(Profile_table(object)), " Features and ",
+              nsamples(Profile_table(object)), " Samples ]", sep = ""), fill = TRUE)
 
     # print Sample Data if there
     if(!is.null(Sample_data(object, FALSE))){
-        cat(paste("Sample_data() Sample Data:       [ ", dim(Sample_data(object))[1], " samples by ",
+        cat(paste("Sample_data() Sample Data:       [ ", dim(Sample_data(object))[1], " Samples by ",
                   dim(Sample_data(object))[2],
-                  " sample variables ]", sep = ""), fill = TRUE)
+                  " Sample variables ]", sep = ""), fill = TRUE)
     }
 
     # print Feature table if there
     if(!is.null(Feature_table(object, FALSE))){
-        cat(paste("Feature_table()   Feature Table:    [ ", dim(Feature_table(object))[1], " taxa by ",
+        cat(paste("Feature_table()   Feature Table:    [ ", dim(Feature_table(object))[1], " Features by ",
                   dim(Feature_table(object))[2],
                   " Feature Attributions ]", sep = ""), fill = TRUE)
     }

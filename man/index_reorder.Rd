@@ -8,15 +8,15 @@
 \usage{
 index_reorder(ps, index_type)
 
-\S4method{index_reorder}{MyDataSet}(ps, index_type = "both")
+\S4method{index_reorder}{MyDataSet}(ps, index_type = "Both")
 }
 \arguments{
 \item{ps}{(Required). A \code{\link{MyDataSet-class}} instance.}
 
 \item{index_type}{(Optional). A character string
 specifying the indices to properly order.
-Supported values are \code{c("both", "Features", "Samples")}.
-Default is \code{"both"}, meaning samples and Features indices
+Supported values are \code{c("Both", "Features", "Samples")}.
+Default is \code{"Both"}, meaning samples and Features indices
 will be checked/re-ordered.}
 }
 \description{

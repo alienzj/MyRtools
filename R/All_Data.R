@@ -60,7 +60,7 @@
 # mydataset <- MyDataSet(Profile_table=PROF,
 #                        Sample_data=META,
 #                        Feature_table=FEATURE)
-# save(mydataset, file = "data/MyDataSet.rda")
+# save(mydataset, file = "data/mydataset.rda")
 #
 ###########################################################################
 # Profile <- data.table::fread(system.file("extdata", "Genus_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")

@@ -82,8 +82,8 @@ MyDataSet <- function(...){
     # that describes samples before attempting to reconcile.
     ps <- prune_samples(shared_samples, ps)
 
-    # Force both samples and feature indices to be in the same order.
-    ps <- index_reorder(ps, "both")
+    # Force Both samples and feature indices to be in the same order.
+    ps <- index_reorder(ps, "Both")
 
     return(ps)
 }
@@ -243,17 +243,17 @@ access <- function(mydataset, slot, errorIfNULL=FALSE){
         # If mydataset is a component class, might return as-is. Depends on slot.
         if( inherits(mydataset, get.component.classes()[slot]) ){
             # if slot-name matches, return mydataset as-is.
-            out = mydataset
+            out <- mydataset
         } else {
             # If slot/component mismatch, set out to NULL. Test later if this is an error.
-            out = NULL
+            out <- NULL
         }
     } else if(!slot %in% slotNames(mydataset) ){
         # If slot is invalid, set out to NULL. Test later if this is an error.
-        out = NULL
+        out <- NULL
     } else {
         # By elimination, must be valid. Access slot
-        out = eval(parse(text=paste("mydataset@", slot, sep="")))
+        out <- eval(parse(text=paste("mydataset@", slot, sep="")))
     }
     if( errorIfNULL & is.null(out) ){
         # Only error regarding a NULL return value if errorIfNULL is TRUE.
@@ -301,8 +301,8 @@ intersect_samples <- function(x){
 #' @param ps (Required). A \code{\link{MyDataSet-class}} instance.
 #' @param index_type (Optional). A character string
 #'  specifying the indices to properly order.
-#'  Supported values are \code{c("both", "Features", "Samples")}.
-#'  Default is \code{"both"}, meaning samples and Features indices
+#'  Supported values are \code{c("Both", "Features", "Samples")}.
+#'  Default is \code{"Both"}, meaning samples and Features indices
 #'  will be checked/re-ordered.
 #'
 #' @keywords internal
@@ -314,21 +314,21 @@ intersect_samples <- function(x){
 setGeneric("index_reorder", function(ps, index_type) standardGeneric("index_reorder") )
 #' @rdname index_reorder
 #' @aliases index_reorder,MyDataSet-method
-setMethod("index_reorder", "MyDataSet", function(ps, index_type="both"){
-    if( index_type %in% c("both", "Feature") ){
+setMethod("index_reorder", "MyDataSet", function(ps, index_type="Both"){
+    if( index_type %in% c("Both", "Feature") ){
         ## ENFORCE CONSISTENT ORDER OF FEATURE INDICES.
         torder <- feature_names(Profile_table(ps))
         if( !is.null(Feature_table(ps, FALSE)) ){
             ps@Feature_table <- Feature_table(Feature_table(ps)[torder, ])
         }
     }
-    if( index_type %in% c("both", "Samples") ){
+    if( index_type %in% c("Both", "Samples") ){
         ## ENFORCE CONSISTENT ORDER OF SAMPLE INDICES
         if( !is.null(Sample_data(ps, FALSE)) ){
             # check first that ps has Sample_data
             if( !all(sample_names(Profile_table(ps)) == rownames(Sample_data(ps))) ){
                 # Reorder the Sample_data rows so that they match the otu_table order.
-                ps@Sample_data <- Sample_data(ps)[sample_names(Profile_table(ps)), ]
+                ps@Sample_data <- Sample_data(Sample_data(ps)[sample_names(Profile_table(ps)), ])
             }
         }
     }
@@ -394,10 +394,10 @@ setMethod("prune_samples", signature("character", "MyDataSet"), function(samples
     samples <- intersect(intersect_samples(x), samples)
     # Now prune each component.
     # All MyDataSet objects have an Profile_table slot, no need to test for existence.
-    x@Profile_table <- prune_samples(samples, Profile_table(x))
+    x@Profile_table <- Profile_table(prune_samples(samples, Profile_table(x)), feature_are_rows = TRUE)
     if( !is.null(x@Sample_data) ){
         # protect missing Sample_data component. Don't need to prune if empty
-        x@Sample_data <- prune_samples(samples, Sample_data(x))
+        x@Sample_data <- Sample_data(prune_samples(samples, Sample_data(x)))
     }
     # Force sample index order after pruning to be the same,
     # according to the same rules as in the constructor, MyDataSet()
@@ -477,7 +477,7 @@ setMethod("prune_feature", signature("character", "Profile_table"), function(fea
     if( setequal(feature, feature_names(x)) ){
         return(x)
     } else {
-        feature = intersect( feature, feature_names(x) )
+        feature <- intersect( feature, feature_names(x) )
         if( feature_are_rows(x) ){
             return(x[feature, , drop=FALSE])
         } else {
@@ -493,14 +493,14 @@ setMethod("prune_feature", signature("character", "Sample_data"), function(featu
 #' @aliases prune_feature,character,MyDataSet-method
 #' @rdname prune_feature-methods
 setMethod("prune_feature", signature("character", "MyDataSet"), function(feature, x){
-    # Re-define `feature` as the intersection of OTU names for each component AND `feature`
+    # Re-define `feature` as the intersection of feature names for each component AND `feature`
     feature <- intersect(intersect_feature(x), feature)
     # Now prune them all.
     # All MyDataSet objects have an Profile_table slot, no need to test for existence.
-    x@Profile_table <- prune_feature(feature, Profile_table(x))
+    x@Profile_table <- Profile_table(prune_feature(feature, Profile_table(x)), feature_are_rows = TRUE)
     # Test if slot is present. If so, perform the component prune.
     if( !is.null(x@Feature_table) ){
-        x@Feature_table <- prune_feature(feature, Feature_table(x))
+        x@Feature_table <- Feature_table(prune_feature(feature, Feature_table(x)))
     }
     # Force index order after pruning to be the same,
     # according to the same rules as in the constructor, MyDataSet()

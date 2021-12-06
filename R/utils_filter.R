@@ -7,10 +7,9 @@
 #' @details 12/6/2021 Guangzhou China
 #' @author  Hua Zou
 #'
-#' @param Object, Class; a [`Profile_table-class`] or [`MyDataSet-class`].
+#' @param Object, Class; a [`MyDataSet-class`].
 #' @param Cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
-#' @param Type, Character; the type of filtering data ("Feature" or "Sample").
-#' @param Each, Logical; filtering Features each group or whole data(default: Each=FALSE).
+#' @param Type, Character; the type of filtering data ("Both", "Features", "Samples").
 #'
 #' @return
 #'  A filtered `object` with the Cutoff.
@@ -19,33 +18,42 @@
 #'
 #' @importFrom stats mad median quantile sd
 #'
-#' @usage NormalizeFun(Vector, type="Zscore")
+#' @usage filter_method(Object, Cutoff=0.2, Type="Both")
 #' @examples
+#' data(mydataset)
+#' filter_method(Object, Cutoff=0.2, Type="Both")
 #'
-filter_profile <- function(object,
-                           Cutoff = 0.2,
-                           Type = c("Feature", "Sample", "Both")){
-  # object = mydataset
-  # Cutoff = 0.2
-  # Type = "Feature"
+filter_method <- function(object,
+                          Cutoff = 0.2,
+                          Type = c("Both", "Features", "Samples")){
 
-  Type <- match.arg(Type, c("Feature", "Sample"))
+  Type <- match.arg(Type, c("Both", "Features", "Samples"))
   prf <- as(Profile_table(object), "matrix")
 
-  if(Type == "Feature"){
-    tmp <- trimFun(prf, 1, Cutoff)
-    abd <- prf[rownames(prf)%in%rownames(tmp), ]
-  }else if(Type == "Sample"){
-    tmp <- trimFun(prf, 2, Cutoff)
-    abd <- prf[, colnames(prf)%in%rownames(tmp)]
+  if(Type == "Features"){
+    tmp1 <- trimFun(prf, 1, Cutoff)
+    remain_features <- rownames(tmp1)
+    remain_samples <- colnames(prf)
+  }else if(Type == "Samples"){
+    tmp2 <- trimFun(prf, 2, Cutoff)
+    remain_features <- rownames(prf)
+    remain_samples <- rownames(tmp2)
   }else if(Type == "Both"){
     tmp1 <- trimFun(prf, 1, Cutoff)
     tmp2 <- trimFun(prf, 2, Cutoff)
-    abd <- prf[rownames(prf)%in%rownames(tmp),
-               colnames(prf)%in%rownames(tmp)]
+    remain_features <- rownames(tmp1)
+    remain_samples <- rownames(tmp2)
   }
+  object <- prune_feature(remain_features, object)
 
-  Profile_table(object) <- Profile_table(abd, feature_are_rows = feature_are_rows(object))
+  # Verify there is more than one component
+  # that describes samples before attempting to reconcile.
+  object <- prune_samples(remain_samples, object)
+
+  # Force both samples and feature indices to be in the same order.
+  object <- index_reorder(object, "Both")
+
+  #object@Profile_table <- Profile_table(abd, feature_are_rows = feature_are_rows(object))
 
   object
 }
