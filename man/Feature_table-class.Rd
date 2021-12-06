@@ -11,14 +11,14 @@ Row indices represent feature, columns represent feature attributions.
 \details{
 \describe{
 
-   \item{.Data}{data-frame data, inherited from the data.frame class.}
+   \item{.Data}{data-frame data, inherited from the matrix class.}
 
    \item{row.names}{
-     Also inherited from the data.frame class;
+     Also inherited from the matrix class;
       it should contain the sample names.
    }
 
-   \item{names}{Inherited from the data.frame class.}
+   \item{names}{Inherited from the matrix class.}
 
  }
 }

@@ -4,12 +4,15 @@
 \name{Feature_table}
 \alias{Feature_table}
 \alias{Feature_table,ANY-method}
+\alias{Feature_table,matrix-method}
 \alias{Feature_table,data.frame-method}
 \title{Build or access the Feature_table.}
 \usage{
 Feature_table(object, errorIfNULL=TRUE)
 
 \S4method{Feature_table}{ANY}(object, errorIfNULL = TRUE)
+
+\S4method{Feature_table}{matrix}(object)
 
 \S4method{Feature_table}{data.frame}(object)
 }
@@ -24,8 +27,8 @@ an error if the slot is empty (\code{NULL})? Default \code{TRUE}.}
 A \code{\link{Feature_table-class}} object.
 It is either grabbed from the relevant slot
 if \code{object} is complex, or built anew if \code{object} is a
-character matrix representing the taxonomic classification of
-species in the experiment.
+character matrix representing the description of
+feature in the experiment.
 }
 \description{
 This is the suggested method for both constructing and accessing a table of

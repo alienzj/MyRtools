@@ -51,21 +51,21 @@ setClass("Sample_data", contains="data.frame")
 #'
 #' \describe{
 #'
-#'    \item{.Data}{data-frame data, inherited from the data.frame class.}
+#'    \item{.Data}{data-frame data, inherited from the matrix class.}
 #'
 #'    \item{row.names}{
-#'	     Also inherited from the data.frame class;
+#'	     Also inherited from the matrix class;
 #'       it should contain the sample names.
 #'    }
 #'
-#'    \item{names}{Inherited from the data.frame class.}
+#'    \item{names}{Inherited from the matrix class.}
 #'
 #'  }
 #'
 #' @name Feature_table-class
 #' @rdname Feature_table-class
 #' @exportClass Feature_table
-setClass("Feature_table", contains = "data.frame")
+setClass("Feature_table", contains = "matrix")
 ################################################################################
 # Use setClassUnion to define the unholy NULL-data union as a virtual class.
 # This is a way of dealing with the expected scenarios in which one or more of
@@ -120,56 +120,4 @@ setClass(
         Feature_table = NULL
     )
 )
-################################################################################
-#' Build MyDataSet-class objects
-#'
-#' This the constructor to build the [`MyDataSet-class`] object.
-#' @param Profile_table, Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID..
-#' @param Sample_data, Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
-#' @param Feature_table, Data.frame; the feature of Profile.
-#'
-#' @seealso [phyloseq::phyloseq()]
-#' @name MyDataSet
-#' @export
-#' @return  a [`MyDataSet-class`] object.
-#' @examples
-#' \donttest{
-#' library(dplyr)
-#' Profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")
-#' Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
-#' Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
-#'
-#' PROF <- Profile_table(as.matrix(Profile), feature_are_row=TRUE)
-#' META <- Sample_data(Metadata)
-#' FEATURE <- Feature_table(Feature)
-#'
-#' mydataset <- MyDataSet(Profile_table=PROF,
-#'                        Sample_data=META,
-#'                        Feature_table=FEATURE)
-#' mydataset
-#' }
-#'
-MyDataSet <- function(Profile_table = NULL,
-                      Sample_data = NULL,
-                      Feature_table = NULL){
-
-    if(is.null(Profile_table)){
-        stop("Profile_table is required")
-    }
-
-    if(is.null(Sample_data)){
-        message("Sample_data is missing please check your input if you need this data")
-    }
-
-    if(is.null(Feature_table)){
-        message("Feature_table is missing please check your input if you need this data")
-    }
-
-    new(
-        "MyDataSet",
-        Profile_table = Profile_table,
-        Sample_data = Sample_data,
-        Feature_table = Feature_table
-    )
-}
 ################################################################################

@@ -2,7 +2,7 @@
 % Please edit documentation in R/All_DataAccess.R
 \name{feature_sums}
 \alias{feature_sums}
-\title{Returns the total number of individuals observed from each species/taxa/OTU.}
+\title{Returns the total number of individuals observed from each feature.}
 \usage{
 feature_sums(x)
 }
@@ -11,8 +11,8 @@ feature_sums(x)
 }
 \value{
 A \code{\link{numeric-class}} with length equal to the number of species
- in the table, name indicated the taxa ID, and value equal to the sum of
- all individuals observed for each taxa in \code{x}.
+ in the table, name indicated the feature ID, and value equal to the sum of
+ all individuals observed for each feature in \code{x}.
 }
 \description{
 A convenience function equivalent to rowSums or colSums, but where

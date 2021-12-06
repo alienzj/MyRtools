@@ -38,7 +38,7 @@ An \code{\link{Profile_table-class}} object.
 }
 \description{
 This is the suggested method for both constructing and accessing
-Operational Feature abundance (\code{\link{Profile_table-class}}) objects.
+Operational Feature profile (\code{\link{Profile_table-class}}) objects.
 When the first
 argument is a matrix, Profile_table() will attempt to create and return an
 Profile_table-class object,
@@ -48,6 +48,5 @@ Alternatively, if the first argument is an experiment-level (\code{\link{MyDataS
 object, then the corresponding \code{Profile_table} is returned.
 }
 \examples{
-
 
 }
