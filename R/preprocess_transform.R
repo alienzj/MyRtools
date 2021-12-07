@@ -1,11 +1,11 @@
-#' @title Transform the profile abundances in `Profile_table` sample by sample
+#' @title Transform the expression profile in `assayData` sample by sample
 #'
-#' @description  Transform the taxa abundances in `Profile_table` sample by sample, which means
+#' @description  Transform the taxa abundances in `assayData` sample by sample, which means
 #' the counts of each sample will be transformed individually.
 #'
 #' @references https://github.com/yiluheihei/microbiomeMarker.
 #'
-#' @param object, Class; [`Profile_table-class`] or [`MyDataSet-class`].
+#' @param object, Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].
 #' @param transform, Character; transformation to apply, the options inclulde:
 #' * "identity", return the original data without any transformation.
 #' * "log10", the transformation is `log10(object)`, and if the data contains
@@ -13,25 +13,22 @@
 #' * "log10p", the transformation is `log10(1 + object)`.
 #'
 #' @return A object matches the class of argument `object` with the transformed
-#'   `Profile_table`.
+#'   `assayData`.
 #'
 #' @export
 #' @examples
-#' \donttest{
-#' data(mydataset)
-#' x1 <- transform_profile(mydataset)
-#' head(Profile_table(x1), 10)
-#' x2 <- transform_profile(mydataset, "log10")
-#' head(Profile_table(x2), 10)
-#' x3 <- transform_profile(mydataset, "log10p")
-#' head(Profile_table(x3), 10)
-#' }
 #'
 transform_profile <- function(object,
-                                 transform = c("identity", "log10", "log10p")){
+                              transform = c("identity", "log10", "log10p")){
 
   transform <- match.arg(transform, c("identity", "log10", "log10p"))
-  prf <- as(Profile_table(object), "matrix")
+  if(inherits(object, "ExpressionSet")){
+    prf <- as(exprs(object), "matrix")
+  }else if(inherits(object, "environment")){
+    prf <- as(object$exprs, "matrix")
+  }else{
+    prf <- object
+  }
 
   if (transform == "identity") {
     abd <- prf
@@ -41,7 +38,13 @@ transform_profile <- function(object,
     abd <- transform_log10p(prf)
   }
 
-  Profile_table(object) <- Profile_table(abd, feature_are_rows = feature_are_rows(object))
+  if(inherits(object, "ExpressionSet")){
+    object <- get_TransformedExprSet(object, abd)
+  }else if(inherits(object, "environment")){
+    object <- assayDataNew(exprs=abd)
+  }else{
+    object <- abd
+  }
 
   return(object)
 }
