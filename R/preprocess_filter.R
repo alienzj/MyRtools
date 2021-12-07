@@ -9,15 +9,19 @@
 #'
 #' @param object, Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].
 #' @param cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
-#' @param filterType, Character; the type of filtering data ("identity", "both", "feature", "sample", "Group").
+#' @param filterType, Character; transformation to apply, the options inclulde:
+#' * "none", return the original data without any filter.
+#' * "both", filter the features and samples of profile more than cutoff.
+#' * "feature", filter the features of profile more than cutoff.
+#' * "sample", filter the samples of profile more than cutoff.
+#' * "Group", filter the features per Group, the samples of the profile more than cutoff, respectively.
 #'
 #' @return
-#'  A filtered `object` with the cutoff
+#'  A filtered `object` with profile more than cutoff.
 #'
 #' @export
 #'
-#' @importFrom stats mad median quantile sd
-#' @import Biobase
+#' @importFrom Biobase exprs assayDataNew
 #'
 #' @usage run_filter(object, object=0.2, filterType="Both")
 #'
@@ -29,11 +33,11 @@
 #'
 run_filter <- function(object,
                        cutoff = 0.2,
-                       filterType = c("identity", "both", "feature", "sample", "Group")){
+                       filterType = c("none", "both", "feature", "sample", "Group")){
 
-  filterType <- match.arg(filterType, c("identity", "both", "feature", "sample", "Group"))
+  filterType <- match.arg(filterType, c("none", "both", "feature", "sample", "Group"))
   if(inherits(object, "ExpressionSet")){
-    prf <- as(exprs(object), "matrix")
+    prf <- as(Biobase::exprs(object), "matrix")
   }else if(inherits(object, "environment")){
     prf <- as(object$exprs, "matrix")
   }else{
@@ -57,16 +61,16 @@ run_filter <- function(object,
     tmp3 <- trim_eachGroup(object, filterType, cutoff)
     remain_features <- rownames(tmp3$features)
     remain_samples <- rownames(tmp3$samples)
-  }else if(filterType == "identity"){
+  }else if(filterType == "none"){
     return(object)
   }
   prf_remain <- prf[remain_features, remain_samples]
 
   if(inherits(object, "ExpressionSet")){
-    assayData(object) <- assayDataNew(exprs=prf_remain)
+    assayData(object) <- Biobase::assayDataNew(exprs=prf_remain)
     object <- get_FilterExprSet(object)
   }else if(inherits(object, "environment")){
-    object <- assayDataNew(exprs=prf_remain)
+    object <- Biobase::assayDataNew(exprs=prf_remain)
   }else{
     object <- prf_remain
   }
@@ -146,4 +150,3 @@ trim_eachGroup <- function(x, group_info, threshold){
   return(res)
 
 }
-
