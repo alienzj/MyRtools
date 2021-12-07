@@ -18,10 +18,10 @@
 #' @export
 #' @examples
 #'
-transform_profile <- function(object,
-                              transform = c("identity",
-                                            "log2", "log2p",
-                                            "log10", "log10p")){
+run_transform <- function(object,
+                          transform = c("identity",
+                                        "log2", "log2p",
+                                        "log10", "log10p")){
 
   transform <- match.arg(transform, c("identity", "log2", "log2p", "log10", "log10p"))
   if(inherits(object, "ExpressionSet")){

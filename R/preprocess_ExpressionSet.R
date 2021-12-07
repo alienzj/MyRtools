@@ -40,12 +40,10 @@ get_ExprSet <- function(profile=Profile,
                         metadata=Metadata,
                         feature=NULL){
 
-  library(dplyr)
-  profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")
-  metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
-  feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
-
   shared_samples <- dplyr::intersect(colnames(profile), metadata$SampleID)
+  if(any(length(shared_samples) == 0, length(shared_samples) == 1)){
+    stop("There are no common samples or just one sample between profile and metadata please check input data\n")
+  }
   phen <- metadata %>% dplyr::filter(SampleID%in%shared_samples) %>%
     column_to_rownames("SampleID")
   prof <- profile %>% dplyr::select(dplyr::all_of(rownames(phen)))
@@ -71,6 +69,9 @@ get_ExprSet <- function(profile=Profile,
                          experimentData=experimentData)
   }else{
     shared_feature <- dplyr::intersect(rownames(prof), rownames(feature))
+    if(any(length(shared_feature) == 0, length(shared_feature) == 1)){
+      stop("There are no common features or just one feature between profile and metadata please check input data\n")
+    }
     fdata <- feature[rownames(feature)%in%shared_feature, ]
     prof2 <- prof %>% t() %>% data.frame() %>%
       dplyr::select(dplyr::all_of(rownames(fdata))) %>%
@@ -117,120 +118,60 @@ get_ExprSet <- function(profile=Profile,
 #' @importFrom stats setNames
 #' @import Biobase
 #'
-#' @usage get_processedExprSet(profile=Profile, metadata=Metadata, feature=Feature)
+#' @usage get_processedExprSet(dataset=ExpressionSet,
+#'         trim_cutoff=0.2,
+#'         trim_type=c("identity", "both", "feature", "sample", "Group"),
+#'         transform=c("identity", "log2", "log2p", "log10", "log10p"),
+#'         imputation=c("identity", "knn"),
+#'         normalization=c("identity", "TSS"))
 #' @examples
 #'
 #' \donttest{
 #' library(dplyr)
 #' data("ExprSetRawRB")
-#' ExprSet <- get_processedExprSet()
+#' ExprSet <- get_processedExprSet(dataset=ExprSetRawCount,
+#' trim_cutoff=0.2,
+#' trim_type="Group",
+#' transform="log2",,
+#' imputation=NULL,
+#' normalization=NULL)
 #' }
 #'
-get_processedExprSet <- function(dataset=ExprSetRawCount){
-  data("ExprSetRawCount")
-  dataset=ExprSetRawCount
-  trim_cutoff=0.2
-  trim_type=c("identity", "both", "feature", "sample")
-  tranform=c("identity", "log2", "log2p", "log10", "log10p")
-  inputation=c("identity", "knn")
-  normalization=c("identity", "TSS")
-
-  # trim feature and sample
-  if(trim){
-    TrimFun <- function(x, y){
-      # All
-      feature_occ <- apply(x, 1, function(x){length(x[x!=0])/length(x)}) %>%
-        data.frame() %>% stats::setNames("Occ") %>%
-        tibble::rownames_to_column("Feature")
-      sample_occ <- apply(x, 2, function(x){length(x[x!=0])/length(x)}) %>%
-        data.frame() %>% stats::setNames("Occ")
-
-      # Each
-      if(each){
-        mdat <- y %>% dplyr::select(dplyr::all_of(c("SampleID", "Group"))) %>%
-          dplyr::inner_join(x %>%
-                              t() %>% data.frame() %>%
-                              tibble::rownames_to_column("SampleID"),
-                            by = "SampleID")
-
-        group_name <- unique(mdat$Group)
-        group_name_each <- lapply(group_name, function(x){
-          mdat_cln <- mdat %>% dplyr::filter(Group%in%x)
-          return(mdat_cln$SampleID)
-        })
-
-        feature_occ_each <- sapply(1:length(group_name_each), function(i){
-          df <- mdat %>% dplyr::filter(SampleID%in%group_name_each[[i]])
-          df2 <- df %>% dplyr::select(-"Group") %>%
-            tibble::column_to_rownames("SampleID") %>%t()
-          ratios <- as.numeric(apply(df2, 1, function(x){length(x[x!=0])/length(x)}))
-          return(ratios)
-        }) %>% data.frame() %>% stats::setNames(paste0(group_name, "_Occ"))
-        rownames(feature_occ_each) <- colnames(mdat)[-c(1:2)]
-
-        feature_occ <- feature_occ_each
-      }
-
-      res <- list(feature=feature_occ, sample=sample_occ)
-    }
-
-    # Occurrence
-    occ_res <- TrimFun(Profile, Metadata)
-
-    # filtering
-    feature_KEEP <- apply(occ_res$feature > occ_Feature, 1, all) %>%
-      data.frame() %>% stats::setNames("Status") %>%
-      dplyr::filter(Status)
-
-    sample_KEEP <- apply(occ_res$sample > occ_Feature, 1, all) %>%
-      data.frame() %>% stats::setNames("Status") %>%
-      dplyr::filter(Status)
-
-    # run
-    profile <- profile[rownames(profile)%in%rownames(feature_KEEP),
-                       colnames(profile)%in%rownames(sample_KEEP)]
-    message(paste("The remained data is",
-                  paste(dim(profile)[1], "Features and",
-                        dim(profile)[2], "Samples")))
-
-  }
-
-  intersect_id <- dplyr::intersect(colnames(profile), metadata$SampleID)
-  phen <- metadata %>% dplyr::filter(SampleID%in%intersect_id) %>%
-    column_to_rownames("SampleID")
-  prof <- profile %>% dplyr::select(dplyr::all_of(rownames(phen)))
-  if(!any(rownames(phen) == colnames(prof))){
-    stop("Please check the order of SampleID between phen and prof")
-  }
-
-  # ExpressionSet
-  exprs <- as.matrix(prof)
-  adf <- new("AnnotatedDataFrame", data=phen)
-  experimentData <- new("MIAME",
-                        name="Hua Zou", lab="UCAS",
-                        contact="zouhua1@outlook.com",
-                        title="Experiment",
-                        abstract="Profile",
-                        url="www.zouhua.top",
-                        other=list(notes="Expression"))
-  # Feature input or not
-  if(is.null(feature)){
-    expressionSet <- new("ExpressionSet",
-                         exprs=exprs,
-                         phenoData=adf,
-                         experimentData=experimentData)
+get_processedExprSet <- function(dataset=ExprSetRawCount,
+                                 trim_cutoff=0.2,
+                                 trim_type="both",
+                                 transform="log2",
+                                 imputation=NULL,
+                                 normalization=NULL){
+  # trim features and samples
+  if(!is.null(trim_cutoff)){
+    trim_type <- match.arg(trim_type, c("identity", "both", "feature", "sample", "Group"))
+    filterObject <- run_filter(dataset, trim_cutoff, trim_type)
+    tempObject <- get_FilterExprSet(filterObject)
   }else{
-    feat <- feature[rownames(feature)%in%rownames(prof), ]
-    if(!any(rownames(feat) == rownames(prof))){
-      stop("Please check the order of Feature between feat and prof")
-    }
-    fdf <- new("AnnotatedDataFrame", data=feat)
-    expressionSet <- new("ExpressionSet",
-                         exprs=exprs,
-                         phenoData=adf,
-                         featureData=fdf,
-                         experimentData=experimentData)
+    tempObject <- dataset
   }
 
-  return(expressionSet)
+  # transform expression matrix
+  if(!is.null(transform)){
+    transform <- match.arg(transform, c("identity", "log2", "log2p", "log10", "log10p"))
+    transformObject <- run_transform(tempObject, transform)
+    tempObject <- get_TransformedExprSet(transformObject, exprs(transformObject))
+  }
+
+  # imputate expression matrix for missing value(NAs) or Zero values
+  if(!is.null(imputation)){
+    imputation <- match.arg(imputation, c("identity", "knn"))
+    imputateObject <- run_imputation(tempObject, imputation)
+    tempObject <- get_ImputatedExprSet(transformObject, exprs(imputateObject))
+  }
+
+  # Normalize expression matrix
+  if(!is.null(normalization)){
+    normalization <- match.arg(normalization, c("identity", "log2", "log2p", "log10", "log10p"))
+    normalizeObject <- run_normalization(tempObject, normalization)
+    tempObject <- get_NormalizedExprSet(transformObject, exprs(normalizeObject))
+  }
+
+  return(tempObject)
 }
