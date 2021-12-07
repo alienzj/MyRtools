@@ -46,6 +46,7 @@ get_FilterExprSet <- function(dataset){
     }
     fdata <- new("AnnotatedDataFrame", data=fdata)
     experimentdata <- experimentData(dataset)
+    experimentdata@other$notes <- "Filtered ExpressionSet"
 
     res <- new("ExpressionSet",
                exprs=exprs(dataset),
@@ -109,7 +110,7 @@ get_TransformedExprSet <- function(dataset, expr){
     fdata <- new("AnnotatedDataFrame", data=fdata)
 
     experimentdata <- experimentData(dataset)
-
+    experimentdata@other$notes <- "Transformed ExpressionSet"
     res <- new("ExpressionSet",
                exprs=expr,
                phenoData=pdata,
@@ -121,3 +122,44 @@ get_TransformedExprSet <- function(dataset, expr){
   return(res)
 }
 ################################################################################
+#' Returns the intersection of species and samples for the components of x
+#'
+#' This function is used internally as part of the infrastructure to ensure that
+#' component data types in a ExpressionSet-object have exactly the same feature.
+#' It relies heavily on the \code{\link{Reduce}} function to determine the
+#' strictly common species.
+#'
+#' @usage intersect_feature(x)
+#'
+#' @param x (Required). A \code{\link{ExpressionSet-class}} object
+#'  that contains 2 or more components
+#'  that in-turn describe feature.
+#'
+#' @return Returns a character vector of only those feature that are present in
+#'  all feature-describing components of \code{x}.
+#'
+#' @seealso \code{\link{Reduce}}, \code{\link{intersect}}
+#' @keywords internal
+#' @examples
+#'
+intersect_feature <- function(x){
+  feature_vectors <- f_comp_es("featureNames", x)
+  feature_vectors <- feature_vectors[!sapply(feature_vectors, is.null)]
+  return( Reduce("intersect", feature_vectors) )
+}
+#' @keywords internal
+intersect_samples <- function(x){
+  sample_vectors <- f_comp_es("sampleNames", x)
+  sample_vectors <- sample_vectors[!sapply(sample_vectors, is.null)]
+  return( Reduce("intersect", sample_vectors) )
+}
+################################################################################
+# A relatively fast way to access from ExpressionSet object components
+# f - function name as character string
+# expressionset - a ExpressionSet object (ExpressionSet-class instance)
+#' @keywords internal
+f_comp_es <- function(f, expressionset){
+  sapply(names(getSlots("ExpressionSet")), function(i, ps){
+    eval(parse(text=paste(f, "(es@", i, ")", sep="")))
+  }, mydataset)
+}

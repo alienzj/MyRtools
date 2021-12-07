@@ -6,13 +6,9 @@
 #' @details 12/2/2021 Guangzhou China
 #' @author  Hua Zou
 #'
-#' @param Profile, Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.
-#' @param Metadata, Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
-#' @param Feature, Data.frame; the feature of Profile.
-#' @param Trim, Logical; filtering Feature and Sample with occurrence(default: FALSE).
-#' @param Occ_Feature, Numeric; the cutoff of Feature's trim(default: occurrence=0.2).
-#' @param Each, Logical; filtering Features each group or whole data(default: Each("Group")=FALSE).
-#' @param Occ_Sample, Numeric; the cutoff of Sample's trim(default: occurrence=0.2).
+#' @param profile, Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.
+#' @param metadata, Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
+#' @param feature, Data.frame; the feature of Profile(default: Feature=NULL).
 #'
 #' @return
 #' an ExpressionSet Object
@@ -36,20 +32,108 @@
 #'
 #' ExprSet <- get_ExprSet(profile=Profile,
 #'                 metadata=Metadata,
-#'                 feature=Feature,
-#'                 trim=TRUE,
-#'                 occ_Feature=0.2,
-#'                 each=TRUE,
-#'                 occ_Sample=0.2)
+#'                 feature=Feature
+#'                 )
 #' }
 #'
 get_ExprSet <- function(profile=Profile,
                         metadata=Metadata,
-                        feature=NULL,
-                        trim=FALSE,
-                        occ_Feature=0.2,
-                        each=FALSE,
-                        occ_Sample=0.2){
+                        feature=NULL){
+
+  library(dplyr)
+  profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")
+  metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
+  feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
+
+  shared_samples <- dplyr::intersect(colnames(profile), metadata$SampleID)
+  phen <- metadata %>% dplyr::filter(SampleID%in%shared_samples) %>%
+    column_to_rownames("SampleID")
+  prof <- profile %>% dplyr::select(dplyr::all_of(rownames(phen)))
+  if(!any(rownames(phen) == colnames(prof))){
+    stop("Please check the order of SampleID between phen and prof")
+  }
+
+  # ExpressionSet
+  exprs <- as.matrix(prof)
+  adf <- new("AnnotatedDataFrame", data=phen)
+  experimentData <- new("MIAME",
+                        name="Hua Zou", lab="UCAS",
+                        contact="zouhua1@outlook.com",
+                        title="Experiment",
+                        abstract="Profile",
+                        url="www.zouhua.top",
+                        other=list(notes="Expression"))
+  # Feature input or not
+  if(is.null(feature)){
+    expressionSet <- new("ExpressionSet",
+                         exprs=exprs,
+                         phenoData=adf,
+                         experimentData=experimentData)
+  }else{
+    shared_feature <- dplyr::intersect(rownames(prof), rownames(feature))
+    fdata <- feature[rownames(feature)%in%shared_feature, ]
+    prof2 <- prof %>% t() %>% data.frame() %>%
+      dplyr::select(dplyr::all_of(rownames(fdata))) %>%
+      t() %>% data.frame()
+    if(!any(rownames(feat) == rownames(prof2))){
+      stop("Please check the order of Feature between feat and prof")
+    }
+
+    fdf <- new("AnnotatedDataFrame", data=fdata)
+    exprs <- as.matrix(prof2)
+    expressionSet <- new("ExpressionSet",
+                         exprs=exprs,
+                         phenoData=adf,
+                         featureData=fdf,
+                         experimentData=experimentData)
+  }
+
+  return(expressionSet)
+}
+
+#' @title Building ExpressionSet Object with preprocess
+#'
+#' @description
+#' precessing the ExpressionSet object by filtering, transforming or normalization
+#'
+#' @details 12/7/2021 Guangzhou China
+#' @author  Hua Zou
+#'
+#' @param dataset, ExpressionSet; (Required) an Raw ExpressionSet object by `get_ExprSet`.
+#' @param trim_cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
+#' @param trim_type, Data.frame; the feature of Profile.
+#' @param tranform, Data.frame; the feature of Profile.
+#' @param inputation, Data.frame; the feature of Profile.
+#' @param normalization, Data.frame; the feature of Profile.
+#'
+#' @return
+#' an preprocessed ExpressionSet Object
+#'
+#' @export
+#'
+#' @importFrom data.table fread
+#' @importFrom dplyr %>% intersect select inner_join filter all_of
+#' @importFrom tibble column_to_rownames column_to_rownames
+#' @importFrom stats setNames
+#' @import Biobase
+#'
+#' @usage get_processedExprSet(profile=Profile, metadata=Metadata, feature=Feature)
+#' @examples
+#'
+#' \donttest{
+#' library(dplyr)
+#' data("ExprSetRawRB")
+#' ExprSet <- get_processedExprSet()
+#' }
+#'
+get_processedExprSet <- function(dataset=ExprSetRawCount){
+  data("ExprSetRawCount")
+  dataset=ExprSetRawCount
+  trim_cutoff=0.2
+  trim_type=c("identity", "both", "feature", "sample")
+  tranform=c("identity", "log2", "log2p", "log10", "log10p")
+  inputation=c("identity", "knn")
+  normalization=c("identity", "TSS")
 
   # trim feature and sample
   if(trim){

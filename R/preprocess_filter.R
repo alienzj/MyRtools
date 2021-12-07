@@ -7,35 +7,31 @@
 #' @details 12/6/2021 Guangzhou China
 #' @author  Hua Zou
 #'
-#' @param Object, Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].
-#' @param Cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
-#' @param FilterType, Character; the type of filtering data ("Both", "Features", "Samples").
+#' @param object, Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].
+#' @param cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
+#' @param filterType, Character; the type of filtering data ("identity", "both", "feature", "sample").
 #'
 #' @return
-#'  A filtered `object` with the Cutoff.
+#'  A filtered `object` with the cutoff
 #'
 #' @export
 #'
 #' @importFrom stats mad median quantile sd
 #' @import Biobase
 #'
-#' @usage filter_method(Object, Cutoff=0.2, FilterType="Both")
+#' @usage filter_method(object, object=0.2, filterType="Both")
 #'
 #' @examples
 #' \donttest{
 #'    data("ExprSet_species")
-#'    filter_method(ExprSet_species, Cutoff=0.2, FilterType="Both")
+#'    filter_method(ExprSet_species, object=0.2, filterType="both")
 #' }
 #'
 filter_method <- function(object,
-                          Cutoff = 0.2,
-                          FilterType = c("Both", "Features", "Samples")){
+                          cutoff = 0.2,
+                          filterType = c("identity", "both", "feature", "sample")){
 
-  # object=ExprSet_species
-  # Cutoff = 0.5
-  # FilterType = "Both"
-
-  FilterType <- match.arg(FilterType, c("Both", "Features", "Samples"))
+  filterType <- match.arg(filterType, c("identity", "both", "feature", "sample"))
   if(inherits(object, "ExpressionSet")){
     prf <- as(exprs(object), "matrix")
   }else if(inherits(object, "environment")){
@@ -44,19 +40,21 @@ filter_method <- function(object,
     prf <- object
   }
 
-  if(FilterType == "Features"){
-    tmp1 <- trim_FeatureOrSample(prf, 1, Cutoff)
+  if(filterType == "feature"){
+    tmp1 <- trim_FeatureOrSample(prf, 1, cutoff)
     remain_features <- rownames(tmp1)
     remain_samples <- colnames(prf)
-  }else if(FilterType == "Samples"){
-    tmp2 <- trim_FeatureOrSample(prf, 2, Cutoff)
+  }else if(filterType == "sample"){
+    tmp2 <- trim_FeatureOrSample(prf, 2, cutoff)
     remain_features <- rownames(prf)
     remain_samples <- rownames(tmp2)
-  }else if(FilterType == "Both"){
-    tmp1 <- trim_FeatureOrSample(prf, 1, Cutoff)
-    tmp2 <- trim_FeatureOrSample(prf, 2, Cutoff)
+  }else if(filterType == "both"){
+    tmp1 <- trim_FeatureOrSample(prf, 1, cutoff)
+    tmp2 <- trim_FeatureOrSample(prf, 2, cutoff)
     remain_features <- rownames(tmp1)
     remain_samples <- rownames(tmp2)
+  }else if(filterType == "identity"){
+    return(object)
   }
   prf_remain <- prf[remain_features, remain_samples]
 
