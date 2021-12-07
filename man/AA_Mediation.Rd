@@ -45,7 +45,7 @@ Metadata <- pData(ExprSet_species)
 Mediation_res1 <- AA_Mediation(dataset=Metadata, XVar="Lysine", YVar="Tryptophan", AdjVar=c("Age", "Gender"), MVar="BMI", Package="mediation")
 
 # intmed package or two mediation
-Mediation_res2 <- AA_Mediation(dataset=Metadata, XVar="Lysine", YVar="Tryptophan", AdjVar=c("Age", "Gender"), MVar=c("BMI", "Age"), Package="intmed")
+#Mediation_res2 <- AA_Mediation(dataset=Metadata, XVar="Lysine", YVar="Tryptophan", AdjVar=c("Age", "Gender"), MVar=c("BMI", "Age"), Package="intmed")
 
 }
 
