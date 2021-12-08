@@ -176,7 +176,7 @@ get_processedExprSet <- function(dataset=ExprSetRawCount,
   if(!is.null(trim_cutoff)){
     trim_type <- match.arg(trim_type, c("identity", "both", "feature", "sample", "Group"))
     filterObject <- run_filter(dataset, trim_cutoff, trim_type)
-    tempObject <- get_FilterExprSet(filterObject)
+    tempObject <- get_FilteredExprSet(filterObject)
   }else{
     tempObject <- dataset
   }
