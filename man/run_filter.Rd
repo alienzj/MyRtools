@@ -11,10 +11,15 @@ run_filter(object, object=0.2, filterType="Both")
 
 \item{cutoff, }{Numeric; the threshold for filtering (default: Cutoff=0.2).}
 
-\item{filterType, }{Character; the type of filtering data ("identity", "both", "feature", "sample", "Group").}
+\item{filterType, }{Character; transformation to apply, the options inclulde:
+* "none", return the original data without any filter.
+* "both", filter the features and samples of profile more than cutoff.
+* "feature", filter the features of profile more than cutoff.
+* "sample", filter the samples of profile more than cutoff.
+* "Group", filter the features per Group, the samples of the profile more than cutoff, respectively.}
 }
 \value{
-A filtered `object` with the cutoff
+A filtered `object` with profile more than cutoff.
 }
 \description{
 Filter samples or features in `assayData` by Occurrences,

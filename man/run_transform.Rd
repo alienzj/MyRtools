@@ -4,23 +4,19 @@
 \alias{run_transform}
 \title{Transform the expression profile in `assayData` sample by sample}
 \usage{
-run_transform(
-  object,
-  transform = c("identity", "log2", "log2p", "log10", "log10p")
-)
+run_transform(object, transform=c("none", "log2", "log2p", "log10", "log10p"))
 }
 \arguments{
 \item{object, }{Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].}
 
 \item{transform, }{Character; transformation to apply, the options inclulde:
-* "identity", return the original data without any transformation.
+* "none", return the original data without any transformation.
 * "log2" or "log10", the transformation is `log2(object)` or `log10(object)`, and if the data contains
   zeros the transformation is `log2(1 + object)` or `log10(1 + object)`.
 * "log2p" or "log10p", the transformation is `log2(1 + object)` or `log10(1 + object)`.}
 }
 \value{
-A object matches the class of argument `object` with the transformed
-  `assayData`.
+A object matches the class of argument `object` with the transformed profile matrix.
 }
 \description{
 Transform the taxa abundances in `assayData` sample by sample, which means

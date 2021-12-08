@@ -4,7 +4,16 @@
 \alias{get_ExprSet}
 \title{Building ExpressionSet Object}
 \usage{
-get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
+get_ExprSet(profile=Profile,
+                  metadata=Metadata,
+                  feature=Feature,
+                  name=NULL,
+                  lab=NULL,
+                  contact=NULL,
+                  title=NULL,
+                  abstract=NULL,
+                  url=NULL,
+                  notes=NULL)
 }
 \arguments{
 \item{profile, }{Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.}
@@ -12,6 +21,20 @@ get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
 \item{metadata, }{Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).}
 
 \item{feature, }{Data.frame; the feature of Profile(default: Feature=NULL).}
+
+\item{name, }{Character; name of experimentData, inheriting from ExpressionSet(default: name=NULL).}
+
+\item{lab, }{Character; lab of experimentData(default: lab=NULL).}
+
+\item{contact, }{Character; contact of experimentData(default: contact=NULL).}
+
+\item{title, }{Character; title of experimentData(default: title=NULL).}
+
+\item{abstract, }{Character; abstract of experimentData(default: abstract=NULL).}
+
+\item{url, }{Character; url of experimentData(default: url=NULL).}
+
+\item{notes, }{Character; notes of experimentData(default: notes=NULL).}
 }
 \value{
 an ExpressionSet Object
@@ -31,9 +54,15 @@ Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
 Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) \%>\% tibble::column_to_rownames("Species")
 
 ExprSet <- get_ExprSet(profile=Profile,
-                metadata=Metadata,
-                feature=Feature
-                )
+                       metadata=Metadata,
+                       feature=Feature,
+                       name="Hua Zou",
+                       lab="UCAS",
+                       contact="zouhua1@outlook.com",
+                       title="Experiment",
+                       abstract="Profile",
+                       url="www.zouhua.top",
+                       notes="Expression")
 }
 
 }

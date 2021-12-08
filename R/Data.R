@@ -26,6 +26,7 @@
 #'
 
 # roxygen2::roxygenise("D:/Project/MyRtools/")
+# roxygen2::roxygenise("~/Documents/Mygithub/MyRtools/")
 # devtools::check(document = FALSE)
 # devtools::build()
 ##################################################################
@@ -34,42 +35,20 @@
 # Profile <- data.table::fread(system.file("extdata", "Species_relative_abundance.tsv", package="MyRtools"))  %>% tibble::column_to_rownames("V1")
 # Metadata <- read.csv(system.file("extdata", "Metadata.csv", package="MyRtools"))
 # Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
-
-# ExprSet_species <- get_ExprSet(profile=Profile,
-#                                metadata=Metadata,
-#                                feature=Feature,
-#                                trim=TRUE,
-#                                occ_Feature=0.2,
-#                                each=TRUE,
-#                                occ_Sample=0.2)
-# save(ExprSet_species, file = "data/ExprSet_species.rda")
+# ExprSetRawRB <- get_ExprSet(profile=Profile,
+#                        metadata=Metadata,
+#                        feature=Feature,
+#                        name="Hua Zou",
+#                        lab="UCAS",
+#                        contact="zouhua1@outlook.com",
+#                        title="Experiment",
+#                        abstract="Profile",
+#                        url="www.zouhua.top",
+#                        notes="Expression")
+# save(ExprSetRawRB, file = "ExprSetRawRB.rda")
 # Profile <- Profile * 10e6
-# ExprSet_species_count <- get_ExprSet(profile=Profile,
-#                                      metadata=Metadata,
-#                                      feature=Feature,
-#                                      trim=TRUE,
-#                                      occ_Feature=0.2,
-#                                      each=TRUE,
-#                                      occ_Sample=0.2)
-# save(ExprSet_species_count, file = "data/ExprSet_species_count.rda")
-###########################################################################
-#
-###########################################################################
-# ExprSet_genus <- get_ExprSet(profile=Profile,
+# ExprSetRawCount <- get_ExprSet(profile=Profile,
 #                                metadata=Metadata,
-#                                feature=Feature,
-#                                trim=TRUE,
-#                                occ_Feature=0.2,
-#                                each=TRUE,
-#                                occ_Sample=0.2)
-# save(ExprSet_genus, file = "data/ExprSet_genus.rda")
-# Profile <- Profile * 10e6
-# ExprSet_genus_count <- get_ExprSet(profile=Profile,
-#                                      metadata=Metadata,
-#                                      feature=Feature,
-#                                      trim=TRUE,
-#                                      occ_Feature=0.2,
-#                                      each=TRUE,
-#                                      occ_Sample=0.2)
-# save(ExprSet_genus_count, file = "data/ExprSet_genus_count.rda")
+#                                feature=Feature,)
+# save(ExprSetRawCount, file = "data/ExprSetRawCount.rda")
 ###########################################################################

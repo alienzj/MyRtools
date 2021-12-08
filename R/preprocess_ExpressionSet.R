@@ -9,6 +9,13 @@
 #' @param profile, Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.
 #' @param metadata, Data.frame; (Required)a dataframe. of Metadata(1st column must be "SampleID"), containing Group information and also environmental factors(biological factors).
 #' @param feature, Data.frame; the feature of Profile(default: Feature=NULL).
+#' @param name, Character; name of experimentData, inheriting from ExpressionSet(default: name="").
+#' @param lab, Character; lab of experimentData(default: lab="").
+#' @param contact, Character; contact of experimentData(default: contact="").
+#' @param title, Character; title of experimentData(default: title="").
+#' @param abstract, Character; abstract of experimentData(default: abstract="").
+#' @param url, Character; url of experimentData(default: url="").
+#' @param notes, Character; notes of experimentData(default: notes="").
 #'
 #' @return
 #' an ExpressionSet Object
@@ -21,7 +28,16 @@
 #' @importFrom stats setNames
 #' @import Biobase
 #'
-#' @usage get_ExprSet(profile=Profile, metadata=Metadata, feature=Feature)
+#' @usage get_ExprSet(profile=Profile,
+#'                   metadata=Metadata,
+#'                   feature=Feature,
+#'                   name="",
+#'                   lab="",
+#'                   contact="",
+#'                   title="",
+#'                   abstract="",
+#'                   url="",
+#'                   notes="")
 #' @examples
 #'
 #' \donttest{
@@ -31,14 +47,27 @@
 #' Feature <- read.csv(system.file("extdata", "Species_feature.csv", package="MyRtools")) %>% tibble::column_to_rownames("Species")
 #'
 #' ExprSet <- get_ExprSet(profile=Profile,
-#'                 metadata=Metadata,
-#'                 feature=Feature
-#'                 )
+#'                        metadata=Metadata,
+#'                        feature=Feature,
+#'                        name="Hua Zou",
+#'                        lab="UCAS",
+#'                        contact="zouhua1@outlook.com",
+#'                        title="Experiment",
+#'                        abstract="Profile",
+#'                        url="www.zouhua.top",
+#'                        notes="Expression")
 #' }
 #'
 get_ExprSet <- function(profile=Profile,
                         metadata=Metadata,
-                        feature=NULL){
+                        feature=NULL,
+                        name="",
+                        lab="",
+                        contact="",
+                        title="",
+                        abstract="",
+                        url="",
+                        notes=""){
 
   shared_samples <- dplyr::intersect(colnames(profile), metadata$SampleID)
   if(any(length(shared_samples) == 0, length(shared_samples) == 1)){
@@ -55,12 +84,12 @@ get_ExprSet <- function(profile=Profile,
   exprs <- as.matrix(prof)
   adf <- new("AnnotatedDataFrame", data=phen)
   experimentData <- new("MIAME",
-                        name="Hua Zou", lab="UCAS",
-                        contact="zouhua1@outlook.com",
-                        title="Experiment",
-                        abstract="Profile",
-                        url="www.zouhua.top",
-                        other=list(notes="Expression"))
+                        name=name, lab=lab,
+                        contact=contact,
+                        title=title,
+                        abstract=abstract,
+                        url=url,
+                        other=list(notes=notes))
   # Feature input or not
   if(is.null(feature)){
     expressionSet <- new("ExpressionSet",
@@ -76,7 +105,7 @@ get_ExprSet <- function(profile=Profile,
     prof2 <- prof %>% t() %>% data.frame() %>%
       dplyr::select(dplyr::all_of(rownames(fdata))) %>%
       t() %>% data.frame()
-    if(!any(rownames(feat) == rownames(prof2))){
+    if(!any(rownames(fdata) == rownames(prof2))){
       stop("Please check the order of Feature between feat and prof")
     }
 
