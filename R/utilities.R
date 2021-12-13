@@ -16,14 +16,14 @@
 #' @importFrom dplyr %>% select all_of
 #' @import Biobase
 #'
-#' @usage get_FilterExprSet(dataset=ExpressionSet)
+#' @usage get_FilteredExprSet(dataset=ExpressionSet)
 #' @examples
 #'
 #' \donttest{
 #'
 #' }
 #'
-get_FilterExprSet <- function(dataset){
+get_FilteredExprSet <- function(dataset){
 
   FeatureNames <- rownames(exprs(dataset))
   SampleNames <- colnames(exprs(dataset))

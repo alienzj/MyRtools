@@ -176,7 +176,11 @@ get_processedExprSet <- function(dataset=ExprSetRawCount,
   if(!is.null(trim_cutoff)){
     trim_type <- match.arg(trim_type, c("identity", "both", "feature", "sample", "Group"))
     filterObject <- run_filter(dataset, trim_cutoff, trim_type)
+<<<<<<< HEAD
     tempObject <- get_FilterExprSet(filterObject)
+=======
+    tempObject <- get_FilteredExprSet(filterObject)
+>>>>>>> a66d8de3a1b6e1c2d5afa57622963f5bca7ccc1b
   }else{
     tempObject <- dataset
   }
@@ -197,7 +201,11 @@ get_processedExprSet <- function(dataset=ExprSetRawCount,
 
   # Normalize expression matrix
   if(!is.null(normalization)){
+<<<<<<< HEAD
     normalization <- match.arg(normalization, c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
+=======
+    normalization <- match.arg(normalization, c("identity", "log2", "log2p", "log10", "log10p"))
+>>>>>>> a66d8de3a1b6e1c2d5afa57622963f5bca7ccc1b
     normalizeObject <- run_normalization(tempObject, normalization)
     tempObject <- get_NormalizedExprSet(transformObject, exprs(normalizeObject))
   }
