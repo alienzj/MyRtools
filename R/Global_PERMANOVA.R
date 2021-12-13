@@ -41,8 +41,10 @@ run_PERMANOVA <- function(dataset=ExprSet,
   metadata <- Biobase::pData(dataset)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
   profile <- Biobase::exprs(dataset)
+
   if(any(profile < 0) & is.element(Distance, "bray")){
-    stop("The value of profile is negative and the approach to calculate distance beteween samples should be bray crutis")
+    message("The value of profile is negative and the approach to calculate distance beteween samples shouldn't be bray crutis")
+    Distance <- "euclidean"
   }
 
   # Prepare for input data
@@ -86,7 +88,7 @@ run_PERMANOVA <- function(dataset=ExprSet,
       sample_dis <- distance
     }
 
-    ad <- vegan::adonis(sample_dis ~ datphe, permutations = 1000)
+    ad <- vegan::adonis(sample_dis ~ datphe, permutations = 999)
     tmp <- data.frame(ad$aov.tab) %>% dplyr::slice(1)
     res <- c(length(datphe), as.numeric(tmp[, c(1:6)]))
 

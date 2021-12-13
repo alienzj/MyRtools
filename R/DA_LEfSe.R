@@ -309,6 +309,9 @@ lefser <- function(expr,
 #' @author  Hua Zou
 #'
 #' @param Expression, ExpressionSet; (Required) ExpressionSet object.
+#' @param trim, Character; filter to apply.(default: trim="none").
+#' @param transform, Character; transformation to apply.(default: tranform="none").
+#' @param normalize, Character; normalization to apply.(default: normalize="none").
 #' @param Group_info, Character; design factor(default: "Group").
 #' @param Group_name, Character; (Required) the group for comparison.
 #' @param kw.p, Numeric; significant level of kruskal.test(default: 0.05).
@@ -327,26 +330,46 @@ lefser <- function(expr,
 #' @importFrom Biobase pData exprs
 #' @importFrom MASS lda
 #'
-#' @usage DA_LEfSe(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
+#' @usage run_LEfSe(dataset=ExpressionSet,
+#'                  trim="none",
+#'                  transform="none",
+#'                  normalize="none",
+#'                  Group_info="Group",
+#'                  Group_name=c("HC", "AA"),
+#'                  kw.p=0.05,
+#'                  wl.p=0.05,
+#'                  Lda=2)
 #' @examples
 #'
 #' \donttest{
-#' data(ExprSet_species_count)
+#' data(ExprSetRawCount)
 #'
-#' LEfSe_res <- DA_LEfSe(dataset=ExprSet_species_count, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
+#' LEfSe_res <- run_LEfSe(dataset=ExprSetRawCount, Group_info="Group", Group_name=c("HC", "AA"), kw.p=0.05, wl.p=0.05, Lda=2)
 #' LEfSe_res
 #' }
 #'
-DA_LEfSe <- function(dataset=ExprSet_species_count,
-                     Group_info="Group",
-                     Group_name=c("HC", "AA"),
-                     kw.p=0.05,
-                     wl.p=0.05,
-                     Lda=2){
+run_LEfSe <- function(dataset=ExprSetRawCount,
+                      trim="none",
+                      transform="none",
+                      normalize="none",
+                      Group_info="Group",
+                      Group_name=c("HC", "AA"),
+                      kw.p=0.05,
+                      wl.p=0.05,
+                      Lda=2){
 
-  metadata <- Biobase::pData(dataset)
+  # preprocess
+  dataset_processed <- get_processedExprSet(dataset=dataset,
+                                            trim=trim,
+                                            transform=transform,
+                                            normalize=normalize)
+
+  metadata <- Biobase::pData(dataset_processed)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- Biobase::exprs(dataset)
+  profile <- Biobase::exprs(dataset_processed)
+  if(!any(profile %% 1 == 0)){
+    stop("The input matrix is not integer matrix please Check it")
+  }
 
   # choose group
   phen <- metadata %>% dplyr::filter(Group%in%Group_name)
@@ -361,30 +384,64 @@ DA_LEfSe <- function(dataset=ExprSet_species_count,
     dplyr::select(dplyr::all_of(rownames(colData))) %>%
     as.matrix()
 
-  # # No zero value for Log transform
-  # if(any(proData == 0)){
-  #   proData <- proData+1
-  # }else{
-  #   proData <- proData
-  # }
   if(!all(rownames(colData) == colnames(proData))){
     stop("Order of sampleID between colData and proData is wrong please check your data")
   }
+
+  # Median abundance
+  median_res <- apply(proData, 1, function(x, y){
+    dat <- data.frame(value=as.numeric(x), group=y)
+    # median value
+    mn <- tapply(dat$value, dat$group, median) %>%
+      data.frame() %>% setNames("value") %>%
+      tibble::rownames_to_column("Group")
+    mn1 <- with(mn, mn[Group%in%Group_name[1], "value"])
+    mn2 <- with(mn, mn[Group%in%Group_name[2], "value"])
+    mnall <- median(dat$value)
+
+    res <- c(mnall, mn1, mn2)
+    return(res)
+  }, colData$Group) %>%
+    t() %>% data.frame() %>%
+    tibble::rownames_to_column("FeatureID")
+  colnames(median_res) <- c("FeatureID", "Median Abundance\n(All)",
+                            paste0("Median Abundance\n", Group_name))
 
   se <- SummarizedExperiment::SummarizedExperiment(
               assays=list(counts=proData),
               colData=colData,
               metadata="Profile")
   lefse_res <- lefser(se,
-                kruskal.threshold = kw.p,
-                wilcox.threshold  = wl.p,
-                lda.threshold     = Lda,
-                groupCol = Group_info,
-                blockCol = NULL,
-                assay    = 1L,
-                trim.names = TRUE)
+                      kruskal.threshold = kw.p,
+                      wilcox.threshold  = wl.p,
+                      lda.threshold     = Lda,
+                      groupCol = Group_info,
+                      blockCol = NULL,
+                      assay    = 1L,
+                      trim.names = TRUE)
 
-  res <- lefse_res %>% dplyr::mutate(Group=ifelse(scores > 0, Group_name[2], Group_name[1]))
+  t_res <- lefse_res %>% dplyr::mutate(Group=ifelse(scores > 0, Group_name[2], Group_name[1]))
+  colnames(t_res) <- c("FeatureID", "LDA_Score", "Enrichment")
+
+  t_res_temp <- t_res %>%
+    dplyr::inner_join(median_res, by = "FeatureID")
+
+  # Number of Group
+  dat_status <- table(colData$Group)
+  dat_status_number <- as.numeric(dat_status)
+  dat_status_name <- names(dat_status)
+  t_res_temp$Block <- paste(paste(dat_status_number[1], dat_status_name[1], sep = "_"),
+                       "vs",
+                       paste(dat_status_number[2], dat_status_name[2], sep = "_"))
+
+  t_res_temp2 <- t_res_temp %>% dplyr::select(FeatureID, Block, Enrichment, LDA_Score,
+                                              dplyr::everything()) %>% dplyr::arrange(LDA_Score)
+
+  # 95% CI Odd Ratio
+  res_odd <- run_OddRatio(colData, proData, Group_name)
+
+  # Merge
+  res <- dplyr::inner_join(t_res_temp2, res_odd, by="FeatureID")
 
   return(res)
 }

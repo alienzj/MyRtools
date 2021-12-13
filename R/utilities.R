@@ -16,14 +16,14 @@
 #' @importFrom dplyr %>% select all_of
 #' @import Biobase
 #'
-#' @usage get_FilteredExprSet(dataset=ExpressionSet)
+#' @usage get_TrimedExprSet(dataset=ExpressionSet)
 #' @examples
 #'
 #' \donttest{
 #'
 #' }
 #'
-get_FilteredExprSet <- function(dataset){
+get_TrimedExprSet <- function(dataset){
 
   FeatureNames <- rownames(exprs(dataset))
   SampleNames <- colnames(exprs(dataset))
@@ -46,7 +46,7 @@ get_FilteredExprSet <- function(dataset){
     }
     fdata <- new("AnnotatedDataFrame", data=fdata)
     experimentdata <- experimentData(dataset)
-    experimentdata@other$notes <- "Filtered ExpressionSet"
+    experimentdata@other$notes <- "Trimed ExpressionSet"
 
     res <- new("ExpressionSet",
                exprs=exprs(dataset),
@@ -288,3 +288,69 @@ get_imputedExprSet <- function(dataset){
   return(res)
 }
 ################################################################################
+#' @title Obtain the 95% CI Odd Ratio by glm model
+#'
+#' @details 12/13/2021 Guangzhou China
+#' @author  Hua Zou
+#'
+#' @param datx, Data.frame; (Required) Metadata with SampleID and Group information.
+#' @param daty, Data.frame; (Required) Profile with SampleID, ordered by datx (Row->Features; Column->SampleID).
+#' @param GroupName, Character; (Required) the contrast group.
+#'
+#' @return
+#' 95% CI Odd Ratio with featureID
+#'
+#' @export
+#'
+#' @importFrom dplyr %>% select all_of
+#' @importFrom tibble rownames_to_column
+#' @importFrom stats glm
+#'
+#' @usage run_OddRatio(datx, daty, GroupName)
+#' @examples
+#'
+#' \donttest{
+#'
+#' }
+#'
+run_OddRatio <- function(datx, daty, GroupName){
+
+  # glm result for odd ratios 95%CI
+  mdat <- dplyr::inner_join(datx %>% tibble::rownames_to_column("SampleID") %>%
+                              dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
+                            daty %>% t() %>% data.frame() %>%
+                              tibble::rownames_to_column("SampleID"),
+                            by = "SampleID") %>%
+    tibble::column_to_rownames("SampleID")
+
+  dat_phe <- mdat %>% dplyr::select(Group) %>%
+    mutate(Group=ifelse(Group==GroupName[2], 1, 0))
+  dat_prf <- mdat %>% dplyr::select(-Group)
+
+  glmFun <- function(GroupN, MarkerN){
+
+    MarkerN[MarkerN==0] <- min(MarkerN[MarkerN!=0])
+    dat_glm <- data.frame(group=GroupN,
+                          marker=scale(MarkerN, center=TRUE, scale=TRUE)) %>%
+      na.omit()
+    model <- summary(stats::glm(group ~ marker, data = dat_glm,
+                                family = binomial(link = "logit")))
+    res <- signif(exp(model$coefficients["marker", 1]) +
+                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["marker",1], 2)
+
+    return(res)
+  }
+
+  glm_res <- t(apply(dat_prf, 2, function(x, group){
+    res <- glmFun(group, as.numeric(x))
+    return(res)
+  }, dat_phe$Group))
+
+  Odd <- glm_res %>% data.frame() %>%
+    setNames(c("upper", "expected","lower")) %>%
+    mutate("Odds Ratio (95% CI)" = paste0(expected, " (", lower, ";", upper, ")"))
+  Odd$FeatureID <- rownames(glm_res)
+
+  res <- Odd[, c(5, 4)]
+  return(res)
+}

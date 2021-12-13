@@ -16,6 +16,7 @@
 #' @author  Hua Zou
 #'
 #' @param Expression, ExpressionSet; (Required) ExpressionSet object.
+#' @param trim, Character; filter to apply.(default: trim="none").
 #' @param GroupVar, Character; design factor(default: "Group").
 #' @param AdjVar, Character; the adjusted variables.
 #' @param RandVar, Character; random effects for longitudinal analysis or repeated measure("~ 1 | studyid").
@@ -38,22 +39,39 @@
 #' @importFrom Biobase pData exprs
 #' @import ggplot2
 #'
-#' @usage DA_ANCOM(dataset=ExpressionSet, GroupVar="Group", AdjVar=NULL, RandVar=NULL, Pvalue=0.05, Wvalue=0.7)
+#' @usage run_ANCOM(dataset=ExpressionSet,
+#'                  trim="none",
+#'                  GroupVar="Group",
+#'                  AdjVar=NULL,
+#'                  RandVar=NULL,
+#'                  Pvalue=0.05,
+#'                  Wvalue=0.7)
 #' @examples
 #'
 #' \donttest{
-#' data(ExprSet_species_count)
+#' data(ExprSetRawCount)
 #'
-#' ANCOM_res <- DA_ANCOM(dataset=ExprSet_species_count, GroupVar="Group", AdjVar="Gender", RandVar=NULL, Pvalue=0.05, Wvalue=0.7)
+#' ANCOM_res <- run_ANCOM(dataset=ExprSetRawCount, GroupVar="Group", AdjVar="Gender", RandVar=NULL, Pvalue=0.05, Wvalue=0.7)
 #' ANCOM_res$res
 #' }
 #'
-DA_ANCOM <- function(dataset=ExprSet_species_count,
-                     GroupVar="Group",
-                     AdjVar=NULL,
-                     RandVar=NULL,
-                     Pvalue=0.05,
-                     Wvalue=0.7){
+run_ANCOM <- function(dataset=ExprSetRawCount,
+                      trim="none",
+                      GroupVar="Group",
+                      Group_name=c("HC", "AA"),
+                      AdjVar=NULL,
+                      RandVar=NULL,
+                      Pvalue=0.05,
+                      Wvalue=0.7){
+
+  # dataset=ExprSetRawCount
+  # trim="none"
+  # Group_name=c("HC", "AA")
+  # GroupVar="Group"
+  # AdjVar=NULL
+  # RandVar=NULL
+  # Pvalue=0.05
+  # Wvalue=0.7
 
   # Data Pre-Processing
   preprocess_ANCOM <- function(
@@ -428,9 +446,11 @@ DA_ANCOM <- function(dataset=ExprSet_species_count,
     return(res)
   }
 
-  metadata <- Biobase::pData(dataset)
+  # preprocess
+  dataset_processed <- get_processedExprSet(dataset=dataset, trim=trim)
+  metadata <- Biobase::pData(dataset_processed)
   colnames(metadata)[which(colnames(metadata) == GroupVar)] <- "Group"
-  profile <- Biobase::exprs(dataset)
+  profile <- Biobase::exprs(dataset_processed)
 
   # factor group
   metadata$Group <- factor(metadata$Group)

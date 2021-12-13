@@ -131,10 +131,10 @@ get_ExprSet <- function(profile=Profile,
 #'
 #' @param dataset, ExpressionSet; (Required) an Raw ExpressionSet object by `get_ExprSet`.
 #' @param trim_cutoff, Numeric; the threshold for filtering (default: Cutoff=0.2).
-#' @param trim_type, Character; filter to apply.(default: trim_type="none").
+#' @param trim, Character; filter to apply.(default: trim="none").
 #' @param tranform, Character; transformation to apply.(default: tranform="none").
-#' @param normalization, Character; normalization to apply.(default: normalization="none").
-#' @param inputation, Character; inputation to apply.(default: inputation="none").
+#' @param normalize, Character; normalization to apply.(default: normalize="none").
+#' @param inpute, Character; inputation to apply.(default: inpute="none").
 #'
 #' @return
 #' an preprocessed ExpressionSet Object
@@ -149,10 +149,10 @@ get_ExprSet <- function(profile=Profile,
 #'
 #' @usage get_processedExprSet(dataset=ExpressionSet,
 #'         trim_cutoff=0.2,
-#'         trim_type=c("none", "both", "feature", "sample", "Group"),
+#'         trim=c("none", "both", "feature", "sample", "Group"),
 #'         transform=c("none", "log2", "log2p", "log10", "log10p"),
-#'         normalization=c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"),
-#'         imputation=c("none", "deletion", "GlobalStandard", "KNN"))
+#'         normalize=c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"),
+#'         impute=c("none", "deletion", "GlobalStandard", "KNN"))
 #' @examples
 #'
 #' \donttest{
@@ -160,24 +160,24 @@ get_ExprSet <- function(profile=Profile,
 #' data("ExprSetRawRB")
 #' ExprSet <- get_processedExprSet(dataset=ExprSetRawCount,
 #' trim_cutoff=0.2,
-#' trim_type="Group",
+#' trim="Group",
 #' transform="log2",
-#' normalization=NULL,
-#' imputation=NULL)
+#' normalize=NULL,
+#' impute=NULL)
 #' }
 #'
 get_processedExprSet <- function(dataset=ExprSetRawCount,
                                  trim_cutoff=0.2,
-                                 trim_type="both",
-                                 transform="log2",
-                                 normalization=NULL,
-                                 imputation=NULL){
+                                 trim="none",
+                                 transform="none",
+                                 normalize=NULL,
+                                 impute=NULL){
 
   # trim features and samples
   if(!is.null(trim_cutoff)){
-    trim_type <- match.arg(trim_type, c("none", "both", "feature", "sample", "Group"))
-    filterObject <- run_filter(dataset, trim_cutoff, trim_type)
-    tempObject <- get_FilteredExprSet(filterObject)
+    trim <- match.arg(trim, c("none", "both", "feature", "sample", "Group"))
+    filterObject <- run_trim(dataset, trim_cutoff, trim)
+    tempObject <- get_TrimedExprSet(filterObject)
   }else{
     tempObject <- dataset
   }
@@ -187,33 +187,33 @@ get_processedExprSet <- function(dataset=ExprSetRawCount,
     transform <- match.arg(transform, c("none", "log2", "log2p", "log10", "log10p"))
     transformObject <- run_transform(tempObject, transform)
     tempObject <- get_TransformedExprSet(transformObject, exprs(transformObject))
-  }else if(any(!is.null(trim_cutoff), !is.null(transform))){
+  }else if(any(!is.null(trim), !is.null(transform))){
     tempObject <- tempObject
-  }else if(all(!is.null(trim_cutoff), !is.null(transform))){
+  }else if(all(!is.null(trim), !is.null(transform))){
     tempObject <- dataset
   }
 
   # Normalize expression matrix
-  if(!is.null(normalization)){
-    normalization <- match.arg(normalization, c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
-    normalizeObject <- run_normalize(tempObject, normalization)
+  if(!is.null(normalize)){
+    normalize <- match.arg(normalize, c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
+    normalizeObject <- run_normalize(tempObject, normalize)
     tempObject <- get_NormalizedExprSet(transformObject, exprs(normalizeObject))
-  }else if(any(!is.null(trim_cutoff), !is.null(transform), !is.null(normalization))){
+  }else if(any(!is.null(trim), !is.null(transform), !is.null(normalize))){
     tempObject <- tempObject
-  }else if(all(!is.null(trim_cutoff), !is.null(transform), !is.null(normalization))){
+  }else if(all(!is.null(trim), !is.null(transform), !is.null(normalize))){
     tempObject <- dataset
   }
 
-  # imputate expression matrix for missing value(NAs) or Zero values
-  if(!is.null(imputation)){
-    imputation <- match.arg(imputation, c("none", "deletion", "GlobalStandard", "KNN"))
-    imputateObject <- run_imputation(tempObject, imputation)
-    tempObject <- get_ImputatedExprSet(imputateObject, exprs(imputateObject))
-  }else if(any(!is.null(trim_cutoff), !is.null(transform),
-               !is.null(normalization), !is.null(imputation))){
+  # impute expression matrix for missing value(NAs) or Zero values
+  if(!is.null(impute)){
+    impute <- match.arg(impute, c("none", "deletion", "GlobalStandard", "KNN"))
+    imputeObject <- run_impute(tempObject, impute)
+    tempObject <- get_imputedExprSet(imputeObject, exprs(imputeObject))
+  }else if(any(!is.null(trim), !is.null(transform),
+               !is.null(normalize), !is.null(impute))){
     tempObject <- tempObject
-  }else if(all(!is.null(trim_cutoff), !is.null(transform),
-               !is.null(normalization), !is.null(imputation))){
+  }else if(all(!is.null(trim), !is.null(transform),
+               !is.null(normalize), !is.null(impute))){
     tempObject <- dataset
   }
 

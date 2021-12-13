@@ -9,6 +9,9 @@
 #' @author  Hua Zou
 #'
 #' @param Expression, ExpressionSet; (Required) ExpressionSet object.
+#' @param trim, Character; filter to apply.(default: trim="none").
+#' @param transform, Character; transformation to apply.(default: tranform="none").
+#' @param normalize, Character; normalization to apply.(default: normalize="none").
 #' @param Group_info, Character; design factor(default: "Group").
 #' @param Group_name, Character; (Required) the group for comparison.
 #' @param Pvalue, Numeric; significant level(default: 0.05).
@@ -26,28 +29,40 @@
 #' @importFrom rstatix t_test
 #' @importFrom Biobase pData exprs
 #'
-#' @usage DA_TWilcox(dataset=ExpressionSet, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
+#' @usage run_Wilcox(dataset=ExpressionSet,
+#'                   trim="none",
+#'                   transform="none",
+#'                   normalize="none",
+#'                   Group_info="Group",
+#'                   Group_name=c("HC", "AA"),
+#'                   Pvalue=0.05,
+#'                   Log2FC=1)
 #' @examples
 #'
 #' \donttest{
-#' data(ExprSet_species)
+#' data(ExprSetRawRB)
 #'
-#' TWilcox_res <- DA_TWilcox(dataset=ExprSet_species, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
+#' TWilcox_res <- run_TWilcox(dataset=ExprSetRawRB, Group_info="Group", Group_name=c("HC", "AA"), Pvalue=0.05, Log2FC=1)
 #' TWilcox_res$res
 #' }
 #'
-DA_TWilcox <- function(dataset=ExprSet_species,
-                       Group_info="Group",
-                       Group_name=c("HC", "AA"),
-                       Pvalue=0.05,
-                       Log2FC=1){
+run_TWilcox <- function(dataset=ExprSetRawCount,
+                        trim="none",
+                        transform="none",
+                        normalize="none",
+                        Group_info="Group",
+                        Group_name=c("HC", "AA"),
+                        Pvalue=0.05,
+                        Log2FC=1){
 
-  metadata <- Biobase::pData(dataset)
+  # preprocess
+  dataset_processed <- get_processedExprSet(dataset=dataset,
+                                            trim=trim,
+                                            transform=transform,
+                                            normalize=normalize)
+  metadata <- Biobase::pData(dataset_processed)
   colnames(metadata)[which(colnames(metadata) == Group_info)] <- "Group"
-  profile <- Biobase::exprs(dataset)
-  # if(!any(profile %% 1 == 0)){
-  #   stop("The input matrix is not integer matrix please Check it")
-  # }
+  profile <- Biobase::exprs(dataset_processed)
 
   # Choose group
   phen <- metadata %>% dplyr::filter(Group%in%Group_name)
@@ -91,42 +106,41 @@ DA_TWilcox <- function(dataset=ExprSet_species,
   if(nrow(Normal_prof) != 0){
     Welch_res <- apply(Normal_prof, 1, function(x, y){
       dat <- data.frame(value=as.numeric(x), group=y)
-      # Fold2Change: median
-      dat$value_scale <- scale(dat$value, center = TRUE, scale = TRUE)
-      mn_median <- tapply(dat$value_scale, dat$group, stats::median) %>%
-        data.frame() %>% stats::setNames("value") %>%
-        rownames_to_column("Group")
-      mn_median1 <- with(mn_median, mn_median[Group%in%group_name[1], "value"])
-      mn_median2 <- with(mn_median, mn_median[Group%in%group_name[2], "value"])
-      if(all(mn_median1 > 0, mn_median2 > 0)){
-        Log2FC_median <- log2(mn_median1/mn_median2)
-      }else{
-        Log2FC_median <- -log2(mn_median1/mn_median2)
-      }
+
+      # median(Original Value)
+      mn <- tapply(dat$value, dat$group, median) %>%
+        data.frame() %>% setNames("value") %>%
+        tibble::rownames_to_column("Group")
+      mn1 <- with(mn, mn[Group%in%Group_name[1], "value"])
+      mn2 <- with(mn, mn[Group%in%Group_name[2], "value"])
+      mnall <- median(dat$value)
+
       # Fold2Change: geometricmean
+      dat$value_scale <- scale(dat$value, center = TRUE, scale = TRUE)
       mn_GM <- tapply(dat$value_scale, dat$group, compositions::geometricmean) %>%
         data.frame() %>% stats::setNames("value") %>%
         rownames_to_column("Group")
-      mn_GM1 <- with(mn_GM, mn_GM[Group%in%group_name[1], "value"])
-      mn_GM2 <- with(mn_GM, mn_GM[Group%in%group_name[2], "value"])
+      mn_GM1 <- with(mn_GM, mn_GM[Group%in%Group_name[1], "value"])
+      mn_GM2 <- with(mn_GM, mn_GM[Group%in%Group_name[2], "value"])
       Log2FC_GM <- log2(mn_GM1/mn_GM2)
 
       # pvalue
       rest <- rstatix::t_test(data = dat, value ~ group)
 
-      return(c(Log2FC_median, mn_median1, mn_median2,
-               Log2FC_GM, mn_GM1, mn_GM2,
+      return(c(mnall, mn1, mn2,
+               mn_GM1, mn_GM2,Log2FC_GM,
                rest$statistic, rest$p))
     }, colData$Group) %>%
       t() %>% data.frame() %>%
-      stats::setNames(c("log2FC_median", paste0("median_", Group_name),
-                 "Log2FC_GM", paste0("geometricmean_", Group_name),
-                 "Statistic", "P.value"))
+    stats::setNames(c("Median_Abundance", paste0("Median_", c(1, 2)),
+                      paste0("geometricmean_", c(1, 2)),
+                      "Log2FoldChange", "Statistic", "Pvalue"))
+
     Normal_res <- Welch_res %>%
-      # dplyr::filter(!is.nan(Log2FC_GM)) %>%
-      # dplyr::filter(!is.infinite(Log2FC_GM)) %>%
+      # dplyr::filter(!is.nan(Log2FoldChange)) %>%
+      # dplyr::filter(!is.infinite(Log2FoldChange)) %>%
       tibble::rownames_to_column("FeatureID") %>%
-      dplyr::arrange(desc(abs(Log2FC_GM)), P.value)
+      dplyr::arrange(desc(abs(Log2FoldChange)), Pvalue)
   }else{
     Normal_res <- data.frame()
   }
@@ -135,22 +149,19 @@ DA_TWilcox <- function(dataset=ExprSet_species,
   if(nrow(Non_Normal_prof) != 0){
     Wilcox_res <- apply(Non_Normal_prof, 1, function(x, y){
       dat <- data.frame(value=as.numeric(x), group=y)
-      # Fold2Change: median
-      dat$value_scale <- scale(dat$value, center = TRUE, scale = TRUE)
-      mn_median <- tapply(dat$value_scale, dat$group, stats::median) %>%
-        data.frame() %>% stats::setNames("value") %>%
+      # median(Original Value)
+      mn <- tapply(dat$value, dat$group, median) %>%
+        data.frame() %>% setNames("value") %>%
         tibble::rownames_to_column("Group")
-      mn_median1 <- with(mn_median, mn_median[Group%in%Group_name[1], "value"])
-      mn_median2 <- with(mn_median, mn_median[Group%in%Group_name[2], "value"])
-      if(all(mn_median1 > 0, mn_median2 > 0)){
-        Log2FC_median <- log2(mn_median1/mn_median2)
-      }else{
-        Log2FC_median <- -log2(mn_median1/mn_median2)
-      }
+      mn1 <- with(mn, mn[Group%in%Group_name[1], "value"])
+      mn2 <- with(mn, mn[Group%in%Group_name[2], "value"])
+      mnall <- median(dat$value)
+
       # Fold2Change: geometricmean
+      dat$value_scale <- scale(dat$value, center = TRUE, scale = TRUE)
       mn_GM <- tapply(dat$value_scale, dat$group, compositions::geometricmean) %>%
         data.frame() %>% stats::setNames("value") %>%
-        tibble::rownames_to_column("Group")
+        rownames_to_column("Group")
       mn_GM1 <- with(mn_GM, mn_GM[Group%in%Group_name[1], "value"])
       mn_GM2 <- with(mn_GM, mn_GM[Group%in%Group_name[2], "value"])
       Log2FC_GM <- log2(mn_GM1/mn_GM2)
@@ -158,82 +169,52 @@ DA_TWilcox <- function(dataset=ExprSet_species,
       # pvalue
       rest <- stats::wilcox.test(data = dat, value ~ group)
 
-      return(c(Log2FC_median, mn_median1, mn_median2,
-               Log2FC_GM, mn_GM1, mn_GM2,
+      return(c(mnall, mn1, mn2,
+               mn_GM1, mn_GM2,Log2FC_GM,
                rest$statistic, rest$p.value))
     }, colData$Group) %>%
       t() %>% data.frame() %>%
-      stats::setNames(c("log2FC_median", paste0("median_", Group_name),
-                 "log2FC_GM", paste0("geometricmean_", Group_name),
-                 "Statistic", "P.value"))
+      stats::setNames(c("Median_Abundance", paste0("Median_", c(1, 2)),
+                        paste0("geometricmean_", c(1, 2)),
+                        "Log2FoldChange", "Statistic", "Pvalue"))
+
     Non_Normal_res <- Wilcox_res %>%
-      # dplyr::filter(!is.nan(log2FC_GM)) %>%
-      # dplyr::filter(!is.infinite(log2FC_GM)) %>%
+      # dplyr::filter(!is.nan(Log2FoldChange)) %>%
+      # dplyr::filter(!is.infinite(Log2FoldChange)) %>%
       tibble::rownames_to_column("FeatureID") %>%
-      dplyr::arrange(desc(abs(log2FC_GM)), P.value)
+      dplyr::arrange(desc(abs(Log2FoldChange)), Pvalue)
   }else{
     Non_Normal_res <- data.frame()
   }
 
   # Number & Block
-  all_res <- rbind(Normal_res, Non_Normal_res)
-  all_res$adj.P.Val <- p.adjust(as.numeric(all_res$P.value), method = "BH")
+  t_res <- rbind(Normal_res, Non_Normal_res)
+  t_res$AdjPval <- p.adjust(as.numeric(t_res$Pvalue), method = "BH")
 
   dat_status <- table(colData$Group)
   dat_status_number <- as.numeric(dat_status)
   dat_status_name <- names(dat_status)
-  all_res$Block <- paste(paste(dat_status_number[1], dat_status_name[1], sep = "_"),
+  t_res$Block <- paste(paste(dat_status_number[1], dat_status_name[1], sep = "_"),
                      "vs",
                      paste(dat_status_number[2], dat_status_name[2], sep = "_"))
-  # Enrichment Meidan
-  all_res[which(all_res$log2FC_median > Log2FC & all_res$adj.P.Val < Pvalue), "Enrichment_median"] <- Group_name[1]
-  all_res[which(all_res$log2FC_median < -Log2FC & all_res$adj.P.Val < Pvalue), "Enrichment_median"] <- Group_name[2]
-  all_res[which(abs(all_res$log2FC_median) <= Log2FC | all_res$adj.P.Val >= Pvalue), "Enrichment_median"] <- "Nonsignif"
 
   # Enrichment geometricmean
-  all_res[which(all_res$log2FC_GM > Log2FC & all_res$adj.P.Val < Pvalue), "Enrichment_GM"] <- Group_name[1]
-  all_res[which(all_res$log2FC_GM < -Log2FC & all_res$adj.P.Val < Pvalue), "Enrichment_GM"] <- Group_name[2]
-  all_res[which(abs(all_res$log2FC_GM) <= Log2FC | all_res$adj.P.Val >= Pvalue), "Enrichment_GM"] <- "Nonsignif"
+  t_res[which(t_res$Log2FoldChange > Log2FC & t_res$AdjPval < Pvalue), "Enrichment"] <- Group_name[1]
+  t_res[which(t_res$Log2FoldChange < -Log2FC & t_res$AdjPval < Pvalue), "Enrichment"] <- Group_name[2]
+  t_res[which(abs(t_res$Log2FoldChange) <= Log2FC | t_res$AdjPval >= Pvalue), "Enrichment"] <- "Nonsignif"
 
-  res_temp <- all_res %>% dplyr::select(FeatureID, Block, adj.P.Val, P.value, dplyr::everything()) %>%
-    arrange(adj.P.Val)
+  # Rename
+  colnames(t_res)[2:4] <- c("Median Abundance\n(All)", paste0("Median Abundance\n", Group_name))
+  colnames(t_res)[5:6] <- paste0("Geometricmean Abundance\n", Group_name)
+  t_res_temp <- t_res %>% dplyr::select(FeatureID, Block, Enrichment,
+                                        AdjPval, Pvalue, Log2FoldChange, Statistic,
+                                        dplyr::everything()) %>% dplyr::arrange(AdjPval)
 
-  # glm result for odd ratios 95%CI
-  mdat <- dplyr::inner_join(colData %>% tibble::rownames_to_column("SampleID") %>%
-                       dplyr::select(dplyr::all_of(c("SampleID", "Group"))),
-                     proData %>% t() %>% data.frame() %>%
-                       tibble::rownames_to_column("SampleID"),
-                     by = "SampleID") %>%
-    tibble::column_to_rownames("SampleID")
+  # 95% CI Odd Ratio
+  res_odd <- run_OddRatio(colData, proData, Group_name)
 
-  dat_phe <- mdat %>% dplyr::select(Group) %>%
-    mutate(Group=ifelse(Group==Group_name[2], 1, 0))
-  dat_prf <- mdat %>% dplyr::select(-Group)
+  # Merge
+  res <- dplyr::inner_join(t_res_temp, res_odd, by="FeatureID")
 
-  glmFun <- function(GroupN, MarkerN){
-
-    MarkerN[MarkerN==0] <- min(MarkerN[MarkerN!=0])
-    dat_glm <- data.frame(group=GroupN,
-                          marker=scale(MarkerN, center=TRUE, scale=TRUE)) %>%
-      na.omit()
-    model <- summary(stats::glm(group ~ marker, data = dat_glm,
-                         family = binomial(link = "logit")))
-    res <- signif(exp(model$coefficients["marker", 1]) +
-                    qnorm(c(0.025,0.5,0.975)) * model$coefficients["marker",1], 2)
-
-    return(res)
-  }
-
-  glm_res <- t(apply(dat_prf, 2, function(x, group){
-    res <- glmFun(group, as.numeric(x))
-    return(res)
-  }, dat_phe$Group))
-
-  Odd <- glm_res %>% data.frame() %>%
-    setNames(c("upper", "expected","lower")) %>%
-    mutate("Odds Ratio (95% CI)" = paste0(expected, " (", lower, ";", upper, ")"))
-  Odd$FeatureID <- rownames(glm_res)
-
-  res <- inner_join(res_temp, Odd[, c(4:5)], by="FeatureID")
   return(res)
 }
