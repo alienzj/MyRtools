@@ -215,7 +215,7 @@ get_NormalizedExprSet <- function(dataset, expr){
     fdata <- new("AnnotatedDataFrame", data=fdata)
 
     experimentdata <- experimentData(dataset)
-    experimentdata@other$notes <- "Transformed ExpressionSet"
+    experimentdata@other$notes <- "Normalized ExpressionSet"
     res <- new("ExpressionSet",
                exprs=expr,
                phenoData=pdata,
