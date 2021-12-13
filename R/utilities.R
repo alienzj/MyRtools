@@ -62,7 +62,7 @@ get_FilterExprSet <- function(dataset){
 #' @title the new transformed ExpressionSet object
 #'
 #' @description
-#' After tranformed the expression, we need to obtain the new transformed ExpressionSet object.
+#' After tranforming the expression, we need to obtain the new transformed ExpressionSet object.
 #'
 #' @details 12/2/2021 Guangzhou China
 #' @author  Hua Zou
@@ -163,3 +163,67 @@ f_comp_es <- function(f, expressionset){
     eval(parse(text=paste(f, "(es@", i, ")", sep="")))
   }, mydataset)
 }
+################################################################################
+#' @title the new Normalized ExpressionSet object
+#'
+#' @description
+#' After Normalizing the expression, we need to obtain the new Normalized ExpressionSet object.
+#'
+#' @details 12/2/2021 Guangzhou China
+#' @author  Hua Zou
+#'
+#' @param dataset, ExpressionSet; (Required) old ExpressionSet object.
+#' @param expr, matrix; (Required) the transformed expression matrix.
+#'
+#' @return
+#' an Normalized ExpressionSet object
+#'
+#' @export
+#'
+#' @importFrom dplyr %>% select all_of
+#' @import Biobase
+#'
+#' @usage get_NormalizedExprSet(dataset=ExpressionSet, expr=tranformedMatrix)
+#' @examples
+#'
+#' \donttest{
+#'
+#' }
+#'
+get_NormalizedExprSet <- function(dataset, expr){
+
+  FeatureNames <- rownames(expr)
+  SampleNames <- colnames(expr)
+  if(!all(exprs(dataset) == expr)){
+
+    pdata <- pData(dataset)
+    if(!any(rownames(pdata) == SampleNames)){
+      stop("Please check the order of SampleID between phen and prof")
+    }
+    pdata <- pData(dataset) %>% t() %>% data.frame() %>%
+      dplyr::select(dplyr::all_of(SampleNames)) %>%
+      t() %>% data.frame()
+    pdata <- new("AnnotatedDataFrame", data=pdata)
+
+    fdata <- fData(dataset)
+    if(!any(rownames(fdata) == FeatureNames)){
+      stop("Please check the order of SampleID between phen and prof")
+    }
+    fdata <- fData(dataset) %>% t() %>% data.frame() %>%
+      dplyr::select(dplyr::all_of(FeatureNames)) %>%
+      t() %>% data.frame()
+    fdata <- new("AnnotatedDataFrame", data=fdata)
+
+    experimentdata <- experimentData(dataset)
+    experimentdata@other$notes <- "Transformed ExpressionSet"
+    res <- new("ExpressionSet",
+               exprs=expr,
+               phenoData=pdata,
+               featureData=fdata,
+               experimentData=experimentdata)
+  }else{
+    res <- dataset
+  }
+  return(res)
+}
+################################################################################

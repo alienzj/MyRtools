@@ -4,9 +4,13 @@
 \alias{norm_tss}
 \alias{norm_tmm}
 \alias{norm_rle}
-\alias{norm_css}
 \alias{norm_clr}
-\alias{norm_cpm}
+\alias{norm_zscore}
+\alias{norm_median}
+\alias{norm_mad}
+\alias{norm_robust}
+\alias{norm_unit}
+\alias{norm_minmax}
 \title{Total-Sum Scaling (TSS) method}
 \usage{
 norm_tss(object)
@@ -28,11 +32,19 @@ norm_rle(
   control_genes = NULL
 )
 
-norm_css(object, sl = 1000)
-
 norm_clr(object)
 
-norm_cpm(object)
+norm_zscore(object)
+
+norm_median(object)
+
+norm_mad(object)
+
+norm_robust(object)
+
+norm_unit(object)
+
+norm_minmax(object)
 }
 \arguments{
 \item{object, }{Object; a [`matrix`](Row->Features; Column->Samples).}
@@ -60,8 +72,6 @@ be provided for a "frozen" size factor calculation.}
 \item{control_genes}{default `NULL`, which means all taxa are used for size
 factor estimation, numeric or logical index vector specifying the taxa
 used for size factor estimation (e.g. core taxa).}
-
-\item{sl}{The value to scale.}
 }
 \description{
 TSS simply transforms the feature table into relative abundance by dividing
@@ -76,21 +86,11 @@ excluding the highest count OTUs and OTUs with the largest log-fold change.
 RLE assumes most features are not differential and uses the relative
 abundances to calculate the normalization factor.
 
-CSS is based on the assumption that the count distributions in each sample
-are equivalent for low abundant genes up to a certain threshold.  Only the
-segment of each sample’s count distribution that is relatively invariant
-across samples is scaled by CSS
-
 In CLR, the log-ratios are computed relative to the geometric mean of all
 features.
-
-`norm_cpm`: This normalization method is from the original LEfSe algorithm,
-recommended when very low values are present (as shown in the LEfSe galaxy).
 }
 \seealso{
 [edgeR::calcNormFactors()]
 
 [DESeq2::estimateSizeFactorsForMatrix()]
-
-[metagenomeSeq::calcNormFactors()]
 }

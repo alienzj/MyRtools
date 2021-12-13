@@ -4,7 +4,7 @@
 \alias{run_normalize}
 \title{Normalize the expression profile data}
 \usage{
-run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", "CSS", "CLR", "CPM", "Zscore"))
+run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
 }
 \arguments{
 \item{object, }{Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].}
@@ -22,11 +22,13 @@ run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", "CSS", "CLR", "CP
     using the geometric mean of the gene-specific abundances over all
     samples. The scaling factors are then calculated as the median of the
     gene counts ratios between the samples and the reference.
-* "CSS": cumulative sum scaling, calculates scaling factors as the
-    cumulative sum of gene abundances up to a data-derived threshold.
 * "CLR": centered log-ratio normalization.
-* "CPM": pre-sample normalization of the sum of the values to 1e+06.
-* "Zscore": convert the data into unit normal distribution(mean=0; sd=1).}
+* "Zscore": convert the data into unit normal distribution(mean=0; sd=1).
+* "Median": Median scale normalization.
+* "MAD": Median Absolute Deviation.
+* "Robust": Robust scale normalization.
+* "Unit": Unit scale normalization.
+* "Min_Max": Median-scale scale normalization.}
 }
 \value{
 A object matches the class of argument `object` with the normalized profile.

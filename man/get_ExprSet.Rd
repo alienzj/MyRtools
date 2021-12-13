@@ -7,13 +7,13 @@
 get_ExprSet(profile=Profile,
                   metadata=Metadata,
                   feature=Feature,
-                  name=NULL,
-                  lab=NULL,
-                  contact=NULL,
-                  title=NULL,
-                  abstract=NULL,
-                  url=NULL,
-                  notes=NULL)
+                  name="",
+                  lab="",
+                  contact="",
+                  title="",
+                  abstract="",
+                  url="",
+                  notes="")
 }
 \arguments{
 \item{profile, }{Numeric matrix; (Required)a Matrix of expression data, whose Row is FeatureID and Column is SampleID.}
@@ -22,19 +22,19 @@ get_ExprSet(profile=Profile,
 
 \item{feature, }{Data.frame; the feature of Profile(default: Feature=NULL).}
 
-\item{name, }{Character; name of experimentData, inheriting from ExpressionSet(default: name=NULL).}
+\item{name, }{Character; name of experimentData, inheriting from ExpressionSet(default: name="").}
 
-\item{lab, }{Character; lab of experimentData(default: lab=NULL).}
+\item{lab, }{Character; lab of experimentData(default: lab="").}
 
-\item{contact, }{Character; contact of experimentData(default: contact=NULL).}
+\item{contact, }{Character; contact of experimentData(default: contact="").}
 
-\item{title, }{Character; title of experimentData(default: title=NULL).}
+\item{title, }{Character; title of experimentData(default: title="").}
 
-\item{abstract, }{Character; abstract of experimentData(default: abstract=NULL).}
+\item{abstract, }{Character; abstract of experimentData(default: abstract="").}
 
-\item{url, }{Character; url of experimentData(default: url=NULL).}
+\item{url, }{Character; url of experimentData(default: url="").}
 
-\item{notes, }{Character; notes of experimentData(default: notes=NULL).}
+\item{notes, }{Character; notes of experimentData(default: notes="").}
 }
 \value{
 an ExpressionSet Object

@@ -197,7 +197,7 @@ get_processedExprSet <- function(dataset=ExprSetRawCount,
 
   # Normalize expression matrix
   if(!is.null(normalization)){
-    normalization <- match.arg(normalization, c("identity", "log2", "log2p", "log10", "log10p"))
+    normalization <- match.arg(normalization, c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
     normalizeObject <- run_normalization(tempObject, normalization)
     tempObject <- get_NormalizedExprSet(transformObject, exprs(normalizeObject))
   }

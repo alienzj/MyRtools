@@ -23,11 +23,13 @@
 #'     using the geometric mean of the gene-specific abundances over all
 #'     samples. The scaling factors are then calculated as the median of the
 #'     gene counts ratios between the samples and the reference.
-#' * "CSS": cumulative sum scaling, calculates scaling factors as the
-#'     cumulative sum of gene abundances up to a data-derived threshold.
 #' * "CLR": centered log-ratio normalization.
-#' * "CPM": pre-sample normalization of the sum of the values to 1e+06.
 #' * "Zscore": convert the data into unit normal distribution(mean=0; sd=1).
+#' * "Median": Median scale normalization.
+#' * "MAD": Median Absolute Deviation.
+#' * "Robust": Robust scale normalization.
+#' * "Unit": Unit scale normalization.
+#' * "Min_Max": Median-scale scale normalization.
 #'
 #'
 #' @return
@@ -38,14 +40,17 @@
 #' @importFrom Biobase exprs assayDataNew
 #' @importFrom stats mad median quantile sd
 #'
-#' @usage run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", "CSS", "CLR", "CPM", "Zscore"))
+#' @usage run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
 #' @examples
 #'
 run_normalize <- function(object,
-                          normalize = c("none", "TSS", "TMM", "RLE", "CSS", "CLR", "CPM", "Zscore")){
+                          normalize = c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max")){
 
+  data("ExprSetRawCount")
+  object=ExprSetRawCount
+  normalize = "TSS"
 
-  normalize <- match.arg(normalize, c("none", "TSS", "TMM", "RLE", "CSS", "CLR", "CPM", "Zscore"))
+  normalize <- match.arg(normalize, c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
   if(inherits(object, "ExpressionSet")){
     prf <- as(Biobase::exprs(object), "matrix")
   }else if(inherits(object, "environment")){
@@ -54,22 +59,28 @@ run_normalize <- function(object,
     prf <- object
   }
 
-  if (normalize == "none") {
+  if (normalize == "none"){
     abd <- prf
-  } else if (normalize == "TSS") {
+  } else if (normalize == "TSS"){
     abd <- norm_tss(prf)
-  } else if (normalize == "TMM")  {
+  } else if (normalize == "TMM"){
     abd <- norm_tmm(prf)
-  }else if (normalize == "RLE") {
-    abd <- transform_log10(prf)
-  } else if (normalize == "CSS") {
-    abd <- transform_log10p(prf)
-  } else if (normalize == "CLR") {
-    abd <- transform_log10p(prf)
-  } else if (normalize == "CPM") {
-    abd <- transform_log10p(prf)
-  } else if (normalize == "Zscore") {
-    abd <- transform_log10p(prf)
+  }else if (normalize == "RLE"){
+    abd <- norm_rle(prf)
+  }else if (normalize == "CLR"){
+    abd <- norm_clr(prf)
+  }else if (normalize == "Zscore"){
+    abd <- norm_zscore(prf)
+  }else if (normalize == "Median"){
+    abd <- norm_median(prf)
+  }else if (normalize == "MAD"){
+    abd <- norm_mad(prf)
+  }else if (normalize == "Robust"){
+    abd <- norm_robust(prf)
+  }else if (normalize == "Unit"){
+    abd <- norm_unit(prf)
+  }else if (normalize == "Min_Max"){
+    abd <- norm_minmax(prf)
   }
 
   if(inherits(object, "ExpressionSet")){
@@ -141,7 +152,7 @@ norm_tmm <- function(object,
     Acutoff = Acutoff
   )
 
- nf
+  return(t(t(object)/nf))
 }
 ################################################################################
 #' Relative log expression (RLE) normalization
@@ -177,52 +188,15 @@ norm_rle <- function(object,
   geo_means <- ifelse(is.null(geo_means), substitute(), geo_means)
   control_genes <- ifelse(is.null(control_genes), substitute(), control_genes)
 
-  nf <- estimateSizeFactorsForMatrix(
+  nf <- DESeq2::estimateSizeFactorsForMatrix(
     object,
     locfunc = locfunc,
     geoMeans = geo_means,
     controlGenes = control_genes,
     type = type
   )
-  object_nf <- set_nf(object, nf)
 
-  object_nf
-}
-################################################################################
-#' Cumulative-Sum Scaling (CSS) method
-#'
-#' CSS is based on the assumption that the count distributions in each sample
-#' are equivalent for low abundant genes up to a certain threshold.  Only the
-#' segment of each sample’s count distribution that is relatively invariant
-#' across samples is scaled by CSS
-#'
-#' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
-#' @param sl The value to scale.
-#' @importFrom phyloseq sample_data<-
-#' @importFrom metagenomeSeq newMRexperiment cumNorm cumNormStatFast MRcounts
-#' @seealso [metagenomeSeq::calcNormFactors()]
-#' @export
-#' @rdname normalize-methods
-#' @aliases norm_css
-#'
-norm_css <- function(object, sl = 1000) {
-
-  if (inherits(object, "phyloseq")) {
-    object_mgs <- phyloseq2metagenomeSeq(object)
-  } else if (inherits(object, "otu_table")) {
-    object_mgs <- otu_table2metagenomeSeq(object)
-  }
-
-  # cumNormStatFast requires counts of all samples at least have two
-  # non zero features. Thus, if there are samples with only one non-zer
-  # features, cumNormStat is taken to compute the pth quantile.
-  count <- as(otu_table(object), "matrix")
-  fun_p <- select_quantile_func(count)
-  nf <- metagenomeSeq::calcNormFactors(object_mgs, p = fun_p(object_mgs))
-  nf <- unlist(nf) / sl
-  object_nf <- set_nf(object, nf)
-
-  object_nf
+  return(t(t(object)/nf))
 }
 ################################################################################
 #' CLR (centered log-ratio) normalization
@@ -243,6 +217,7 @@ norm_clr <- function(object) {
   # do not save the norm_factor, the norm factors are calculated based on the
   # subsequently differential analysis method, e.g. edgeR, DESeq
 
+  rownames(object_normed) <- rownames(object)
   return(object_normed)
 
 }
@@ -259,67 +234,151 @@ trans_clr <- function(x, base = exp(1)) {
   return(x)
 }
 ################################################################################
-#' Normalize the sum of values of each sample to million (counts per million)
-#'
-#' `norm_cpm`: This normalization method is from the original LEfSe algorithm,
-#' recommended when very low values are present (as shown in the LEfSe galaxy).
+#' Z-scale normalization
 #'
 #' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
 #'
 #' @export
 #' @rdname normalize-methods
-#' @aliases norm_cpm
-#' @importFrom phyloseq transform_sample_counts
-norm_cpm <- function(object) {
-  otu <- as(otu_table(object), "matrix") %>%
-    as.data.frame()
+#' @aliases norm_zscore
+#'
+norm_zscore <- function(object){
 
-  # whether the object is summarized
-  hie <- check_tax_summarize(object)
-  if (hie) {
-    features <- row.names(otu)
-    features_split <- strsplit(features, "|", fixed = TRUE)
-    single_indx <- which(lengths(features_split) < 2)
+  trans_zscore <- function(x){
+    value <- as.numeric(x)
+    mean_value <- mean(value, na.rm = FALSE)
+    sd_value <- stats::sd(value, na.rm = FALSE)
 
-    ## keep the counts of a sample identical with `normalization`
-    ## if we norm the counts in two steps:
-    ## 1. calculate scale size: norm_coef = normalization/lib_size;
-    ## 2. multiple the scale size value * norm_coef
-    ## the counts of a sample colSums(otu) may not equal to the argument
-    ## normalization.
-    ## e.g. normalization = 1e6, colSums(otu) = 999999
-    ## Finally, the kruskal test may be inaccurate,
-    ## e.g. https://github.com/yiluheihei/microbiomeMarker/issues/13
-    ps_normed <- transform_sample_counts(
-      object,
-      function(x) x * 1e+06 / sum(x[single_indx])
-    )
-  } else {
-    ps_normed <- transform_sample_counts(
-      object,
-      function(x) x * 1e+06 / sum(x)
-    )
+    x_scale <- (value - mean_value)/sd_value
+
+    return(x_scale)
   }
+  object_normed <- apply(object, 2, trans_zscore)
+  rownames(object_normed) <- rownames(object)
 
-  otu_normed <- data.frame(otu_table(ps_normed))
-  otu_normed <- purrr::map_df(
-    otu_normed,
-    function(x) {
-      if (mean(x) && stats::sd(x) / mean(x) < 1e-10) {
-        return(round(x * 1e6) / 1e6)
-      } else {
-        return(x)
-      }
-    }
-  )
+  return(object_normed)
+}
+################################################################################
+#' Median-scale normalization
+#'
+#' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
+#'
+#' @export
+#' @rdname normalize-methods
+#' @aliases norm_median
+#'
+norm_median <- function(object){
 
-  otu_normed <- as.data.frame(otu_normed)
-  row.names(otu_normed) <- row.names(otu)
-  colnames(otu_normed) <- colnames(otu)
-  otu_table(object) <- otu_table(otu_normed, taxa_are_rows = TRUE)
+  trans_median <- function(x){
+    value <- as.numeric(x)
+    median_value <- stats::median(value, na.rm = FALSE)
+    IQR_value <- stats::IQR(value, na.rm = FALSE)
 
-  # do not save the norm_factor, the norm factors are calculated based on the
-  # subsequently differential analysis method, e.g. edgeR, DESeq
-  object
+    x_scale <- (value - median_value)/IQR_value
+
+    return(x_scale)
+  }
+  object_normed <- apply(object, 2, trans_median)
+  rownames(object_normed) <- rownames(object)
+
+  return(object_normed)
+}
+################################################################################
+#' Median Absolute Deviation normalization
+#'
+#' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
+#'
+#' @export
+#' @rdname normalize-methods
+#' @aliases norm_mad
+#'
+norm_mad <- function(object){
+
+  trans_mad <- function(x){
+    value <- as.numeric(x)
+    d_mad <- stats::mad(value, na.rm = FALSE)
+    x_scale <- (value - stats::median(value, na.rm = FALSE))/d_mad
+
+    x_scale <- (value - median_value)/IQR_value
+
+    return(x_scale)
+  }
+  object_normed <- apply(object, 2, trans_median)
+  rownames(object_normed) <- rownames(object)
+  return(object_normed)
+}
+################################################################################
+#' Robust scale normalization
+#'
+#' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
+#'
+#' @export
+#' @rdname normalize-methods
+#' @aliases norm_robust
+#'
+norm_robust <- function(object){
+
+  trans_robust <- function(x){
+
+    value <- as.numeric(x)
+    q_value <- as.numeric(stats::quantile(value, na.rm = FALSE))
+    remain_value <- value[value > q_value[2] & value < q_value[4]]
+
+    mean_value <- mean(remain_value, na.rm = FALSE)
+    sd_value <- stats::sd(remain_value, na.rm = FALSE)
+
+    x_scale <- (value - mean_value)/sd_value
+
+    return(x_scale)
+  }
+  object_normed <- apply(object, 2, trans_robust)
+  rownames(object_normed) <- rownames(object)
+
+  return(object_normed)
+}
+################################################################################
+#' Unit scale normalization
+#'
+#' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
+#'
+#' @export
+#' @rdname normalize-methods
+#' @aliases norm_unit
+#'
+norm_unit <- function(object){
+
+  trans_unit <- function(x){
+    value <- as.numeric(x)
+    x_scale <- value / sqrt(sum(value^2, na.rm = FALSE))
+
+    return(x_scale)
+  }
+  object_normed <- apply(object, 2, trans_unit)
+  rownames(object_normed) <- rownames(object)
+  return(object_normed)
+}
+################################################################################
+#' Min-Max  normalization
+#'
+#' @param object, Object; a [`matrix`](Row->Features; Column->Samples).
+#'
+#' @export
+#' @rdname normalize-methods
+#' @aliases norm_minmax
+#'
+norm_minmax <- function(object){
+
+  trans_minmax <- function(x){
+    value <- as.numeric(x)
+    min_value <- min(value, na.rm = FALSE)
+    max_value <- max(value, na.rm = FALSE)
+
+    x_scale <- (value - min_value)/(max_value - min_value)
+
+    return(x_scale)
+  }
+  object_normed <- apply(object, 2, trans_minmax)
+  rownames(object_normed) <- rownames(object)
+  return(object_normed)
 }
 ################################################################################
