@@ -6,23 +6,23 @@
 \usage{
 get_processedExprSet(dataset=ExpressionSet,
         trim_cutoff=0.2,
-        trim_type=c("identity", "both", "feature", "sample", "Group"),
-        transform=c("identity", "log2", "log2p", "log10", "log10p"),
-        imputation=c("identity", "knn"),
-        normalization=c("identity", "TSS"))
+        trim_type=c("none", "both", "feature", "sample", "Group"),
+        transform=c("none", "log2", "log2p", "log10", "log10p"),
+        normalization=c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"),
+        imputation=c("none", "deletion", "GlobalStandard", "KNN"))
 }
 \arguments{
 \item{dataset, }{ExpressionSet; (Required) an Raw ExpressionSet object by `get_ExprSet`.}
 
 \item{trim_cutoff, }{Numeric; the threshold for filtering (default: Cutoff=0.2).}
 
-\item{trim_type, }{Data.frame; the feature of Profile.}
+\item{trim_type, }{Character; filter to apply.(default: trim_type="none").}
 
-\item{normalization, }{Data.frame; the feature of Profile.}
+\item{normalization, }{Character; normalization to apply.(default: normalization="none").}
 
-\item{tranform, }{Data.frame; the feature of Profile.}
+\item{tranform, }{Character; transformation to apply.(default: tranform="none").}
 
-\item{inputation, }{Data.frame; the feature of Profile.}
+\item{inputation, }{Character; inputation to apply.(default: inputation="none").}
 }
 \value{
 an preprocessed ExpressionSet Object
@@ -41,9 +41,9 @@ data("ExprSetRawRB")
 ExprSet <- get_processedExprSet(dataset=ExprSetRawCount,
 trim_cutoff=0.2,
 trim_type="Group",
-transform="log2",,
-imputation=NULL,
-normalization=NULL)
+transform="log2",
+normalization=NULL,
+imputation=NULL)
 }
 
 }

@@ -7,10 +7,10 @@
 #'
 #' @param object, Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].
 #' @param transform, Character; transformation to apply, the options inclulde:
-#' * "none", return the original data without any transformation.
-#' * "log2" or "log10", the transformation is `log2(object)` or `log10(object)`, and if the data contains
+#' * "none": return the original data without any transformation.
+#' * "log2" or "log10": the transformation is `log2(object)` or `log10(object)`, and if the data contains
 #'   zeros the transformation is `log2(1 + object)` or `log10(1 + object)`.
-#' * "log2p" or "log10p", the transformation is `log2(1 + object)` or `log10(1 + object)`.
+#' * "log2p" or "log10p": the transformation is `log2(1 + object)` or `log10(1 + object)`.
 #'
 #' @return
 #'  A object matches the class of argument `object` with the transformed profile matrix.

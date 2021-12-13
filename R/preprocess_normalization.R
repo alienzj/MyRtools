@@ -1,7 +1,6 @@
-#' @title Normalize the expression profile data
+#' @title Normalize the expression profile in `assayData` sample by sample
 #'
 #' @description
-#'
 #' Eliminating the bias such as sequencing depth, platform and other technical effects is vital for downstream data analysis.
 #'
 #' @details 12/7/2021 Guangzhou China
@@ -11,7 +10,7 @@
 #'
 #' @param object, Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].
 #' @param normalize, Character; normalization to apply, the options inclulde:
-#' * "none", return the original data without any transformation.
+#' * "none": return the original data without any transformation.
 #' * "TSS": total sum scaling, also referred to as "relative abundance", the
 #'     abundances were normalized by dividing the corresponding sample library
 #'     size.
@@ -45,10 +44,6 @@
 #'
 run_normalize <- function(object,
                           normalize = c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max")){
-
-  data("ExprSetRawCount")
-  object=ExprSetRawCount
-  normalize = "TSS"
 
   normalize <- match.arg(normalize, c("none", "TSS", "TMM", "RLE", "CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
   if(inherits(object, "ExpressionSet")){

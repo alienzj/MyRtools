@@ -68,7 +68,7 @@ run_filter <- function(object,
 
   if(inherits(object, "ExpressionSet")){
     assayData(object) <- Biobase::assayDataNew(exprs=prf_remain)
-    object <- get_FilterExprSet(object)
+    object <- get_FilteredExprSet(object)
   }else if(inherits(object, "environment")){
     object <- Biobase::assayDataNew(exprs=prf_remain)
   }else{

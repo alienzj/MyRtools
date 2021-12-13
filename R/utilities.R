@@ -227,3 +227,64 @@ get_NormalizedExprSet <- function(dataset, expr){
   return(res)
 }
 ################################################################################
+#' @title the new imputed ExpressionSet object
+#'
+#' @description
+#' After imputing features, we need to obtain the new ExpressionSet object.
+#'
+#' @details 12/13/2021 Guangzhou China
+#' @author  Hua Zou
+#'
+#' @param dataset, ExpressionSet; (Required) imputed ExpressionSet object.
+#'
+#' @return
+#' an imputed ExpressionSet object
+#'
+#' @export
+#'
+#' @importFrom dplyr %>% select all_of
+#' @import Biobase
+#'
+#' @usage get_imputedExprSet(dataset=ExpressionSet)
+#' @examples
+#'
+#' \donttest{
+#'
+#' }
+#'
+get_imputedExprSet <- function(dataset){
+
+  FeatureNames <- rownames(exprs(dataset))
+  SampleNames <- colnames(exprs(dataset))
+  if(any(length(FeatureNames) != length(featureNames(dataset)),
+         length(SampleNames) != length(sampleNames(dataset)))){
+
+    pdata <- pData(dataset) %>% t() %>% data.frame() %>%
+      dplyr::select(dplyr::all_of(SampleNames)) %>%
+      t() %>% data.frame()
+    if(!any(rownames(pdata) == SampleNames)){
+      stop("Please check the order of SampleID between phen and prof")
+    }
+    pdata <- new("AnnotatedDataFrame", data=pdata)
+
+    fdata <- fData(dataset) %>% t() %>% data.frame() %>%
+      dplyr::select(dplyr::all_of(FeatureNames)) %>%
+      t() %>% data.frame()
+    if(!any(rownames(fdata) == FeatureNames)){
+      stop("Please check the order of SampleID between phen and prof")
+    }
+    fdata <- new("AnnotatedDataFrame", data=fdata)
+    experimentdata <- experimentData(dataset)
+    experimentdata@other$notes <- "Imputed ExpressionSet"
+
+    res <- new("ExpressionSet",
+               exprs=exprs(dataset),
+               phenoData=pdata,
+               featureData=fdata,
+               experimentData=experimentdata)
+  }else{
+    res <- dataset
+  }
+  return(res)
+}
+################################################################################

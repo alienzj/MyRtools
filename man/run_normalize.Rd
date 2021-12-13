@@ -2,7 +2,7 @@
 % Please edit documentation in R/preprocess_normalization.R
 \name{run_normalize}
 \alias{run_normalize}
-\title{Normalize the expression profile data}
+\title{Normalize the expression profile in `assayData` sample by sample}
 \usage{
 run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", CLR", "Zscore", "Median", "MAD", "Robust", "Unit", "Min_Max"))
 }
@@ -10,7 +10,7 @@ run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", CLR", "Zscore", "
 \item{object, }{Object; a [`matrix`] or [`assayData-class`] or [`ExpressionSet-class`].}
 
 \item{normalize, }{Character; normalization to apply, the options inclulde:
-* "none", return the original data without any transformation.
+* "none": return the original data without any transformation.
 * "TSS": total sum scaling, also referred to as "relative abundance", the
     abundances were normalized by dividing the corresponding sample library
     size.
