@@ -29,13 +29,13 @@
 #' @examples
 #'
 #' \donttest{
-#' data(ExprSet_species)
+#' data(ExprSetRawRB)
 #'
-#' PartialCC_res <- AA_PartialCC(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, AdjVar=c("Age", "Gender"), Method="pcor")
+#' PartialCC_res <- AA_PartialCC(dataset=ExprSetRawRB, Group_info="Group", Group_name=NULL, AdjVar=c("Age", "Gender"), Method="pcor")
 #'
 #'}
 #'
-AA_PartialCC <- function(dataset=ExprSet_species,
+AA_PartialCC <- function(dataset=ExprSetRawRB,
                          Group_info="Group",
                          Group_name=NULL,
                          AdjVar=c("Age", "Gender"),

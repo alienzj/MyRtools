@@ -37,9 +37,9 @@ CMA examines the intermediate process(Mediation variable:M) by which the indepen
 \examples{
 
 \donttest{
-data(ExprSet_species)
+data(ExprSetRawRB)
 library(Biobase)
-Metadata <- pData(ExprSet_species)
+Metadata <- pData(ExprSetRawRB)
 
 # mediation package & one mediation
 Mediation_res1 <- AA_Mediation(dataset=Metadata, XVar="Lysine", YVar="Tryptophan", AdjVar=c("Age", "Gender"), MVar="BMI", Package="mediation")

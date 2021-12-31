@@ -29,9 +29,9 @@ The correlation among features is calculated by Spearman.
 \examples{
 
 \donttest{
-data(ExprSet_species)
+data(ExprSetRawRB)
 
-SimpleCC_res <- AA_SimpleCC(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, Object="Feature")
+SimpleCC_res <- AA_SimpleCC(dataset=ExprSetRawRB, Group_info="Group", Group_name=NULL, Object="Feature")
 
 }
 

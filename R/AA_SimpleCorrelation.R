@@ -28,13 +28,13 @@
 #' @examples
 #'
 #' \donttest{
-#' data(ExprSet_species)
+#' data(ExprSetRawRB)
 #'
-#' SimpleCC_res <- AA_SimpleCC(dataset=ExprSet_species, Group_info="Group", Group_name=NULL, Object="Feature")
+#' SimpleCC_res <- AA_SimpleCC(dataset=ExprSetRawRB, Group_info="Group", Group_name=NULL, Object="Feature")
 #'
 #'}
 #'
-AA_SimpleCC <- function(dataset=ExprSet_species,
+AA_SimpleCC <- function(dataset=ExprSetRawRB,
                         Group_info="Group",
                         Group_name=NULL,
                         Object="Feature"){

@@ -11,17 +11,17 @@ run_normalize(object, normalize=c("none", "TSS", "TMM", "RLE", CLR", "Zscore", "
 
 \item{normalize, }{Character; normalization to apply, the options inclulde:
 * "none": return the original data without any transformation.
-* "TSS": total sum scaling, also referred to as "relative abundance", the
-    abundances were normalized by dividing the corresponding sample library
-    size.
+* "TSS": total sum scaling, also referred to as relative abundance, the
+   abundances were normalized by dividing the corresponding sample library
+   size.
 * "TMM": trimmed mean of m-values. First, a sample is chosen as reference.
-    The scaling factor is then derived using a weighted trimmed mean over
-    the differences of the log-transformed gene-count fold-change between
-    the sample and the reference.
-* "RLE", relative log expression, RLE uses a pseudo-reference calculated
-    using the geometric mean of the gene-specific abundances over all
-    samples. The scaling factors are then calculated as the median of the
-    gene counts ratios between the samples and the reference.
+   The scaling factor is then derived using a weighted trimmed mean over
+   the differences of the log-transformed gene-count fold-change between
+   the sample and the reference.
+* "RLE": relative log expression, RLE uses a pseudo-reference calculated
+   using the geometric mean of the gene-specific abundances over all
+   samples. The scaling factors are then calculated as the median of the
+   gene counts ratios between the samples and the reference.
 * "CLR": centered log-ratio normalization.
 * "Zscore": convert the data into unit normal distribution(mean=0; sd=1).
 * "Median": Median scale normalization.

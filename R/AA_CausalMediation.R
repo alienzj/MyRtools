@@ -34,9 +34,9 @@
 #' @examples
 #'
 #' \donttest{
-#' data(ExprSet_species)
+#' data(ExprSetRawRB)
 #' library(Biobase)
-#' Metadata <- pData(ExprSet_species)
+#' Metadata <- pData(ExprSetRawRB)
 #'
 #' # mediation package & one mediation
 #' Mediation_res1 <- AA_Mediation(dataset=Metadata, XVar="Lysine", YVar="Tryptophan", AdjVar=c("Age", "Gender"), MVar="BMI", Package="mediation")
@@ -58,7 +58,6 @@ AA_Mediation <- function(dataset=Metadata,
   if(nrow(dat) == 0){
     stop("Data with too many missing values couldn't be used please check your data")
   }
-
 
   # mediation package
   if(all(is.element(Package, "mediation"), length(MVar) == 1)){
