@@ -27,6 +27,7 @@
 
 # roxygen2::roxygenise("D:/Project/MyRtools/")
 # roxygen2::roxygenise("~/Documents/Mygithub/MyRtools/")
+# roxygen2::roxygenise("/disk/user/zouhua/github/MyRtools/")
 # devtools::check(document = FALSE)
 # devtools::build()
 ##################################################################
